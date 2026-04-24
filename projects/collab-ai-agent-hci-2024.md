@@ -4,17 +4,16 @@ author: "Minji Kim, Dongwoo Kang, Ha-Eun Kwon"
 affilation: CIT HCI College
 venue: "HCI College Conference 2024"
 Links:
-
-* Paper: https://www.companoid.institute/achievement-project/goget
-* News: https://platum.kr/archives/247782
+- Paper: https://www.companoid.institute/achievement-project/goget
+- News: https://platum.kr/archives/247782
 ---
 
 # 생산성 향상을 위한 인공지능 기반 대화형 협업 도구 솔루션 제안
 
 ## Show
-assets/images/collab-ai-agent-hci-2024/24_02_thumnail.avif
-assets/images/collab-ai-agent-hci-2024/24_02_01.png
-assets/images/collab-ai-agent-hci-2024/24_02_02.png
+https://raw.githubusercontent.com/dongwoodustinkang/dongwoodustinkang.github.io/main/assets/images/collab-ai-agent-hci-2024/24_02_thumnail.avif
+https://raw.githubusercontent.com/dongwoodustinkang/dongwoodustinkang.github.io/main/assets/images/collab-ai-agent-hci-2024/24_02_01.png
+https://raw.githubusercontent.com/dongwoodustinkang/dongwoodustinkang.github.io/main/assets/images/collab-ai-agent-hci-2024/24_02_02.png
 
 ## Overview
 GoGet은 Usability Test와 User Research(기획자·개발자·디자이너 100명 대상)를 통해 발견한 협업 도구의 자료 검색 문제를 해결하기 위한 AI Agent 기반 대화형 협업 솔루션입니다. 날짜, 팀원, 파일 유형 등 사용자가 기억하는 문맥을 기반으로 필요한 자료를 빠르고 정확하게 찾고, 다음 Task를 제안해 업무 몰입을 지속시킵니다.
