@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project | Dongwoo Kang</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=20260424-0001" />
+</head>
+
+<body>
+  <div class="mouse-glow" id="mouse-glow" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand-button brand-link" href="index.html">DONGWOO KANG</a>
+
+      <nav class="tabs desktop-tabs" aria-label="Primary">
+        <a class="tab-button" href="index.html">Home</a>
+        <a class="tab-button active" href="projects.html" aria-current="page">Projects</a>
+        <a class="tab-button" href="assets/pdf/dongwoo-kang-cv.pdf" target="_blank" rel="noreferrer">CV</a>
+      </nav>
+
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <button id="dark-toggle" class="dark-toggle" type="button" aria-label="Toggle dark mode">☾</button>
+        <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"
+          aria-controls="mobile-overlay">
+          <span class="menu-line"></span>
+          <span class="menu-line"></span>
+          <span class="menu-line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="mobile-overlay" class="mobile-overlay" aria-hidden="true">
+    <nav class="mobile-menu" aria-label="Mobile Primary">
+      <a class="tab-button mobile-tab-button" href="index.html">Home</a>
+      <a class="tab-button mobile-tab-button active" href="projects.html" aria-current="page">Projects</a>
+      <a class="tab-button mobile-tab-button" href="assets/pdf/dongwoo-kang-cv.pdf" target="_blank"
+        rel="noreferrer">CV</a>
+    </nav>
+  </div>
+
+  <main class="project-detail-main">
+    <section class="project-detail-section" aria-label="Project Detail">
+      <header class="project-detail-header">
+        <h1 id="project-detail-title" class="project-detail-title">{Project Name}</h1>
+        <p id="project-detail-author" class="project-detail-author">{Author}</p>
+        <p id="project-detail-affiliation" class="project-detail-affiliation">{Univ}</p>
+        <p id="project-detail-venue" class="project-detail-venue">{conference name / conference}</p>
+
+        <div id="project-detail-actions" class="project-detail-actions" aria-label="Project Links"></div>
+      </header>
+
+      <div class="project-detail-divider" aria-hidden="true"></div>
+
+      <div id="project-detail-hero" class="project-detail-hero" aria-hidden="true"></div>
+      <div id="project-detail-summary" class="project-detail-summary"></div>
+      <div id="project-detail-content" class="project-detail-content"></div>
+
+      <div hidden aria-hidden="true">
+        <h2 id="project-detail-abstract-label"></h2>
+        <div id="project-detail-abstract"></div>
+        <h2 id="project-detail-bibtex-label"></h2>
+        <button id="project-bibtex-copy-btn" type="button"><img id="project-bibtex-copy-icon" src="assets/icons/copy.svg" alt="" /></button>
+        <code id="project-detail-bibtex"></code>
+        <h2 id="project-detail-publications-label"></h2>
+        <div id="project-detail-publications"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="site-footer-inner">
+      <p class="footer-name">DONGWOO KANG</p>
+      <a class="footer-email" href="mailto:dongwookang@keti.re.kr">dongwookang [at] keti [dot] re [dot] kr</a>
+      <p class="footer-location">Seoul, South Korea</p>
+
+      <div class="footer-socials" aria-label="Social links">
+        <a class="footer-social-link footer-social-github" href="https://github.com/dongwoodustinkang" target="_blank"
+          rel="noreferrer" aria-label="GitHub"></a>
+        <a class="footer-social-link footer-social-linkedin" href="https://www.linkedin.com/in/-dongwookang"
+          target="_blank" rel="noreferrer" aria-label="LinkedIn"></a>
+        <a class="footer-social-link footer-social-scholar"
+          href="https://scholar.google.com/citations?user=dongwoo-kang" target="_blank" rel="noreferrer"
+          aria-label="Google Scholar"></a>
+        <a class="footer-social-link footer-social-medium" href="https://medium.com/@dongwoo-kang" target="_blank"
+          rel="noreferrer" aria-label="Medium"></a>
+      </div>
+
+      <div class="footer-copy" style="max-width:100%;">
+        <span class="footer-copy-text">© 2024 DONGWOO KANG. ALL RIGHTS RESERVED.</span>
+        <span class="footer-copy-text">BUILT WITH PRECISION &amp; EMPATHY</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="project-detail.js?v=20260424-0003"></script>
+</body>
+
+</html>

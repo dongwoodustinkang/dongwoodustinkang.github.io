@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dongwoo Kang</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=20260424-0002" />
+</head>
+
+<body>
+  <div class="mouse-glow" id="mouse-glow" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <button id="brand-home" class="brand-button" type="button">DONGWOO KANG</button>
+
+      <nav class="tabs desktop-tabs" role="tablist" aria-label="Primary">
+        <button class="tab-button active" role="tab" aria-selected="true" data-target="home">
+          Home
+        </button>
+        <a class="tab-button" href="projects.html">Projects</a>
+        <a class="tab-button" href="assets/pdf/dongwoo-kang-cv.pdf" target="_blank" rel="noreferrer">CV</a>
+      </nav>
+
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <button id="dark-toggle" class="dark-toggle" type="button" aria-label="Toggle dark mode">☾</button>
+        <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"
+          aria-controls="mobile-overlay">
+          <span class="menu-line"></span>
+          <span class="menu-line"></span>
+          <span class="menu-line"></span>
+        </button>
+      </div>
+    </div>
+    <div class="header-divider" aria-hidden="true"></div>
+  </header>
+
+  <div id="mobile-overlay" class="mobile-overlay" aria-hidden="true">
+    <nav class="mobile-menu" aria-label="Mobile Primary">
+      <button class="tab-button mobile-tab-button active" aria-selected="true" data-target="home">
+        Home
+      </button>
+      <a class="tab-button mobile-tab-button" href="projects.html">Projects</a>
+      <a class="tab-button mobile-tab-button" href="assets/pdf/dongwoo-kang-cv.pdf" target="_blank"
+        rel="noreferrer">CV</a>
+    </nav>
+  </div>
+
+  <main>
+    <section id="home" class="panel active" role="tabpanel" aria-labelledby="home-title">
+      <div class="panel-card home-panel">
+        <div class="home-intro-grid">
+          <div class="home-copy">
+            <h1 id="home-title" class="home-name">DONGWOO KANG</h1>
+            <div id="home-content" class="markdown-content home-markdown" aria-live="polite"></div>
+            <div class="home-socials" aria-label="Social links">
+              <a class="home-social-link footer-social-link footer-social-github"
+                href="https://github.com/dongwoodustinkang" target="_blank" rel="noreferrer" aria-label="GitHub"></a>
+              <!-- <a class="home-social-link footer-social-link footer-social-threads"
+                href="https://www.threads.net/@your-id" target="_blank" rel="noreferrer" aria-label="Threads"></a> -->
+              <a class="home-social-link footer-social-link footer-social-linkedin"
+                href="https://www.linkedin.com/in/-dongwookang" target="_blank" rel="noreferrer"
+                aria-label="LinkedIn"></a>
+              <a class="home-social-link footer-social-link footer-social-scholar"
+                href="https://scholar.google.com/citations?user=your-id" target="_blank" rel="noreferrer"
+                aria-label="Google Scholar"></a>
+              <a class="home-social-link footer-social-link footer-social-medium"
+                href="https://medium.com/@dongwoo-kang" target="_blank" rel="noreferrer" aria-label="Medium"></a>
+              <a class="home-social-link footer-social-link footer-social-email" href="mailto:dongwookang@keti.re.kr"
+                aria-label="Email"></a>
+            </div>
+          </div>
+          <button id="home-visual" class="home-visual" type="button" aria-label="Flip intro visual"
+            aria-pressed="false">
+            <span class="home-visual-inner">
+              <span class="home-visual-face home-visual-front" aria-hidden="true"></span>
+              <span class="home-visual-face home-visual-back" aria-hidden="true"></span>
+            </span>
+          </button>
+        </div>
+
+        <section class="recent-updates" aria-label="Recent Updates">
+          <h2 class="updates-title">Recent Updates</h2>
+          <ul class="updates-list">
+            <li class="update-item">
+              <span class="update-text">Presented our CSI research at the ICEC-Asia 2025 Poster Session.</span>
+              <time class="update-date" datetime="2026-02-05">Oct 28, 2025</time>
+            </li>
+            <li class="update-item">
+              <span class="update-text">Honored to deliver an oral presentaion on MCP at the HCI College Conference
+                2024.</span>
+              <time class="update-date" datetime="2026-02-04">Dec 14, 2024</time>
+            </li>
+            <li class="update-item">
+              <span class="update-text">Presented our CSI research at the ICTC 2024 Poster Session.</span>
+              <time class="update-date" datetime="2026-01-30">Oct 18, 2024</time>
+            </li>
+          </ul>
+        </section>
+
+        <section class="home-projects" aria-label="Projects">
+          <h2 class="home-projects-title">Projects</h2>
+          <article class="home-project-item">
+            <div class="home-project-thumb" aria-hidden="true"></div>
+            <div class="home-project-details">
+              <h3 class="home-project-name">{Project Name}</h3>
+              <p class="home-project-author">{Author}</p>
+              <p class="home-project-venue">{conference name / conference}</p>
+              <button class="home-project-abstract" type="button" aria-expanded="false"
+                aria-controls="home-project-hidden-1">
+                abstract ↓
+              </button>
+            </div>
+          </article>
+          <p id="home-project-hidden-1" class="home-project-hidden" hidden>{Hidden Abstract...}</p>
+          <a class="view-all-projects" href="projects.html">
+            View all projects →
+          </a>
+        </section>
+
+        <section class="projects-timeline" aria-label="Timeline">
+          <h2 class="timeline-section-title">Timeline</h2>
+          <ol class="timeline-list">
+
+            <li class="timeline-item">
+              <p class="timeline-meta">
+                <span class="timeline-period">2016 - 2023</span>
+                <span class="timeline-org">/ College of Information, Hanshin University</span>
+              </p>
+              <h3 class="timeline-title">B.E. in Information Technology Contents</h3>
+              <p class="timeline-desc">
+                Completed my Bachelor of Engineering at Hanshin University’s College of Information with a GPA of
+                <strong>4.13/4.5</strong>
+                Validated professional technical proficiency through <strong>two private-sector internships</strong> in
+                Python and
+                iOS
+                development.
+                Strategized and led a <strong>coding education curriculum</strong> for elementary students.
+              </p>
+              <div class="timeline-tags" aria-label="Keywords">
+                <span class="timeline-tag">Deep Learning</span>
+                <span class="timeline-tag">Python</span>
+                <span class="timeline-tag">Mobile Application</span>
+                <span class="timeline-tag">UX Design</span>
+                <span class="timeline-tag">Big Data</span>
+              </div>
+            </li>
+
+
+            <li class="timeline-item timeline-item-current">
+              <p class="timeline-meta">
+                <span class="timeline-period">2024 - PRESENT</span>
+                <span class="timeline-org">/ Korea Electronics Technology Institute (KETI)</span>
+              </p>
+              <h3 class="timeline-title">Researcher</h3>
+              <p class="timeline-desc">
+                Leading research on <strong>CSI-based behavioral recognition</strong> using lightweight DL and signal
+                preprocessing.
+                Presented findings at ICTC and ICEC-Asia, with a current focus on 3D Digital Human synthesis.
+                Advancing <strong>HCI</strong>-driven productivity through MCP Tool strategies presented at HCI
+                conferences.
+              </p>
+              <div class="timeline-tags" aria-label="Keywords">
+                <span class="timeline-tag">CSI Sensing</span>
+                <span class="timeline-tag">Deep Learning</span>
+                <span class="timeline-tag">Digital Human</span>
+                <span class="timeline-tag">HCI</span>
+                <span class="timeline-tag">Behavioral Recognition</span>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section class="awards-section" aria-label="Awards and Prizes">
+          <h2 class="awards-title">Awards &amp; Prizes</h2>
+          <ul class="awards-list">
+            <li class="award-item">
+              <div class="award-left">
+                <span class="award-icon award-icon-contest" aria-hidden="true"></span>
+                <div class="award-copy">
+                  <p class="award-name">Excellence Award of HCI College Conference 2024</p>
+                  <p class="award-org">Companoid Institute</p>
+                </div>
+              </div>
+              <time class="award-date" datetime="2024-12-14">Dec 14, 2024</time>
+            </li>
+
+            <li class="award-item">
+              <div class="award-left">
+                <span class="award-icon award-icon-contest" aria-hidden="true"></span>
+                <div class="award-copy">
+                  <p class="award-name">Excellence Award of AI & Big Data Hackathon</p>
+                  <p class="award-org">Hanshin University</p>
+                </div>
+              </div>
+              <time class="award-date" datetime="2021-12-01">Dec, 2021</time>
+            </li>
+
+            <li class="award-item">
+              <div class="award-left">
+                <span class="award-icon award-icon-scholarship" aria-hidden="true"></span>
+                <div class="award-copy">
+                  <p class="award-name">National Science & Engineering Scholarship (4 Semesters)</p>
+                  <p class="award-org">Ministry of Science and ICT (MSIT)</p>
+                </div>
+              </div>
+              <time class="award-date" datetime="2020-03-01">2020 - 2022</time>
+            </li>
+
+            <li class="award-item">
+              <div class="award-left">
+                <span class="award-icon award-icon-scholarship" aria-hidden="true"></span>
+                <div class="award-copy">
+                  <p class="award-name">Academic Excellence Full Scholarship (3 Semesters)</p>
+                  <p class="award-org">Hanshin University</p>
+                </div>
+              </div>
+              <time class="award-date" datetime="2020-03-01">2016 - 2020</time>
+            </li>
+          </ul>
+        </section>
+
+        <section class="odds-section" aria-label="Odds and Ends">
+          <h2 class="odds-title">Odds &amp; Ends</h2>
+          <div class="odds-list">
+            <p class="odds-line">🇬🇧 <span class="tooltip-anchor">English<span class="tooltip-bubble">IELTS 6.0
+                  (2024)<br>TEPS 320 (2026)</span></span> matters to me - it's how real communication happens.</p>
+            <p class="odds-line">
+              ⛹️ I like picking up new sports, and unwinding with music 🎶 or films 🍿.
+            </p>
+            <p class="odds-line">🎖️ Got a few <span class="tooltip-anchor">certs<span class="tooltip-bubble">IoT 자격검정 (2025)<br>AWS CSA (2025)<br>SQLD (2024)<br>정보처리기사 (2024)</span></span> to keep my practical bits in check.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="projects" class="panel" role="tabpanel" aria-labelledby="projects-title">
+      <div class="panel-card">
+        <div class="section-head">
+          <h2 id="projects-title">Projects</h2>
+          <div class="filters" role="group" aria-label="Project filters">
+            <button class="filter-button active" aria-pressed="true" data-filter="all">All</button>
+            <button class="filter-button" aria-pressed="false" data-filter="industrial">
+              Industrial
+            </button>
+            <button class="filter-button" aria-pressed="false" data-filter="academic">
+              Academic
+            </button>
+          </div>
+        </div>
+        <div id="project-grid" class="project-grid"></div>
+      </div>
+    </section>
+
+    <section id="contact" class="panel" role="tabpanel" aria-labelledby="contact-title">
+      <div class="panel-card">
+        <h2 id="contact-title">Contact</h2>
+        <p class="section-note">카드를 움직여 3D 회전을 확인해보세요.</p>
+        <div class="card-stage">
+          <article class="business-card" id="business-card" tabindex="0">
+            <div class="card-face card-front">
+              <p class="card-role">Researcher / Engineer</p>
+              <h3>홍길동</h3>
+              <p class="card-email">honggildong@university.edu</p>
+              <p class="card-org">Dept. of Computer Science</p>
+            </div>
+            <div class="card-face card-back">
+              <p>GitHub</p>
+              <a href="https://github.com/your-id" target="_blank" rel="noreferrer">github.com/your-id</a>
+              <p>LinkedIn</p>
+              <a href="https://linkedin.com/in/your-id" target="_blank" rel="noreferrer">linkedin.com/in/your-id</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="site-footer-inner">
+      <p class="footer-name">DONGWOO KANG</p>
+      <a class="footer-email" href="mailto:dongwookang@keti.re.kr">dongwookang [at] keti [dot] re [dot] kr</a>
+      <p class="footer-location">Seoul, South Korea</p>
+
+      <div class="footer-socials" aria-label="Social links">
+        <a class="footer-social-link footer-social-github" href="https://github.com/dongwoodustinkang" target="_blank"
+          rel="noreferrer" aria-label="GitHub"></a>
+        <a class="footer-social-link footer-social-linkedin" href="https://www.linkedin.com/in/-dongwookang"
+          target="_blank" rel="noreferrer" aria-label="LinkedIn"></a>
+        <a class="footer-social-link footer-social-scholar" href="https://scholar.google.com/citations?user=your-id"
+          target="_blank" rel="noreferrer" aria-label="Google Scholar"></a>
+        <a class="footer-social-link footer-social-medium" href="https://medium.com/@dongwoo-kang" target="_blank"
+          rel="noreferrer" aria-label="Medium"></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js?v=20260424-0002"></script>
+</body>
+
+</html>

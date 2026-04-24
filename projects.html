@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects | Dongwoo Kang</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=20260424-0001" />
+</head>
+
+<body>
+  <div class="mouse-glow" id="mouse-glow" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand-button brand-link" href="index.html">DONGWOO KANG</a>
+
+      <nav class="tabs desktop-tabs" aria-label="Primary">
+        <a class="tab-button" href="index.html">Home</a>
+        <a class="tab-button active" href="projects.html" aria-current="page">Projects</a>
+        <a class="tab-button" href="assets/pdf/dongwoo-kang-cv.pdf" target="_blank" rel="noreferrer">CV</a>
+      </nav>
+
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <button id="dark-toggle" class="dark-toggle" type="button" aria-label="Toggle dark mode">☾</button>
+        <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"
+          aria-controls="mobile-overlay">
+          <span class="menu-line"></span>
+          <span class="menu-line"></span>
+          <span class="menu-line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="mobile-overlay" class="mobile-overlay" aria-hidden="true">
+    <nav class="mobile-menu" aria-label="Mobile Primary">
+      <a class="tab-button mobile-tab-button" href="index.html">Home</a>
+      <a class="tab-button mobile-tab-button active" href="projects.html" aria-current="page">Projects</a>
+      <a class="tab-button mobile-tab-button" href="assets/pdf/dongwoo-kang-cv.pdf" target="_blank"
+        rel="noreferrer">CV</a>
+    </nav>
+  </div>
+
+  <main class="projects-main">
+    <section class="projects-page-section" aria-label="Projects Archive">
+      <div class="projects-page-head">
+        <div class="projects-filters" role="group" aria-label="Project filters">
+          <label class="projects-filter-wrap" for="projects-year-filter">
+            <span class="sr-only">Filter projects by year</span>
+            <select id="projects-year-filter" class="projects-filter-select projects-filter-year">
+              <option value="all">All Year</option>
+            </select>
+          </label>
+
+          <label class="projects-filter-wrap" for="projects-filter">
+            <span class="sr-only">Filter projects by category</span>
+            <select id="projects-filter" class="projects-filter-select">
+              <option value="all">All Projects</option>
+              <option value="industrial">Industrial Projects</option>
+              <option value="academic">Academic Projects</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div id="projects-list" class="projects-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="site-footer-inner">
+      <p class="footer-name">DONGWOO KANG</p>
+      <a class="footer-email" href="mailto:dongwookang@keti.re.kr">dongwookang [at] keti [dot] re [dot] kr</a>
+      <p class="footer-location">Seoul, South Korea</p>
+
+      <div class="footer-socials" aria-label="Social links">
+        <a class="footer-social-link footer-social-github" href="https://github.com/dongwoodustinkang" target="_blank"
+          rel="noreferrer" aria-label="GitHub"></a>
+        <a class="footer-social-link footer-social-linkedin" href="https://www.linkedin.com/in/-dongwookang"
+          target="_blank" rel="noreferrer" aria-label="LinkedIn"></a>
+        <a class="footer-social-link footer-social-scholar"
+          href="https://scholar.google.com/citations?user=dongwoo-kang" target="_blank" rel="noreferrer"
+          aria-label="Google Scholar"></a>
+        <a class="footer-social-link footer-social-medium" href="https://medium.com/dongwoo-kang" target="_blank"
+          rel="noreferrer" aria-label="Medium"></a>
+      </div>
+
+      <div class="footer-copy" style="max-width:100%;">
+        <span class="footer-copy-text">© 2024 DONGWOO KANG. ALL RIGHTS RESERVED.</span>
+        <span class="footer-copy-text">BUILT WITH PRECISION &amp; EMPATHY</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="projects-page.js?v=20260421-0001"></script>
+</body>
+
+</html>
