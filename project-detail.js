@@ -984,6 +984,11 @@ async function loadProject() {
 
 bibtexCopyButton.addEventListener("click", copyBibtex);
 
+// Remove page-exiting class when page is restored from bfcache
+window.addEventListener("pageshow", () => {
+  document.querySelector(".project-detail-main")?.classList.remove("page-exiting");
+});
+
 loadProject().then(() => {
   const slug = new URLSearchParams(window.location.search).get("slug") || "";
   if (slug) {

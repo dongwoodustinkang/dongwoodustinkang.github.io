@@ -113,124 +113,117 @@ setActivePanel(getInitialPanel());
 setupHomeVisualFlip();
 loadHomeMarkdown();
 
-// ── Home projects: dynamic first project ─────────────
-async function loadHomeProject() {
-  const section = document.querySelector(".home-projects");
-  if (!section) return;
-
-  let projects;
+// ── Home projects: up to 2 projects, fully dynamic ───
+async function parseMdForProject(contentPath) {
+  if (!contentPath) return {};
   try {
-    const res = await fetch("projects/projects.json");
-    if (!res.ok) return;
-    projects = await res.json();
-  } catch (_) { return; }
-
-  if (!projects || !projects.length) return;
-  const p = projects[0];
-
-  const article = section.querySelector(".home-project-item");
-  const hiddenAbstract = section.querySelector(".home-project-hidden");
-  if (!article) return;
-
-  const nameEl    = article.querySelector(".home-project-name");
-  const authorEl  = article.querySelector(".home-project-author");
-  const venueEl   = article.querySelector(".home-project-venue");
-  const abstractBtn = article.querySelector(".home-project-abstract");
-  const thumbEl   = article.querySelector(".home-project-thumb");
-
-  // JSON defaults
-  if (nameEl)   nameEl.textContent   = p.title  || "";
-  if (authorEl) authorEl.textContent = p.author || "";
-  if (venueEl)  venueEl.textContent  = p.venue  || "";
-  if (thumbEl && p.thumbnail) {
-    thumbEl.style.backgroundImage = `url("${p.thumbnail}")`;
-    thumbEl.classList.add("has-image");
-  }
-
-  // Fetch md: single pass for frontmatter override + ## Show thumbnail + ## Overview text
-  let overviewText = "";
-  if (p.content) {
-    try {
-      const mdRes = await fetch(p.content);
-      if (mdRes.ok) {
-        const mdText = await mdRes.text();
-        const lines  = mdText.split(/\r?\n/);
-
-        const fm = parseFrontmatter(mdText);
-        if (fm.title  && nameEl)   nameEl.textContent   = fm.title;
-        if (fm.author && authorEl) authorEl.textContent = fm.author;
-        if (fm.venue  && venueEl)  venueEl.textContent  = fm.venue;
-
-        let inShow = false, inOverview = false, showThumb = "";
-        const overviewLines = [];
-        for (const line of lines) {
-          if (/^## Show\s*$/i.test(line.trim()))     { inShow = true;  inOverview = false; continue; }
-          if (/^## Overview\s*$/i.test(line.trim())) { inOverview = true; inShow = false; continue; }
-          if (/^## /.test(line)) { inShow = false; if (inOverview) break; }
-          if (inShow && !showThumb) {
-            const src = line.trim();
-            if (src && /\.(png|jpe?g|gif|webp|svg|avif)(\?.*)?$/i.test(src)) showThumb = src;
-          }
-          if (inOverview && line.trim()) overviewLines.push(line.trim());
-        }
-        overviewText = overviewLines.join(" ");
-        if (showThumb && thumbEl) {
-          thumbEl.style.backgroundImage = `url("${showThumb}")`;
-          thumbEl.classList.add("has-image");
-        }
+    const res = await fetch(contentPath);
+    if (!res.ok) return {};
+    const mdText = await res.text();
+    const lines  = mdText.split(/\r?\n/);
+    const fm     = parseFrontmatter(mdText);
+    let inShow = false, inOverview = false, showThumb = "";
+    const overviewLines = [];
+    for (const line of lines) {
+      if (/^## Show\s*$/i.test(line.trim()))     { inShow = true;  inOverview = false; continue; }
+      if (/^## Overview\s*$/i.test(line.trim())) { inOverview = true; inShow = false; continue; }
+      if (/^## /.test(line)) { inShow = false; if (inOverview) break; }
+      if (inShow && !showThumb) {
+        const src = line.trim();
+        if (src && /\.(png|jpe?g|gif|webp|svg|avif)(\?.*)?$/i.test(src)) showThumb = src;
       }
-    } catch (_) {}
-  }
+      if (inOverview && line.trim()) overviewLines.push(line.trim());
+    }
+    return { fm, thumbnail: showThumb, overview: overviewLines.join(" ") };
+  } catch (_) { return {}; }
+}
 
-  const abstractText = overviewText || p.abstract || "";
-  if (hiddenAbstract && abstractText) {
-    hiddenAbstract.textContent = abstractText;
-  } else if (abstractBtn && !abstractText) {
-    abstractBtn.hidden = true;
-  }
+function buildProjectItem(p, mdData, idx) {
+  const { fm = {}, thumbnail = "", overview = "" } = mdData;
+  const title       = fm.title  || p.title  || "";
+  const author      = fm.author || p.author || "";
+  const venue       = fm.venue  || p.venue  || "";
+  const thumbSrc    = thumbnail || p.thumbnail || "";
+  const abstractText = overview || p.abstract || "";
+  const hiddenId    = `home-project-hidden-${idx + 1}`;
+  const detailUrl   = p.slug ? `project-detail.html?slug=${encodeURIComponent(p.slug)}` : "#";
+  const reduced     = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Wire abstract toggle directly on this button (avoids re-binding all buttons)
-  if (abstractBtn && hiddenAbstract) {
-    hiddenAbstract.id = "home-project-hidden-1";
-    abstractBtn.setAttribute("aria-controls", "home-project-hidden-1");
+  // ── Thumb ──
+  const thumbEl = document.createElement("div");
+  thumbEl.className = "home-project-thumb";
+  thumbEl.setAttribute("aria-hidden", "true");
+  if (thumbSrc) { thumbEl.style.backgroundImage = `url("${thumbSrc}")`; thumbEl.classList.add("has-image"); }
+
+  const overlay = document.createElement("span");
+  overlay.className = "home-project-thumb-overlay";
+  overlay.setAttribute("aria-hidden", "true");
+  overlay.textContent = "EXPLORE →";
+
+  const thumbLink = document.createElement("a");
+  thumbLink.href = detailUrl;
+  thumbLink.className = "home-project-thumb-link";
+  thumbLink.setAttribute("aria-label", `View project: ${title}`);
+  thumbLink.appendChild(thumbEl);
+  thumbLink.appendChild(overlay);
+
+  // ── Details ──
+  const nameEl = document.createElement("h3");
+  nameEl.className = "home-project-name";
+  nameEl.textContent = title;
+
+  const nameLink = document.createElement("a");
+  nameLink.href = detailUrl;
+  nameLink.className = "home-project-name-link";
+  nameLink.appendChild(nameEl);
+
+  const authorEl = document.createElement("p");
+  authorEl.className = "home-project-author";
+  authorEl.textContent = author;
+
+  const venueEl = document.createElement("p");
+  venueEl.className = "home-project-venue";
+  venueEl.textContent = venue;
+
+  const details = document.createElement("div");
+  details.className = "home-project-details";
+  details.appendChild(nameLink);
+  details.appendChild(authorEl);
+  details.appendChild(venueEl);
+
+  // ── Abstract button + hidden paragraph ──
+  const hiddenEl = document.createElement("p");
+  hiddenEl.id = hiddenId;
+  hiddenEl.className = "home-project-hidden";
+  hiddenEl.hidden = true;
+  hiddenEl.textContent = abstractText;
+
+  if (abstractText) {
+    const abstractBtn = document.createElement("button");
+    abstractBtn.className = "home-project-abstract";
+    abstractBtn.type = "button";
     abstractBtn.setAttribute("aria-expanded", "false");
+    abstractBtn.setAttribute("aria-controls", hiddenId);
     abstractBtn.textContent = "abstract ↓";
     abstractBtn.addEventListener("click", () => {
-      hiddenAbstract.hidden = !hiddenAbstract.hidden;
-      const expanded = !hiddenAbstract.hidden;
+      hiddenEl.hidden = !hiddenEl.hidden;
+      const expanded = !hiddenEl.hidden;
       abstractBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
       abstractBtn.textContent = expanded ? "abstract ↑" : "abstract ↓";
     });
+    details.appendChild(abstractBtn);
   }
 
-  const detailUrl = `project-detail.html?slug=${encodeURIComponent(p.slug)}`;
+  // ── Article ──
+  const article = document.createElement("article");
+  article.className = "home-project-item";
+  article.appendChild(thumbLink);
+  article.appendChild(details);
 
-  if (thumbEl && !thumbEl.closest("a")) {
-    const thumbLink = document.createElement("a");
-    thumbLink.href = detailUrl;
-    thumbLink.className = "home-project-thumb-link";
-    thumbLink.setAttribute("aria-label", `View project: ${p.title}`);
-    thumbEl.parentNode.insertBefore(thumbLink, thumbEl);
-    thumbLink.appendChild(thumbEl);
-    const overlay = document.createElement("span");
-    overlay.className = "home-project-thumb-overlay";
-    overlay.setAttribute("aria-hidden", "true");
-    overlay.textContent = "EXPLORE →";
-    thumbLink.appendChild(overlay);
-  }
-
-  if (nameEl && !nameEl.closest("a")) {
-    const nameLink = document.createElement("a");
-    nameLink.href = detailUrl;
-    nameLink.className = "home-project-name-link";
-    nameEl.parentNode.insertBefore(nameLink, nameEl);
-    nameLink.appendChild(nameEl);
-  }
-
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // ── Navigation with FLIP ──
   function navigateToDetail(e) {
     e.preventDefault();
-    if (nameEl) {
+    if (p.slug) {
       sessionStorage.setItem("flip:" + p.slug, JSON.stringify({
         titleTop: nameEl.getBoundingClientRect().top,
         scrollY: window.scrollY,
@@ -244,11 +237,43 @@ async function loadHomeProject() {
       window.location.href = detailUrl;
     }
   }
+  thumbLink.addEventListener("click", navigateToDetail);
+  nameLink.addEventListener("click", navigateToDetail);
 
-  const thumbLink = section.querySelector(".home-project-thumb-link");
-  if (thumbLink) thumbLink.addEventListener("click", navigateToDetail);
-  const nameLink = section.querySelector(".home-project-name-link");
-  if (nameLink) nameLink.addEventListener("click", navigateToDetail);
+  return { article, hiddenEl };
 }
+
+async function loadHomeProject() {
+  const section = document.querySelector(".home-projects");
+  if (!section) return;
+
+  let projects;
+  try {
+    const res = await fetch("projects/projects.json");
+    if (!res.ok) return;
+    projects = await res.json();
+  } catch (_) { return; }
+  if (!projects || !projects.length) return;
+
+  const shown = projects.slice(0, 2);
+
+  // Fetch md metadata for all shown projects in parallel
+  const mdDataList = await Promise.all(shown.map((p) => parseMdForProject(p.content)));
+
+  // Remove static template items, keep title + view-all link
+  section.querySelectorAll(".home-project-item, .home-project-hidden").forEach((el) => el.remove());
+  const viewAll = section.querySelector(".view-all-projects");
+
+  shown.forEach((p, idx) => {
+    const { article, hiddenEl } = buildProjectItem(p, mdDataList[idx], idx);
+    section.insertBefore(article, viewAll);
+    section.insertBefore(hiddenEl, viewAll);
+  });
+}
+
+// Remove page-exiting class when page is restored from bfcache
+window.addEventListener("pageshow", () => {
+  document.querySelector("main")?.classList.remove("page-exiting");
+});
 
 loadHomeProject();

@@ -147,6 +147,11 @@ if (yearFilterSelect) {
 
 loadProjects();
 
+// Remove page-exiting class when page is restored from bfcache
+window.addEventListener("pageshow", () => {
+  document.querySelector(".projects-main")?.classList.remove("page-exiting");
+});
+
 // ── Exit animation + FLIP data storage ──────────────
 projectsList.addEventListener("click", (e) => {
   const tile = e.target.closest(".projects-tile-link");
