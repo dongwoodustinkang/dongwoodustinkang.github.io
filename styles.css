@@ -1704,6 +1704,37 @@ h2 {
 .project-detail-row-body p + p { margin-top: 0.45rem; }
 .project-detail-row-body ul { margin: 0.55rem 0 0; padding-left: 1.15rem; }
 
+/* ── Inline markdown formatting ── */
+.project-detail-row-body mark,
+.project-detail-summary mark {
+  background: rgba(255, 195, 0, 0.28);
+  color: var(--text-main);
+  border-radius: 3px;
+  padding: 0 3px;
+}
+.dark .project-detail-row-body mark,
+.dark .project-detail-summary mark {
+  background: rgba(255, 195, 0, 0.18);
+}
+
+/* ── Embedded images ── */
+.project-md-figure {
+  margin: 1rem 0;
+}
+.project-md-img {
+  display: block;
+  max-width: 100%;
+  border-radius: 6px;
+  border: 1px solid rgba(10, 47, 31, 0.08);
+}
+.dark .project-md-img { border-color: rgba(255, 255, 255, 0.08); }
+
+.project-md-img-inline {
+  max-height: 1.4em;
+  vertical-align: middle;
+  border-radius: 3px;
+}
+
 .project-code-pre {
   margin: 0.6rem 0 0;
   padding: 0.85rem 0.95rem;

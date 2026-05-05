@@ -141,7 +141,28 @@ function normalizeFenceLanguage(raw = "") {
   return aliasMap[lang] || lang || "text";
 }
 
-function markdownLinesToHtml(lines = []) {
+function parseInlineMarkdown(raw, contentPath = "") {
+  // Escape HTML special chars first, then apply inline markdown
+  let text = escapeHtml(raw);
+  // Inline images: ![alt](src)
+  text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, src) => {
+    const resolved = resolveContentPath(src, contentPath);
+    return `<img class="project-md-img-inline" src="${resolved}" alt="${alt}" loading="lazy" />`;
+  });
+  // Bold: **text**
+  text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  // Italic: *text* (avoid matching bold's inner *)
+  text = text.replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, "<em>$1</em>");
+  // Highlight: ==text==
+  text = text.replace(/==([^=\n]+)==/g, "<mark>$1</mark>");
+  // Inline code: `code`
+  text = text.replace(/`([^`]+)`/g, "<code>$1</code>");
+  // Links: [text](url)
+  text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
+  return text;
+}
+
+function markdownLinesToHtml(lines = [], contentPath = "") {
   const html = [];
   let inList = false;
   let inCode = false;
@@ -195,24 +216,33 @@ function markdownLinesToHtml(lines = []) {
       return;
     }
 
+    // ── Standalone image line → <figure> ──
+    const imgSrc = parseImageSourceFromLine(trimmed);
+    if (imgSrc) {
+      closeListIfNeeded();
+      const resolved = resolveContentPath(imgSrc, contentPath);
+      html.push(`<figure class="project-md-figure"><img class="project-md-img" src="${resolved}" alt="" loading="lazy" /></figure>`);
+      return;
+    }
+
     const h4Matched = trimmed.match(/^####\s+(.+)$/);
     if (h4Matched) {
       closeListIfNeeded();
-      html.push(`<h4 class="project-md-h4">${escapeHtml(h4Matched[1].trim())}</h4>`);
+      html.push(`<h4 class="project-md-h4">${parseInlineMarkdown(h4Matched[1].trim(), contentPath)}</h4>`);
       return;
     }
 
     const h3Matched = trimmed.match(/^###\s+(.+)$/);
     if (h3Matched) {
       closeListIfNeeded();
-      html.push(`<h3 class="project-md-h3">${escapeHtml(h3Matched[1].trim())}</h3>`);
+      html.push(`<h3 class="project-md-h3">${parseInlineMarkdown(h3Matched[1].trim(), contentPath)}</h3>`);
       return;
     }
 
     const h2Matched = trimmed.match(/^##\s+(.+)$/);
     if (h2Matched) {
       closeListIfNeeded();
-      html.push(`<h2 class="project-md-h2">${escapeHtml(h2Matched[1].trim())}</h2>`);
+      html.push(`<h2 class="project-md-h2">${parseInlineMarkdown(h2Matched[1].trim(), contentPath)}</h2>`);
       return;
     }
 
@@ -221,12 +251,12 @@ function markdownLinesToHtml(lines = []) {
         html.push("<ul>");
         inList = true;
       }
-      html.push(`<li>${escapeHtml(trimmed.replace(/^-+\s*/, ""))}</li>`);
+      html.push(`<li>${parseInlineMarkdown(trimmed.replace(/^-+\s*/, ""), contentPath)}</li>`);
       return;
     }
 
     closeListIfNeeded();
-    html.push(`<p>${escapeHtml(trimmed)}</p>`);
+    html.push(`<p>${parseInlineMarkdown(trimmed, contentPath)}</p>`);
   });
 
   closeListIfNeeded();
@@ -681,7 +711,7 @@ function renderActions(project, resources) {
   return { primaryLink, arxivLink, pdfLink, videoLink, codeLink };
 }
 
-function renderContentRows(sections, skipKeys) {
+function renderContentRows(sections, skipKeys, contentPath = "") {
   if (!contentEl) return;
   contentEl.innerHTML = "";
   Object.keys(sections).forEach((key) => {
@@ -699,20 +729,20 @@ function renderContentRows(sections, skipKeys) {
 
     const body = document.createElement("div");
     body.className = "project-detail-row-body";
-    body.innerHTML = markdownLinesToHtml(section.lines);
+    body.innerHTML = markdownLinesToHtml(section.lines, contentPath);
     row.appendChild(body);
 
     contentEl.appendChild(row);
   });
 }
 
-function renderAbstract(lines = []) {
+function renderAbstract(lines = [], contentPath = "") {
   if (!lines.length) {
     abstractEl.innerHTML = "<p>Project abstract will be updated soon.</p>";
     return;
   }
 
-  abstractEl.innerHTML = markdownLinesToHtml(lines);
+  abstractEl.innerHTML = markdownLinesToHtml(lines, contentPath);
 }
 
 function renderPublications(items = []) {
@@ -909,10 +939,11 @@ async function loadProject() {
     const heroCaptionLines = heroImageSection ? extractImageCaptionLines(heroImageSection.lines) : [];
     const imageCaptionLines = imageCaptionSection ? imageCaptionSection.lines : [];
     const captionLines = heroCaptionLines.length ? heroCaptionLines : imageCaptionLines;
+    const mdContentPath = (project.content || "").trim();
     if (captionLines.length) {
-      summaryEl.innerHTML = markdownLinesToHtml(captionLines);
+      summaryEl.innerHTML = markdownLinesToHtml(captionLines, mdContentPath);
     } else if (summarySection?.lines?.length) {
-      summaryEl.innerHTML = markdownLinesToHtml(summarySection.lines);
+      summaryEl.innerHTML = markdownLinesToHtml(summarySection.lines, mdContentPath);
     } else {
       summaryEl.textContent = summaryText || "Project summary will be updated soon.";
     }
@@ -929,10 +960,10 @@ async function loadProject() {
         publicationsSectionKey,
       ].filter(Boolean)
     );
-    renderContentRows(sections, contentSkipKeys);
+    renderContentRows(sections, contentSkipKeys, mdContentPath);
 
     // Hidden section refs (kept for bibtex/publications logic)
-    renderAbstract([]);
+    renderAbstract([], mdContentPath);
 
     const bibtexOrCodeSection = bibtexSection || codeSection;
     const customCode = extractCodeBlock(bibtexOrCodeSection ? bibtexOrCodeSection.lines : []);
