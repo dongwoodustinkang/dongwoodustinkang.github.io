@@ -1620,23 +1620,21 @@ h2 {
 .hero-dot.active { background: #fff; }
 
 .project-detail-summary {
-  margin: 1.1rem 0 0;
-  padding: 0.85rem 1.1rem 0.85rem 1.2rem;
-  border-left: 3px solid var(--accent);
-  border-radius: 0 6px 6px 0;
-  background: rgba(10, 47, 31, 0.04);
+  margin: 1.35rem 0 0;
+  padding: 1.1rem 0 0;
+  border-top: 1px solid rgba(10, 47, 31, 0.1);
   color: var(--text-main);
   font-family: "Noto Sans KR", sans-serif;
-  font-size: 14.5px;
-  line-height: 1.72;
+  font-size: 15px;
+  line-height: 1.8;
 }
 .dark .project-detail-summary {
-  background: rgba(255, 255, 255, 0.05);
+  border-top-color: rgba(255, 255, 255, 0.08);
 }
 
 .project-detail-summary p { margin: 0; }
-.project-detail-summary p + p { margin-top: 0.45rem; }
-.project-detail-summary ul { margin: 0.55rem 0 0; padding-left: 1.15rem; }
+.project-detail-summary p + p { margin-top: 0.5rem; }
+.project-detail-summary ul { margin: 0.6rem 0 0; padding-left: 1.15rem; }
 
 .project-md-h2 {
   margin: 1rem 0 0.4rem;
