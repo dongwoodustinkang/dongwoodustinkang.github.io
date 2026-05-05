@@ -1694,6 +1694,7 @@ h2 {
 
 .project-detail-row-body {
   grid-column: 2;
+  min-width: 0;
   color: var(--text-sub);
   font-family: "Noto Sans KR", sans-serif;
   font-size: 14px;
@@ -1720,16 +1721,21 @@ h2 {
 /* ── Embedded images ── */
 .project-md-figure {
   margin: 1rem 0;
+  max-width: 100%;
+  overflow: hidden;
 }
 .project-md-img {
   display: block;
+  width: 100%;
   max-width: 100%;
+  height: auto;
   border-radius: 6px;
   border: 1px solid rgba(10, 47, 31, 0.08);
 }
 .dark .project-md-img { border-color: rgba(255, 255, 255, 0.08); }
 
 .project-md-img-inline {
+  max-width: 100%;
   max-height: 1.4em;
   vertical-align: middle;
   border-radius: 3px;
