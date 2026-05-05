@@ -1,6 +1,3 @@
-const menuToggleButton = document.getElementById("menu-toggle");
-const mobileOverlay = document.getElementById("mobile-overlay");
-
 const titleEl = document.getElementById("project-detail-title");
 const authorEl = document.getElementById("project-detail-author");
 const affiliationEl = document.getElementById("project-detail-affiliation");
@@ -20,70 +17,8 @@ const publicationsLabelEl = document.getElementById("project-detail-publications
 
 let copiedIconTimer = null;
 
-function openMobileMenu() {
-  mobileOverlay.classList.add("open");
-  mobileOverlay.setAttribute("aria-hidden", "false");
-  menuToggleButton.classList.add("is-open");
-  menuToggleButton.setAttribute("aria-expanded", "true");
-  document.body.classList.add("menu-open");
-}
-
-function closeMobileMenu() {
-  mobileOverlay.classList.remove("open");
-  mobileOverlay.setAttribute("aria-hidden", "true");
-  menuToggleButton.classList.remove("is-open");
-  menuToggleButton.setAttribute("aria-expanded", "false");
-  document.body.classList.remove("menu-open");
-}
-
-function parseFrontmatter(markdown) {
-  const result = { title: "", author: "", affiliation: "", venue: "", links: [] };
-  const fmMatch = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  if (!fmMatch) return result;
-  const lines = fmMatch[1].split(/\r?\n/);
-  let listKey = null;
-  for (const raw of lines) {
-    const line = raw.trim();
-    if (!line) continue;
-    if (listKey && /^[*-]\s/.test(line)) {
-      const itemText = line.replace(/^[*-]\s+/, "");
-      const ci = itemText.indexOf(":");
-      const label = ci > -1 ? itemText.slice(0, ci).trim() : itemText.trim();
-      const url = ci > -1 ? itemText.slice(ci + 1).trim() : "";
-      if (listKey === "links") result.links.push({ label, url });
-      continue;
-    }
-    listKey = null;
-    const ci = line.indexOf(":");
-    if (ci === -1) continue;
-    const key = line.slice(0, ci).trim().toLowerCase();
-    const val = line.slice(ci + 1).trim().replace(/^["']|["']$/g, "");
-    if (!val) { if (key === "links") listKey = "links"; }
-    else if (key === "title") result.title = val;
-    else if (key === "author" || key === "authors") result.author = val;
-    else if (key === "affiliation" || key === "affilation") result.affiliation = val;
-    else if (key === "venue") result.venue = val;
-  }
-  return result;
-}
-
 function stripFrontmatter(markdown) {
   return markdown.replace(/^---\r?\n[\s\S]*?\r?\n---\s*\r?\n?/, "");
-}
-
-function escapeHtml(input = "") {
-  return input
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
-function getProjectYear(project) {
-  const venue = (project.venue || "").trim();
-  const matched = venue.match(/\b(19|20)\d{2}\b/);
-  return matched ? matched[0] : "2026";
 }
 
 function getQuerySlug() {
@@ -566,7 +501,7 @@ function toBibtexAuthors(authors = "") {
 }
 
 function buildBibtex(project, arxivLink) {
-  const year = getProjectYear(project);
+  const year = getProjectYear(project, "2026");
   const arxivId = getArxivId(arxivLink);
   const firstAuthor = (project.author || "author").split(",")[0].replace(/[^a-zA-Z]/g, "").toLowerCase();
   const key = `${firstAuthor || "author"}${year}`;
@@ -1008,16 +943,9 @@ async function loadProject() {
     bibtexEl.textContent = bibtex;
     bibtexEl.className = `language-${codeLanguage}`;
 
-    if (bibtexSection) {
-      bibtexCopyButton.title = "Copy BibTeX";
-      bibtexCopyButton.setAttribute("aria-label", "Copy BibTeX");
-    } else if (codeSection) {
-      bibtexCopyButton.title = "Copy Code";
-      bibtexCopyButton.setAttribute("aria-label", "Copy Code");
-    } else {
-      bibtexCopyButton.title = "Copy BibTeX";
-      bibtexCopyButton.setAttribute("aria-label", "Copy BibTeX");
-    }
+    const copyLabel = (codeSection && !bibtexSection) ? "Copy Code" : "Copy BibTeX";
+    bibtexCopyButton.title = copyLabel;
+    bibtexCopyButton.setAttribute("aria-label", copyLabel);
 
     abstractLabelEl.textContent = abstractSection?.title || summarySection?.title || "ABSTRACT";
     bibtexLabelEl.textContent = bibtexOrCodeSection?.title || "BIBTEX";
@@ -1056,36 +984,15 @@ async function loadProject() {
 
 bibtexCopyButton.addEventListener("click", copyBibtex);
 
-menuToggleButton.addEventListener("click", () => {
-  if (mobileOverlay.classList.contains("open")) {
-    closeMobileMenu();
-    return;
-  }
-  openMobileMenu();
-});
-
-mobileOverlay.addEventListener("click", (event) => {
-  if (event.target === mobileOverlay) {
-    closeMobileMenu();
+loadProject().then(() => {
+  const slug = new URLSearchParams(window.location.search).get("slug") || "";
+  if (slug) {
+    runFlipAnimation(slug);
+    runHeroFlipAnimation(slug);
   }
 });
-
-window.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    closeMobileMenu();
-  }
-});
-
-window.addEventListener("resize", () => {
-  if (window.innerWidth > 900) {
-    closeMobileMenu();
-  }
-});
-
-loadProject();
 
 // ── FLIP title animation ─────────────────────────────
-// Called inside loadProject() after title is set — patched via wrapper below.
 function runFlipAnimation(slug) {
   const key = "flip:" + slug;
   const stored = sessionStorage.getItem(key);
@@ -1162,62 +1069,6 @@ function runHeroFlipAnimation(slug) {
     heroEl.style.transition = "";
     heroEl.style.opacity = "";
   }, { once: true });
-}
-
-// Patch loadProject to call FLIP after content is set
-const _origLoadProject = loadProject;
-(async function patchedLoad() {
-  // loadProject already called above; intercept future slug reads via MutationObserver on title
-  const slug = new URLSearchParams(window.location.search).get("slug") || "";
-  if (!slug) return;
-
-  // Wait for title to be populated (text changes from "{Project Name}")
-  const observer = new MutationObserver(() => {
-    if (titleEl.textContent && titleEl.textContent !== "{Project Name}") {
-      observer.disconnect();
-      runFlipAnimation(slug);
-      runHeroFlipAnimation(slug);
-    }
-  });
-  observer.observe(titleEl, { childList: true, subtree: true, characterData: true });
-})();
-
-// ── Dark mode ────────────────────────────────────────
-const darkToggleBtn = document.getElementById("dark-toggle");
-const floatingText = document.getElementById("floating-indicator-text");
-
-function setDark(val) {
-  document.body.classList.toggle("dark", val);
-  localStorage.setItem("theme", val ? "dark" : "light");
-  if (darkToggleBtn) darkToggleBtn.textContent = val ? "☀" : "☾";
-  if (floatingText) floatingText.textContent = val ? "DARK_MODE" : "AVAILABLE";
-}
-
-const savedTheme = localStorage.getItem("theme");
-const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-setDark(savedTheme === "dark" || (savedTheme === null && prefersDark));
-
-if (darkToggleBtn) {
-  darkToggleBtn.addEventListener("click", () => {
-    setDark(!document.body.classList.contains("dark"));
-  });
-}
-
-// ── Header scroll ────────────────────────────────────
-const siteHeaderEl = document.querySelector(".site-header");
-if (siteHeaderEl) {
-  const onScroll = () => siteHeaderEl.classList.toggle("scrolled", window.scrollY > 20);
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-}
-
-// ── Mouse glow ───────────────────────────────────────
-const mouseGlow = document.getElementById("mouse-glow");
-if (mouseGlow) {
-  window.addEventListener("mousemove", (e) => {
-    mouseGlow.style.left = e.clientX + "px";
-    mouseGlow.style.top = e.clientY + "px";
-  }, { passive: true });
 }
 
 // ── Back navigation exit animation ──────────────────

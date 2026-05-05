@@ -1,41 +1,9 @@
-const projectData = [
-  {
-    category: "industrial",
-    title: "Predictive Maintenance Dashboard",
-    description:
-      "제조 설비 로그를 분석해 고장 확률을 예측하고, 현장 엔지니어를 위한 실시간 알림 대시보드를 구축했습니다.",
-  },
-  {
-    category: "industrial",
-    title: "Demand Forecasting for Retail",
-    description:
-      "프로모션/계절성 데이터를 결합해 판매량 예측 모델을 개선하고 재고 비용을 절감한 프로젝트입니다.",
-  },
-  {
-    category: "academic",
-    title: "Graph Neural Network Research",
-    description:
-      "이종 그래프에서 노드 분류 성능을 높이기 위한 attention 기반 메시지 전달 기법을 연구했습니다.",
-  },
-  {
-    category: "academic",
-    title: "HCI Study for AI Tutor",
-    description:
-      "학습자의 이해도를 높이는 설명 인터페이스를 설계하고 사용자 실험을 통해 효과를 검증했습니다.",
-  },
-];
-
 const tabButtons = document.querySelectorAll(".tab-button[data-target]");
 const panels = document.querySelectorAll(".panel");
-const projectGrid = document.getElementById("project-grid");
-const filterButtons = document.querySelectorAll(".filter-button");
 const homeContent = document.getElementById("home-content");
 const businessCard = document.getElementById("business-card");
 const homeVisual = document.getElementById("home-visual");
 const brandHomeButton = document.getElementById("brand-home");
-const menuToggleButton = document.getElementById("menu-toggle");
-const mobileOverlay = document.getElementById("mobile-overlay");
-const homeAbstractButtons = document.querySelectorAll(".home-project-abstract");
 let cardFlipped = false;
 
 function setActivePanel(target) {
@@ -44,27 +12,9 @@ function setActivePanel(target) {
     button.classList.toggle("active", isActive);
     button.setAttribute("aria-selected", isActive ? "true" : "false");
   });
-
   panels.forEach((panel) => {
-    const isActive = panel.id === target;
-    panel.classList.toggle("active", isActive);
+    panel.classList.toggle("active", panel.id === target);
   });
-}
-
-function openMobileMenu() {
-  mobileOverlay.classList.add("open");
-  mobileOverlay.setAttribute("aria-hidden", "false");
-  menuToggleButton.classList.add("is-open");
-  menuToggleButton.setAttribute("aria-expanded", "true");
-  document.body.classList.add("menu-open");
-}
-
-function closeMobileMenu() {
-  mobileOverlay.classList.remove("open");
-  mobileOverlay.setAttribute("aria-hidden", "true");
-  menuToggleButton.classList.remove("is-open");
-  menuToggleButton.setAttribute("aria-expanded", "false");
-  document.body.classList.remove("menu-open");
 }
 
 tabButtons.forEach((button) => {
@@ -81,87 +31,13 @@ brandHomeButton.addEventListener("click", () => {
   closeMobileMenu();
 });
 
-menuToggleButton.addEventListener("click", () => {
-  if (mobileOverlay.classList.contains("open")) {
-    closeMobileMenu();
-    return;
-  }
-  openMobileMenu();
-});
-
-mobileOverlay.addEventListener("click", (event) => {
-  if (event.target === mobileOverlay) {
-    closeMobileMenu();
-  }
-});
-
-window.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    closeMobileMenu();
-  }
-});
-
-window.addEventListener("resize", () => {
-  if (window.innerWidth > 900) {
-    closeMobileMenu();
-  }
-});
-
-function renderProjects(filter = "all") {
-  if (!projectGrid) {
-    return;
-  }
-
-  projectGrid.innerHTML = "";
-
-  const filtered = filter === "all" ? projectData : projectData.filter((item) => item.category === filter);
-
-  filtered.forEach((project) => {
-    const card = document.createElement("article");
-    card.className = "project-card";
-    card.innerHTML = `
-      <p class="project-meta">${project.category}</p>
-      <h3>${project.title}</h3>
-      <p>${project.description}</p>
-    `;
-    projectGrid.appendChild(card);
-  });
-}
-
-filterButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const filter = button.dataset.filter;
-    filterButtons.forEach((b) => {
-      b.classList.remove("active");
-      b.setAttribute("aria-pressed", "false");
-    });
-    button.classList.add("active");
-    button.setAttribute("aria-pressed", "true");
-    renderProjects(filter);
-  });
-});
-
 function getInitialPanel() {
   const hash = window.location.hash.replace("#", "");
-  if (hash === "contact") {
-    return "contact";
-  }
-  return "home";
-}
-
-function escapeHtml(input) {
-  return input
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+  return hash === "contact" ? "contact" : "home";
 }
 
 function parseInlineMarkdown(text) {
-  const escaped = escapeHtml(text);
-  return escaped
-    .replace(/==([^=]+)==/g, '<mark class="home-highlight">$1</mark>')
+  return escapeHtml(text)
     .replace(/`([^`]+)`/g, "<code>$1</code>")
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
     .replace(/\*([^*]+)\*/g, "<em>$1</em>")
@@ -169,235 +45,73 @@ function parseInlineMarkdown(text) {
 }
 
 function markdownToHtml(markdownText) {
-  const lines = markdownText.split("\n");
   const html = [];
   let inList = false;
+  const closeList = () => { if (inList) { html.push("</ul>"); inList = false; } };
 
-  lines.forEach((rawLine) => {
+  markdownText.split("\n").forEach((rawLine) => {
     const line = rawLine.trim();
-
-    if (!line) {
-      if (inList) {
-        html.push("</ul>");
-        inList = false;
-      }
-      return;
-    }
-
-    if (line.startsWith("# ")) {
-      if (inList) {
-        html.push("</ul>");
-        inList = false;
-      }
-      html.push(`<h1>${parseInlineMarkdown(line.slice(2))}</h1>`);
-      return;
-    }
-
-    if (line.startsWith("## ")) {
-      if (inList) {
-        html.push("</ul>");
-        inList = false;
-      }
-      html.push(`<h2>${parseInlineMarkdown(line.slice(3))}</h2>`);
-      return;
-    }
-
-    if (line.startsWith("### ")) {
-      if (inList) {
-        html.push("</ul>");
-        inList = false;
-      }
-      html.push(`<h3>${parseInlineMarkdown(line.slice(4))}</h3>`);
-      return;
-    }
-
+    if (!line) { closeList(); return; }
+    if (line.startsWith("# "))   { closeList(); html.push(`<h1>${parseInlineMarkdown(line.slice(2))}</h1>`); return; }
+    if (line.startsWith("## "))  { closeList(); html.push(`<h2>${parseInlineMarkdown(line.slice(3))}</h2>`); return; }
+    if (line.startsWith("### ")) { closeList(); html.push(`<h3>${parseInlineMarkdown(line.slice(4))}</h3>`); return; }
     if (line.startsWith("- ")) {
-      if (!inList) {
-        html.push("<ul>");
-        inList = true;
-      }
+      if (!inList) { html.push("<ul>"); inList = true; }
       html.push(`<li>${parseInlineMarkdown(line.slice(2))}</li>`);
       return;
     }
-
-    if (inList) {
-      html.push("</ul>");
-      inList = false;
-    }
-
+    closeList();
     html.push(`<p>${parseInlineMarkdown(line)}</p>`);
   });
-
-  if (inList) {
-    html.push("</ul>");
-  }
-
+  closeList();
   return html.join("\n");
 }
 
-function setupHomeAbstractToggles() {
-  const setAbstractLabel = (button, isExpanded) => {
-    button.textContent = isExpanded ? "abstract ↑" : "abstract ↓";
-  };
-
-  homeAbstractButtons.forEach((button) => {
-    const targetId = button.getAttribute("aria-controls");
-    if (!targetId) {
-      return;
-    }
-
-    const hiddenAbstract = document.getElementById(targetId);
-    if (!hiddenAbstract) {
-      return;
-    }
-
-    const isExpandedInitially = !hiddenAbstract.hidden;
-    button.setAttribute("aria-expanded", isExpandedInitially ? "true" : "false");
-    setAbstractLabel(button, isExpandedInitially);
-
-    button.addEventListener("click", () => {
-      hiddenAbstract.hidden = !hiddenAbstract.hidden;
-      const isExpanded = !hiddenAbstract.hidden;
-      button.setAttribute("aria-expanded", isExpanded ? "true" : "false");
-      setAbstractLabel(button, isExpanded);
-    });
-  });
-}
-
 function setupHomeVisualFlip() {
-  if (!homeVisual) {
-    return;
-  }
-
-  const syncPressedState = () => {
-    const isFlipped = homeVisual.classList.contains("is-flipped");
-    homeVisual.setAttribute("aria-pressed", isFlipped ? "true" : "false");
-  };
-
-  const toggleFlip = () => {
-    homeVisual.classList.toggle("is-flipped");
-    syncPressedState();
-  };
-
-  homeVisual.addEventListener("click", toggleFlip);
-  homeVisual.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      toggleFlip();
-    }
-  });
-
-  syncPressedState();
+  if (!homeVisual) return;
+  const syncState = () => homeVisual.setAttribute("aria-pressed", homeVisual.classList.contains("is-flipped") ? "true" : "false");
+  const toggle = () => { homeVisual.classList.toggle("is-flipped"); syncState(); };
+  homeVisual.addEventListener("click", toggle);
+  homeVisual.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+  syncState();
 }
 
 async function loadHomeMarkdown() {
   try {
-    const response = await fetch("content/home.md");
-    if (!response.ok) {
-      throw new Error("home.md file not found");
-    }
-    const markdown = await response.text();
-    homeContent.innerHTML = markdownToHtml(markdown);
-  } catch (error) {
-    homeContent.innerHTML =
-      "<p>홈 소개 파일을 불러오지 못했습니다. <code>content/home.md</code>를 확인해주세요.</p>";
+    const res = await fetch("content/home.md");
+    if (!res.ok) throw new Error();
+    homeContent.innerHTML = markdownToHtml(await res.text());
+  } catch (_) {
+    homeContent.innerHTML = "<p>홈 소개 파일을 불러오지 못했습니다. <code>content/home.md</code>를 확인해주세요.</p>";
   }
 }
 
 function setCardTransform(xRatio, yRatio) {
-  const rotateY = xRatio * 12;
-  const rotateX = yRatio * -10;
-  const baseY = cardFlipped ? 180 : 0;
-  businessCard.style.transform = `rotateX(${rotateX}deg) rotateY(${baseY + rotateY}deg)`;
+  businessCard.style.transform = `rotateX(${yRatio * -10}deg) rotateY(${(cardFlipped ? 180 : 0) + xRatio * 12}deg)`;
 }
-
 function resetCardTransform() {
-  const baseY = cardFlipped ? 180 : 0;
-  businessCard.style.transform = `rotateX(0deg) rotateY(${baseY}deg)`;
+  businessCard.style.transform = `rotateX(0deg) rotateY(${cardFlipped ? 180 : 0}deg)`;
 }
 
-businessCard.addEventListener("mousemove", (event) => {
-  const rect = businessCard.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
-  const xRatio = (x / rect.width - 0.5) * 2;
-  const yRatio = (y / rect.height - 0.5) * 2;
-  setCardTransform(xRatio, yRatio);
+businessCard.addEventListener("mousemove", (e) => {
+  const r = businessCard.getBoundingClientRect();
+  setCardTransform((e.clientX - r.left) / r.width * 2 - 1, (e.clientY - r.top) / r.height * 2 - 1);
 });
-
 businessCard.addEventListener("mouseleave", resetCardTransform);
-
-businessCard.addEventListener("touchmove", (event) => {
-  const touch = event.touches[0];
-  const rect = businessCard.getBoundingClientRect();
-  const x = touch.clientX - rect.left;
-  const y = touch.clientY - rect.top;
-  const xRatio = (x / rect.width - 0.5) * 2;
-  const yRatio = (y / rect.height - 0.5) * 2;
-  setCardTransform(xRatio, yRatio);
+businessCard.addEventListener("touchmove", (e) => {
+  const t = e.touches[0], r = businessCard.getBoundingClientRect();
+  setCardTransform((t.clientX - r.left) / r.width * 2 - 1, (t.clientY - r.top) / r.height * 2 - 1);
 });
-
 businessCard.addEventListener("touchend", resetCardTransform);
 businessCard.addEventListener("blur", resetCardTransform);
 
-businessCard.addEventListener("dblclick", () => {
-  cardFlipped = !cardFlipped;
-  businessCard.classList.toggle("flipped", cardFlipped);
-  resetCardTransform();
-});
-
-businessCard.addEventListener("keydown", (event) => {
-  if (event.key === "Enter" || event.key === " ") {
-    event.preventDefault();
-    cardFlipped = !cardFlipped;
-    businessCard.classList.toggle("flipped", cardFlipped);
-    resetCardTransform();
-  }
-});
+const flipCard = () => { cardFlipped = !cardFlipped; businessCard.classList.toggle("flipped", cardFlipped); resetCardTransform(); };
+businessCard.addEventListener("dblclick", flipCard);
+businessCard.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flipCard(); } });
 
 setActivePanel(getInitialPanel());
 setupHomeVisualFlip();
-setupHomeAbstractToggles();
 loadHomeMarkdown();
-renderProjects();
-
-// ── Dark mode toggle ─────────────────────────────────
-const darkToggleBtn = document.getElementById("dark-toggle");
-const floatingText = document.getElementById("floating-indicator-text");
-
-function setDark(val) {
-  document.body.classList.toggle("dark", val);
-  localStorage.setItem("theme", val ? "dark" : "light");
-  if (darkToggleBtn) darkToggleBtn.textContent = val ? "☀" : "☾";
-  if (floatingText) floatingText.textContent = val ? "DARK_MODE" : "AVAILABLE";
-}
-
-const savedTheme = localStorage.getItem("theme");
-const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-setDark(savedTheme === "dark" || (savedTheme === null && prefersDark));
-
-if (darkToggleBtn) {
-  darkToggleBtn.addEventListener("click", () => {
-    setDark(!document.body.classList.contains("dark"));
-  });
-}
-
-// ── Header scroll detection ──────────────────────────
-const siteHeader = document.querySelector(".site-header");
-if (siteHeader) {
-  const onScroll = () => siteHeader.classList.toggle("scrolled", window.scrollY > 20);
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-}
-
-// ── Mouse glow ───────────────────────────────────────
-const mouseGlow = document.getElementById("mouse-glow");
-if (mouseGlow) {
-  window.addEventListener("mousemove", (e) => {
-    mouseGlow.style.left = e.clientX + "px";
-    mouseGlow.style.top = e.clientY + "px";
-  }, { passive: true });
-}
 
 // ── Home projects: dynamic first project ─────────────
 async function loadHomeProject() {
@@ -418,67 +132,48 @@ async function loadHomeProject() {
   const hiddenAbstract = section.querySelector(".home-project-hidden");
   if (!article) return;
 
-  // Populate text fields (will be overridden by frontmatter below)
-  const nameEl = article.querySelector(".home-project-name");
-  const authorEl = article.querySelector(".home-project-author");
-  const venueEl = article.querySelector(".home-project-venue");
+  const nameEl    = article.querySelector(".home-project-name");
+  const authorEl  = article.querySelector(".home-project-author");
+  const venueEl   = article.querySelector(".home-project-venue");
   const abstractBtn = article.querySelector(".home-project-abstract");
-  if (nameEl) nameEl.textContent = p.title || "";
-  if (authorEl) authorEl.textContent = p.author || "";
-  if (venueEl) venueEl.textContent = p.venue || "";
+  const thumbEl   = article.querySelector(".home-project-thumb");
 
-  // Thumb: set background image (## Show first image takes priority over json thumbnail)
-  const thumbEl = article.querySelector(".home-project-thumb");
+  // JSON defaults
+  if (nameEl)   nameEl.textContent   = p.title  || "";
+  if (authorEl) authorEl.textContent = p.author || "";
+  if (venueEl)  venueEl.textContent  = p.venue  || "";
   if (thumbEl && p.thumbnail) {
     thumbEl.style.backgroundImage = `url("${p.thumbnail}")`;
     thumbEl.classList.add("has-image");
   }
 
-  // Fetch md: parse frontmatter + ## Overview + ## Show thumbnail
+  // Fetch md: single pass for frontmatter override + ## Show thumbnail + ## Overview text
   let overviewText = "";
   if (p.content) {
     try {
       const mdRes = await fetch(p.content);
       if (mdRes.ok) {
         const mdText = await mdRes.text();
+        const lines  = mdText.split(/\r?\n/);
 
-        // Parse frontmatter
-        const fmMatch = mdText.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-        if (fmMatch) {
-          const fmLines = fmMatch[1].split(/\r?\n/);
-          let listKey = null;
-          for (const raw of fmLines) {
-            const ln = raw.trim();
-            if (!ln) continue;
-            if (listKey && /^[*-]\s/.test(ln)) { listKey = null; continue; }
-            listKey = null;
-            const ci = ln.indexOf(":");
-            if (ci === -1) continue;
-            const key = ln.slice(0, ci).trim().toLowerCase();
-            const val = ln.slice(ci + 1).trim().replace(/^["']|["']$/g, "");
-            if (!val) { if (key === "links") listKey = "links"; continue; }
-            if (key === "title" && nameEl) nameEl.textContent = val;
-            else if ((key === "author" || key === "authors") && authorEl) authorEl.textContent = val;
-            else if (key === "venue" && venueEl) venueEl.textContent = val;
-          }
-        }
+        const fm = parseFrontmatter(mdText);
+        if (fm.title  && nameEl)   nameEl.textContent   = fm.title;
+        if (fm.author && authorEl) authorEl.textContent = fm.author;
+        if (fm.venue  && venueEl)  venueEl.textContent  = fm.venue;
 
-        const lines = mdText.split(/\r?\n/);
-        let inOverview = false;
-        let inShow = false;
-        let showThumb = "";
-        const collected = [];
+        let inShow = false, inOverview = false, showThumb = "";
+        const overviewLines = [];
         for (const line of lines) {
-          if (/^## Show\s*$/i.test(line.trim())) { inShow = true; inOverview = false; continue; }
+          if (/^## Show\s*$/i.test(line.trim()))     { inShow = true;  inOverview = false; continue; }
           if (/^## Overview\s*$/i.test(line.trim())) { inOverview = true; inShow = false; continue; }
           if (/^## /.test(line)) { inShow = false; if (inOverview) break; }
           if (inShow && !showThumb) {
             const src = line.trim();
             if (src && /\.(png|jpe?g|gif|webp|svg|avif)(\?.*)?$/i.test(src)) showThumb = src;
           }
-          if (inOverview && line.trim()) collected.push(line.trim());
+          if (inOverview && line.trim()) overviewLines.push(line.trim());
         }
-        overviewText = collected.join(" ");
+        overviewText = overviewLines.join(" ");
         if (showThumb && thumbEl) {
           thumbEl.style.backgroundImage = `url("${showThumb}")`;
           thumbEl.classList.add("has-image");
@@ -486,6 +181,7 @@ async function loadHomeProject() {
       }
     } catch (_) {}
   }
+
   const abstractText = overviewText || p.abstract || "";
   if (hiddenAbstract && abstractText) {
     hiddenAbstract.textContent = abstractText;
@@ -493,19 +189,22 @@ async function loadHomeProject() {
     abstractBtn.hidden = true;
   }
 
-  // Update abstract toggle id binding (re-query after re-run of setupHomeAbstractToggles)
+  // Wire abstract toggle directly on this button (avoids re-binding all buttons)
   if (abstractBtn && hiddenAbstract) {
     hiddenAbstract.id = "home-project-hidden-1";
     abstractBtn.setAttribute("aria-controls", "home-project-hidden-1");
-    // Re-attach toggle since textContent changed
-    abstractBtn.removeAttribute("data-bound");
-    setupHomeAbstractToggles();
+    abstractBtn.setAttribute("aria-expanded", "false");
+    abstractBtn.textContent = "abstract ↓";
+    abstractBtn.addEventListener("click", () => {
+      hiddenAbstract.hidden = !hiddenAbstract.hidden;
+      const expanded = !hiddenAbstract.hidden;
+      abstractBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
+      abstractBtn.textContent = expanded ? "abstract ↑" : "abstract ↓";
+    });
   }
 
-  // Make thumb and name clickable → navigate to detail page
   const detailUrl = `project-detail.html?slug=${encodeURIComponent(p.slug)}`;
 
-  // Wrap thumb in anchor
   if (thumbEl && !thumbEl.closest("a")) {
     const thumbLink = document.createElement("a");
     thumbLink.href = detailUrl;
@@ -513,8 +212,6 @@ async function loadHomeProject() {
     thumbLink.setAttribute("aria-label", `View project: ${p.title}`);
     thumbEl.parentNode.insertBefore(thumbLink, thumbEl);
     thumbLink.appendChild(thumbEl);
-
-    // Hover explore overlay
     const overlay = document.createElement("span");
     overlay.className = "home-project-thumb-overlay";
     overlay.setAttribute("aria-hidden", "true");
@@ -522,7 +219,6 @@ async function loadHomeProject() {
     thumbLink.appendChild(overlay);
   }
 
-  // Make name a link
   if (nameEl && !nameEl.closest("a")) {
     const nameLink = document.createElement("a");
     nameLink.href = detailUrl;
@@ -531,16 +227,13 @@ async function loadHomeProject() {
     nameLink.appendChild(nameEl);
   }
 
-  // Page-exit + FLIP on click
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   function navigateToDetail(e) {
     e.preventDefault();
-    const titleRect = nameEl ? nameEl.getBoundingClientRect() : null;
-    if (titleRect) {
+    if (nameEl) {
       sessionStorage.setItem("flip:" + p.slug, JSON.stringify({
-        titleTop: titleRect.top,
-        scrollY: window.scrollY
+        titleTop: nameEl.getBoundingClientRect().top,
+        scrollY: window.scrollY,
       }));
     }
     const mainEl = document.querySelector("main");
