@@ -358,6 +358,7 @@ h2 {
 }
 
 .home-visual {
+  position: relative;
   display: block;
   order: 1;
   width: 50%;
@@ -411,8 +412,80 @@ h2 {
   outline-offset: 4px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .home-visual-inner { transition: none; }
+/* ── Home Visual Dock ───────────────────────────────── */
+.home-visual-dock {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 22px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  z-index: 10;
+}
+
+.home-visual:hover .home-visual-dock,
+.home-visual:focus-within .home-visual-dock,
+.home-visual.dock-open .home-visual-dock {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.home-visual-dock-item {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.home-visual-dock-item:hover {
+  transform: scale(1.14) translateY(-3px);
+}
+
+.home-visual-dock-icon {
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #F9F9F9;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.home-visual-dock-tooltip {
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-family: var(--header-font);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 20;
+}
+
+.home-visual-dock-item:hover .home-visual-dock-tooltip {
+  opacity: 1;
 }
 
 /* ── Section divider pattern ───────────────────────── */
@@ -1903,6 +1976,8 @@ main.page-exiting,
   .project-detail-main {
     animation: none;
   }
+  .home-visual-inner,
+  .home-visual-dock { transition: none; }
 }
 
 /* Projects tile stagger + hover overlay */

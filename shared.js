@@ -64,6 +64,34 @@ if (_mouseGlow) {
   }, { passive: true });
 }
 
+// ── Social Links — single source of truth ────────────
+const SOCIAL_LINKS = [
+  { key: "github",   url: "https://github.com/dongwoodustinkang",                   label: "GitHub" },
+  { key: "email",    url: "mailto:dongwookang@keti.re.kr",                           label: "Email" },
+  { key: "medium",   url: "https://medium.com/@dongwoo-kang",                        label: "Medium" },
+  { key: "scholar",  url: "https://scholar.google.com/citations?user=dongwoo-kang",  label: "Google Scholar" },
+  { key: "linkedin", url: "https://www.linkedin.com/in/-dongwookang",                label: "LinkedIn" },
+];
+
+function renderSocialLinks(container, variant = "footer") {
+  if (!container) return;
+  container.innerHTML = "";
+  SOCIAL_LINKS.forEach(({ key, url, label }) => {
+    const a = document.createElement("a");
+    a.href = url;
+    a.setAttribute("aria-label", label);
+    if (!url.startsWith("mailto:")) { a.target = "_blank"; a.rel = "noreferrer"; }
+    a.className = variant === "home"
+      ? `home-social-link footer-social-link footer-social-${key}`
+      : `footer-social-link footer-social-${key}`;
+    container.appendChild(a);
+  });
+}
+
+// Auto-populate all social link containers
+document.querySelectorAll(".home-socials").forEach(el => renderSocialLinks(el, "home"));
+document.querySelectorAll(".footer-socials").forEach(el => renderSocialLinks(el, "footer"));
+
 // ── Utilities ────────────────────────────────────────
 function escapeHtml(input = "") {
   return String(input)

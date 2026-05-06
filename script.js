@@ -71,9 +71,61 @@ function setupHomeVisualFlip() {
   if (!homeVisual) return;
   const syncState = () => homeVisual.setAttribute("aria-pressed", homeVisual.classList.contains("is-flipped") ? "true" : "false");
   const toggle = () => { homeVisual.classList.toggle("is-flipped"); syncState(); };
-  homeVisual.addEventListener("click", toggle);
+  // Touch devices: tap toggles dock, not flip
+  if (!window.matchMedia("(hover: none)").matches) {
+    homeVisual.addEventListener("click", toggle);
+  }
   homeVisual.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
   syncState();
+}
+
+function buildHomeVisualDock() {
+  if (!homeVisual || typeof SOCIAL_LINKS === "undefined") return;
+
+  const dock = document.createElement("div");
+  dock.className = "home-visual-dock";
+  dock.setAttribute("role", "group");
+  dock.setAttribute("aria-label", "Social links");
+
+  SOCIAL_LINKS.forEach(({ key, url, label }) => {
+    const a = document.createElement("a");
+    a.href = url;
+    a.className = "home-visual-dock-item";
+    a.setAttribute("aria-label", label);
+    if (!url.startsWith("mailto:")) { a.target = "_blank"; a.rel = "noreferrer"; }
+    // Prevent click from bubbling to the visual (would trigger flip)
+    a.addEventListener("click", e => e.stopPropagation());
+    a.addEventListener("pointerdown", e => e.stopPropagation());
+
+    const icon = document.createElement("span");
+    icon.className = `home-visual-dock-icon footer-social-${key}`;
+    icon.setAttribute("aria-hidden", "true");
+
+    const tooltip = document.createElement("span");
+    tooltip.className = "home-visual-dock-tooltip";
+    tooltip.textContent = label;
+    tooltip.setAttribute("aria-hidden", "true");
+
+    a.appendChild(icon);
+    a.appendChild(tooltip);
+    dock.appendChild(a);
+  });
+
+  homeVisual.appendChild(dock);
+
+  // Touch device: first tap opens dock, subsequent taps on outside close it
+  if (window.matchMedia("(hover: none)").matches) {
+    homeVisual.addEventListener("click", (e) => {
+      if (!e.target.closest(".home-visual-dock")) {
+        homeVisual.classList.toggle("dock-open");
+      }
+    });
+    document.addEventListener("touchstart", (e) => {
+      if (!homeVisual.contains(e.target)) {
+        homeVisual.classList.remove("dock-open");
+      }
+    }, { passive: true });
+  }
 }
 
 async function loadHomeMarkdown() {
@@ -111,6 +163,7 @@ businessCard.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key
 
 setActivePanel(getInitialPanel());
 setupHomeVisualFlip();
+buildHomeVisualDock();
 loadHomeMarkdown();
 
 // ── Home projects: up to 2 projects, fully dynamic ───
