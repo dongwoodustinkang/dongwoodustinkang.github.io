@@ -315,7 +315,7 @@ h2 {
   margin: 0 auto;
 }
 
-.home-copy { order: 2; }
+.home-copy { order: 3; }
 
 .home-name {
   margin: 0 0 0.6rem;
@@ -459,7 +459,8 @@ h2 {
 
 /* ── Home visual hint ───────────────────────────────── */
 .home-visual-hint {
-  margin: 0.5rem auto 0;
+  order: 2;
+  margin: -0.5rem auto 0;
   width: fit-content;
   font-family: var(--mono-font);
   font-size: 11px;
@@ -2075,7 +2076,7 @@ main.page-exiting,
   .projects-list { column-gap: 1.35rem; row-gap: 1.6rem; }
 
   .home-intro-grid { grid-template-columns: 1fr; gap: 1.2rem; max-width: 100%; margin: 0; }
-  .home-copy { order: 2; max-width: 100%; }
+  .home-copy { order: 3; max-width: 100%; }
   .home-visual { display: block; order: 1; width: 100%; max-width: 100%; margin: 0; }
 
   .site-footer { padding: 2.5rem 1rem 3rem; }

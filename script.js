@@ -82,7 +82,7 @@ function buildHomeVisualDock() {
     a.className = "home-visual-dock-item";
     a.setAttribute("aria-label", label);
     if (!url.startsWith("mailto:")) { a.target = "_blank"; a.rel = "noreferrer"; }
-    // Prevent click from bubbling to the visual (would trigger flip)
+    // Prevent click from bubbling to the visual wrapper
     a.addEventListener("click", e => e.stopPropagation());
     a.addEventListener("pointerdown", e => e.stopPropagation());
 

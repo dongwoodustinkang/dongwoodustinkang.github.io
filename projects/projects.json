@@ -1,5 +1,18 @@
 [
   {
+    "slug": "csi-project-2025",
+    "category": "academic",
+    "title": "고도화된 데이터 전처리와 CSI 기반 온디바이스 AIoT 프로그램 개발",
+    "author": "Content Convergence Center",
+    "affiliation": "Korea Electronic Technology Institute(KETI)",
+    "venue": "2025",
+    "link": "",
+    "code": "",
+    "thumbnail": "assets/images/csi-project-2025/csi25-01.png",
+    "abstract": "SVD 기반 정적 요소 제거 및 Edge AI 성능 향상을 위한 연구",
+    "content": "projects/csi-project-2025.md"
+  },
+  {
     "slug": "collab-ai-agent-hci-2024",
     "category": "industrial",
     "title": "AI Agent 기반 대화형 협업 도구 솔루션 제안",
@@ -29,7 +42,7 @@
     "slug": "csi-project-2024",
     "category": "academic",
     "title": "하드웨어 노이즈 극복을 위한 CSI 정제 및 전처리 최적화",
-    "author": "Contents Convergence Center",
+    "author": "Content Convergence Center",
     "affiliation": "Korea Electronic Technology Institute(KETI)",
     "venue": "2024",
     "link": "",
@@ -37,18 +50,5 @@
     "thumbnail": "assets/images/csi24/csi24-01.png",
     "abstract": "SVD 기반 정적 요소 제거 및 Edge AI 성능 향상을 위한 연구",
     "content": "projects/csi-project-2024.md"
-  },
-  {
-    "slug": "csi-project-2025",
-    "category": "academic",
-    "title": "하드웨어 노이즈 극복을 위한 CSI 정제 및 전처리 최적화",
-    "author": "Contents Convergence Center",
-    "affiliation": "Korea Electronic Technology Institute(KETI)",
-    "venue": "2025",
-    "link": "",
-    "code": "",
-    "thumbnail": "assets/images/csi-project-2024/csi24-01.png",
-    "abstract": "SVD 기반 정적 요소 제거 및 Edge AI 성능 향상을 위한 연구",
-    "content": "projects/csi-project-2025.md"
   }
 ]
