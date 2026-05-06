@@ -67,17 +67,6 @@ function markdownToHtml(markdownText) {
   return html.join("\n");
 }
 
-function setupHomeVisualFlip() {
-  if (!homeVisual) return;
-  const syncState = () => homeVisual.setAttribute("aria-pressed", homeVisual.classList.contains("is-flipped") ? "true" : "false");
-  const toggle = () => { homeVisual.classList.toggle("is-flipped"); syncState(); };
-  // Touch devices: tap toggles dock, not flip
-  if (!window.matchMedia("(hover: none)").matches) {
-    homeVisual.addEventListener("click", toggle);
-  }
-  homeVisual.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
-  syncState();
-}
 
 function buildHomeVisualDock() {
   if (!homeVisual || typeof SOCIAL_LINKS === "undefined") return;
@@ -162,7 +151,6 @@ businessCard.addEventListener("dblclick", flipCard);
 businessCard.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flipCard(); } });
 
 setActivePanel(getInitialPanel());
-setupHomeVisualFlip();
 buildHomeVisualDock();
 loadHomeMarkdown();
 
