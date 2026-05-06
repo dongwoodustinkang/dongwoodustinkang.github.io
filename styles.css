@@ -336,25 +336,10 @@ h2 {
 
 .markdown-content.home-markdown p { margin: 0; }
 
-.home-socials {
-  margin-top: 0.85rem;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
-}
-
-.home-social-link {
-  border: 1px solid var(--line);
-  background-color: transparent;
-}
-
-
 @media (min-width: 901px) {
   .home-copy { text-align: center; }
   .home-name { text-align: center; }
   .markdown-content.home-markdown { text-align: center; }
-  .home-socials { justify-content: center; }
 }
 
 .home-visual {
@@ -470,6 +455,27 @@ h2 {
 
 .home-visual-dock-item:hover .home-visual-dock-tooltip {
   opacity: 1;
+}
+
+/* ── Home visual hint ───────────────────────────────── */
+.home-visual-hint {
+  margin: 0.5rem auto 0;
+  width: fit-content;
+  font-family: var(--mono-font);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--text-sub);
+  opacity: 0.6;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 0.22s ease;
+}
+.home-visual-hint::after {
+  content: " ↑";
+}
+.home-visual:hover ~ .home-visual-hint,
+.home-visual.dock-open ~ .home-visual-hint {
+  opacity: 0;
 }
 
 /* ── Section divider pattern ───────────────────────── */

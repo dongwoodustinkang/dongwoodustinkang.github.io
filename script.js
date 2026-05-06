@@ -103,7 +103,8 @@ function buildHomeVisualDock() {
   homeVisual.appendChild(dock);
 
   // Touch device: first tap opens dock, subsequent taps on outside close it
-  if (window.matchMedia("(hover: none)").matches) {
+  const isTouch = window.matchMedia("(hover: none)").matches;
+  if (isTouch) {
     homeVisual.addEventListener("click", (e) => {
       if (!e.target.closest(".home-visual-dock")) {
         homeVisual.classList.toggle("dock-open");
@@ -115,6 +116,13 @@ function buildHomeVisualDock() {
       }
     }, { passive: true });
   }
+
+  // Hover / touch hint below the visual
+  const hint = document.createElement("p");
+  hint.className = "home-visual-hint";
+  hint.setAttribute("aria-hidden", "true");
+  hint.textContent = isTouch ? "touch" : "hover";
+  homeVisual.insertAdjacentElement("afterend", hint);
 }
 
 async function loadHomeMarkdown() {

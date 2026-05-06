@@ -88,8 +88,7 @@ function renderSocialLinks(container, variant = "footer") {
   });
 }
 
-// Auto-populate all social link containers
-document.querySelectorAll(".home-socials").forEach(el => renderSocialLinks(el, "home"));
+// Auto-populate footer social link containers
 document.querySelectorAll(".footer-socials").forEach(el => renderSocialLinks(el, "footer"));
 
 // ── Utilities ────────────────────────────────────────
