@@ -1768,6 +1768,17 @@ h2 {
 .project-detail-row-body ul { margin: 0.55rem 0 0; padding-left: 1.15rem; }
 
 /* ── Inline markdown formatting ── */
+.project-detail-row-body a,
+.project-detail-summary a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+.project-detail-row-body a:hover,
+.project-detail-row-body a:focus-visible,
+.project-detail-summary a:hover,
+.project-detail-summary a:focus-visible { opacity: 0.75; }
+
 .project-detail-row-body mark,
 .project-detail-summary mark {
   background: rgba(255, 195, 0, 0.28);
