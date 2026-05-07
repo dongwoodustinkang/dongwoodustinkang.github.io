@@ -168,12 +168,11 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
   let inCode = false;
   let codeLang = "text";
   let codeLines = [];
+  let inMath = false;
+  let mathLines = [];
 
   const closeListIfNeeded = () => {
-    if (inList) {
-      html.push("</ul>");
-      inList = false;
-    }
+    if (inList) { html.push("</ul>"); inList = false; }
   };
 
   const closeCodeIfNeeded = () => {
@@ -181,47 +180,63 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
     const escaped = escapeHtml(codeLines.join("\n"));
     const langLabel = codeLang !== "text" ? escapeHtml(codeLang) : "";
     const blockClass = langLabel ? "project-code-block" : "project-code-block no-lang";
+    const tooltip = langLabel || "copy";
     html.push(
       `<div class="${blockClass}">` +
       (langLabel ? `<span class="project-code-lang" aria-hidden="true">${langLabel}</span>` : ``) +
       `<div class="project-code-inner">` +
       `<pre class="project-code-pre"><code class="language-${codeLang}">${escaped}</code></pre>` +
-      `<button class="project-code-copy" type="button" aria-label="Copy code" data-tooltip="Copy">` +
-      `<img src="assets/icons/copy.svg" alt="" /></button>` +
+      `<button class="project-code-copy" type="button" aria-label="Copy code" data-lang="${tooltip}" data-tooltip="${tooltip}">` +
+      `<img class="copy-icon copy-icon--la" src="assets/icons/copy_a.svg" alt="" />` +
+      `<img class="copy-icon copy-icon--ls" src="assets/icons/copy_a_success.svg" alt="" />` +
+      `<img class="copy-icon copy-icon--da" src="assets/icons/copy_b.svg" alt="" />` +
+      `<img class="copy-icon copy-icon--ds" src="assets/icons/copy_b_success.svg" alt="" />` +
+      `</button>` +
       `</div>` +
       `</div>`
     );
-    inCode = false;
-    codeLang = "text";
-    codeLines = [];
+    inCode = false; codeLang = "text"; codeLines = [];
+  };
+
+  const closeMathIfNeeded = () => {
+    if (!inMath) return;
+    // Wrap in a div so KaTeX auto-render finds $$ ... $$ in one text node
+    html.push(`<div class="project-math-block">$$\n${mathLines.join("\n")}\n$$</div>`);
+    inMath = false; mathLines = [];
   };
 
   lines.forEach((rawLine) => {
     const line = rawLine.trimEnd();
     const trimmed = line.trim();
 
+    // ── Inside code fence ──
     if (inCode) {
-      if (trimmed.startsWith("```")) {
-        closeCodeIfNeeded();
-        return;
-      }
+      if (trimmed.startsWith("```")) { closeCodeIfNeeded(); return; }
       codeLines.push(rawLine);
       return;
     }
 
+    // ── Open code fence ──
     if (trimmed.startsWith("```")) {
       closeListIfNeeded();
+      closeMathIfNeeded();
       const langMatched = trimmed.match(/^```([\w#+-]*)/);
       codeLang = normalizeFenceLanguage(langMatched ? langMatched[1] : "");
-      inCode = true;
-      codeLines = [];
+      inCode = true; codeLines = [];
       return;
     }
 
-    if (!trimmed) {
-      closeListIfNeeded();
+    // ── $$ math block delimiter ──
+    if (trimmed === "$$") {
+      if (inMath) { closeMathIfNeeded(); }
+      else { closeListIfNeeded(); inMath = true; mathLines = []; }
       return;
     }
+
+    // ── Inside math block ──
+    if (inMath) { mathLines.push(rawLine); return; }
+
+    if (!trimmed) { closeListIfNeeded(); return; }
 
     // ── Standalone image line → <figure> ──
     const imgSrc = parseImageSourceFromLine(trimmed);
@@ -268,6 +283,7 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
 
   closeListIfNeeded();
   closeCodeIfNeeded();
+  closeMathIfNeeded();
   return html.join("");
 }
 
@@ -1029,7 +1045,6 @@ function initCodeBlocks() {
   }
   // Copy buttons — read textContent after hljs so span tags are stripped
   document.querySelectorAll(".project-code-copy").forEach((btn) => {
-    const icon = btn.querySelector("img");
     btn.addEventListener("click", async () => {
       const codeEl = btn.closest(".project-code-block").querySelector("code");
       const text = codeEl ? codeEl.textContent : "";
@@ -1045,12 +1060,10 @@ function initCodeBlocks() {
         document.execCommand("copy");
         document.body.removeChild(ta);
       }
-      if (icon) icon.src = "assets/icons/copy_success.svg";
       btn.dataset.tooltip = "Copied!";
       btn.classList.add("is-copied");
       setTimeout(() => {
-        if (icon) icon.src = "assets/icons/copy.svg";
-        btn.dataset.tooltip = "Copy";
+        btn.dataset.tooltip = btn.dataset.lang || "copy";
         btn.classList.remove("is-copied");
       }, 2000);
     });

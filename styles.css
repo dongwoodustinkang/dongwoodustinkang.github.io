@@ -1855,14 +1855,14 @@ h2 {
   font-size: 12.5px;
   line-height: 1.6;
 }
-/* color: unset so hljs theme colors are not overridden; pre-wrap for line wrapping */
+/* Do NOT set color here — let hljs .hljs rule apply its own color (#abb2bf).
+   Setting color (even unset/inherit) with higher specificity overrides hljs. */
 .project-code-pre code {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   background: transparent;
   padding: 0;
   font-size: inherit;
-  color: unset;
 }
 
 /* Copy button — absolute inside inner box, top-right */
@@ -1876,18 +1876,32 @@ h2 {
   width: 28px;
   height: 28px;
   padding: 5px;
-  background: rgba(255, 255, 255, 0.08);
+  /* light mode: dark button bg */
+  background: rgba(0, 0, 0, 0.18);
   border: none;
   border-radius: 7px;
   cursor: pointer;
   opacity: 0.6;
   transition: opacity 150ms ease, background 150ms ease;
 }
-.project-code-copy:hover { opacity: 1; background: rgba(255, 255, 255, 0.14); }
+/* dark mode: light button bg */
+.dark .project-code-copy { background: rgba(255, 255, 255, 0.1); }
+.project-code-copy:hover { opacity: 1; }
+.project-code-copy:hover { background: rgba(0, 0, 0, 0.28); }
+.dark .project-code-copy:hover { background: rgba(255, 255, 255, 0.18); }
 .project-code-copy.is-copied { opacity: 1; }
-.project-code-copy img { width: 100%; height: 100%; display: block; object-fit: contain; }
 
-/* Tooltip — same pill style as the lang badge, appears to the left of the button */
+/* ── 4-icon system: CSS swaps based on dark mode + is-copied state ── */
+.copy-icon { display: none; width: 100%; height: 100%; object-fit: contain; }
+/* light default */ .copy-icon--la { display: block; }
+/* light success */ .project-code-copy.is-copied .copy-icon--la { display: none; }
+                   .project-code-copy.is-copied .copy-icon--ls { display: block; }
+/* dark default  */ .dark .copy-icon--la { display: none; }
+                    .dark .copy-icon--da { display: block; }
+/* dark success  */ .dark .project-code-copy.is-copied .copy-icon--da { display: none; }
+                    .dark .project-code-copy.is-copied .copy-icon--ds { display: block; }
+
+/* Tooltip — same pill style as lang badge, appears to the left of the button */
 .project-code-copy::before {
   content: attr(data-tooltip);
   position: absolute;
@@ -1910,11 +1924,12 @@ h2 {
 .project-code-copy.is-copied::before { opacity: 1; }
 
 /* ── KaTeX display math ── */
-.katex-display {
-  margin: 1rem 0;
+.project-math-block {
+  margin: 0.8rem 0;
   overflow-x: auto;
   overflow-y: hidden;
 }
+.katex-display { margin: 0; }
 .katex { font-size: 1.05em; }
 
 .project-detail-bibtex-body { position: relative; min-width: 0; }
