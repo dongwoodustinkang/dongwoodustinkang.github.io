@@ -184,7 +184,8 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
       `<div class="project-code-block">` +
       `<div class="project-code-header">` +
       `<span class="project-code-lang">${langLabel}</span>` +
-      `<button class="project-code-copy" type="button" aria-label="Copy code">Copy</button>` +
+      `<button class="project-code-copy" type="button" aria-label="Copy code">` +
+      `<img src="assets/icons/copy.svg" alt="" /></button>` +
       `</div>` +
       `<pre class="project-code-pre"><code class="language-${codeLang}">${escaped}</code></pre>` +
       `</div>`
@@ -1025,8 +1026,9 @@ function initCodeBlocks() {
   if (window.hljs) {
     document.querySelectorAll(".project-code-pre code").forEach((el) => hljs.highlightElement(el));
   }
-  // Copy buttons — read textContent after hljs so spans are stripped
+  // Copy buttons — read textContent after hljs so span tags are stripped
   document.querySelectorAll(".project-code-copy").forEach((btn) => {
+    const icon = btn.querySelector("img");
     btn.addEventListener("click", async () => {
       const codeEl = btn.closest(".project-code-block").querySelector("code");
       const text = codeEl ? codeEl.textContent : "";
@@ -1042,9 +1044,12 @@ function initCodeBlocks() {
         document.execCommand("copy");
         document.body.removeChild(ta);
       }
-      btn.textContent = "Copied!";
+      if (icon) icon.src = "assets/icons/copy_success.svg";
       btn.classList.add("is-copied");
-      setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("is-copied"); }, 2000);
+      setTimeout(() => {
+        if (icon) icon.src = "assets/icons/copy.svg";
+        btn.classList.remove("is-copied");
+      }, 2000);
     });
   });
 }
