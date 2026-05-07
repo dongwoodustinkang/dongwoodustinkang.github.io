@@ -177,12 +177,17 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
   };
 
   const closeCodeIfNeeded = () => {
-    if (!inCode) {
-      return;
-    }
-    const code = escapeHtml(codeLines.join("\n"));
+    if (!inCode) return;
+    const escaped = escapeHtml(codeLines.join("\n"));
+    const langLabel = codeLang !== "text" ? escapeHtml(codeLang) : "";
     html.push(
-      `<pre class="project-code-pre"><code class="language-${codeLang}" data-lang="${codeLang}">${code}</code></pre>`
+      `<div class="project-code-block">` +
+      `<div class="project-code-header">` +
+      `<span class="project-code-lang">${langLabel}</span>` +
+      `<button class="project-code-copy" type="button" aria-label="Copy code">Copy</button>` +
+      `</div>` +
+      `<pre class="project-code-pre"><code class="language-${codeLang}">${escaped}</code></pre>` +
+      `</div>`
     );
     inCode = false;
     codeLang = "text";
@@ -1015,6 +1020,48 @@ async function loadProject() {
 
 bibtexCopyButton.addEventListener("click", copyBibtex);
 
+function initCodeBlocks() {
+  // Syntax highlighting
+  if (window.hljs) {
+    document.querySelectorAll(".project-code-pre code").forEach((el) => hljs.highlightElement(el));
+  }
+  // Copy buttons — read textContent after hljs so spans are stripped
+  document.querySelectorAll(".project-code-copy").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const codeEl = btn.closest(".project-code-block").querySelector("code");
+      const text = codeEl ? codeEl.textContent : "";
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = Object.assign(document.createElement("textarea"), {
+          value: text,
+          style: "position:fixed;opacity:0",
+        });
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      btn.textContent = "Copied!";
+      btn.classList.add("is-copied");
+      setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("is-copied"); }, 2000);
+    });
+  });
+}
+
+function initMath() {
+  if (!window.renderMathInElement) return;
+  const opts = {
+    delimiters: [
+      { left: "$$", right: "$$", display: true },
+      { left: "$",  right: "$",  display: false },
+    ],
+    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+    throwOnError: false,
+  };
+  [summaryEl, contentEl].forEach((el) => { if (el) renderMathInElement(el, opts); });
+}
+
 // Remove page-exiting class when page is restored from bfcache
 window.addEventListener("pageshow", () => {
   document.querySelector(".project-detail-main")?.classList.remove("page-exiting");
@@ -1026,6 +1073,8 @@ loadProject().then(() => {
     runFlipAnimation(slug);
     runHeroFlipAnimation(slug);
   }
+  initCodeBlocks();
+  initMath();
 });
 
 // ── FLIP title animation ─────────────────────────────
