@@ -1816,66 +1816,98 @@ h2 {
 
 /* ── Code block wrapper ── */
 .project-code-block {
+  position: relative;
   margin: 0.8rem 0;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 1.55rem; /* room for the floating lang pill above inner box */
 }
+.project-code-block.no-lang { padding-top: 0; }
 
-.project-code-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.35rem 0.75rem;
-  background: #21252b;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-}
-
+/* Floating language badge (pill above the inner box, top-right) */
 .project-code-lang {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.18rem 0.6rem;
+  background: rgba(128, 128, 128, 0.14);
+  border-radius: 20px;
   font-family: var(--mono-font);
   font-size: 11px;
-  color: #9da5b4;
-  letter-spacing: 0.04em;
-  text-transform: lowercase;
+  color: var(--text-sub);
+  letter-spacing: 0.06em;
+  pointer-events: none;
+  user-select: none;
 }
 
-.project-code-copy {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  padding: 4px;
-  background: transparent;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  opacity: 0.55;
-  transition: opacity 150ms ease;
+/* Inner code container */
+.project-code-inner {
+  position: relative;
+  border-radius: 10px;
+  background: #282c34;
+  overflow: hidden;
 }
-.project-code-copy:hover { opacity: 1; }
-.project-code-copy.is-copied { opacity: 1; }
-.project-code-copy img { width: 100%; height: 100%; display: block; object-fit: contain; }
 
 .project-code-pre {
   margin: 0;
-  padding: 0.9rem 1rem;
-  background: #282c34;
+  padding: 0.85rem 3rem 0.85rem 1rem; /* right padding leaves room for copy btn */
+  background: transparent;
   border: 0;
-  border-radius: 0;
   font-family: var(--mono-font);
   font-size: 12.5px;
   line-height: 1.6;
-  overflow-x: auto;
 }
-/* color: unset 으로 hljs 테마 색상이 inherit에 묻히지 않게 해제 */
+/* color: unset so hljs theme colors are not overridden; pre-wrap for line wrapping */
 .project-code-pre code {
-  white-space: pre;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   background: transparent;
   padding: 0;
   font-size: inherit;
   color: unset;
 }
+
+/* Copy button — absolute inside inner box, top-right */
+.project-code-copy {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 150ms ease, background 150ms ease;
+}
+.project-code-copy:hover { opacity: 1; background: rgba(255, 255, 255, 0.14); }
+.project-code-copy.is-copied { opacity: 1; }
+.project-code-copy img { width: 100%; height: 100%; display: block; object-fit: contain; }
+
+/* Tooltip — same pill style as the lang badge, appears to the left of the button */
+.project-code-copy::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 0.4rem);
+  transform: translateY(-50%);
+  padding: 0.18rem 0.6rem;
+  background: rgba(128, 128, 128, 0.18);
+  border-radius: 20px;
+  font-family: var(--mono-font);
+  font-size: 11px;
+  color: var(--text-sub);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.project-code-copy:hover::before,
+.project-code-copy.is-copied::before { opacity: 1; }
 
 /* ── KaTeX display math ── */
 .katex-display {
