@@ -66,11 +66,11 @@ if (_mouseGlow) {
 
 // ── Social Links — single source of truth ────────────
 const SOCIAL_LINKS = [
-  { key: "github",   url: "https://github.com/dongwoodustinkang",                   label: "GitHub" },
-  { key: "email",    url: "mailto:dongwookang@keti.re.kr",                           label: "Email" },
-  { key: "medium",   url: "https://medium.com/@dongwoo-kang",                        label: "Medium" },
-  { key: "scholar",  url: "https://scholar.google.com/citations?user=dongwoo-kang",  label: "Google Scholar" },
-  { key: "linkedin", url: "https://www.linkedin.com/in/-dongwookang",                label: "LinkedIn" },
+  { key: "github", url: "https://github.com/dongwoodustinkang", label: "GitHub" },
+  { key: "email", url: "mailto:dongwookang@keti.re.kr", label: "Email" },
+  { key: "medium", url: "https://medium.com/@dongwoo-kang", label: "Medium" },
+  { key: "scholar", url: "https://scholar.google.com/citations?user=8NhwmX4AAAAJ&hl=ko&oi=sra", label: "Google Scholar" },
+  { key: "linkedin", url: "https://www.linkedin.com/in/-dongwookang", label: "LinkedIn" },
 ];
 
 function renderSocialLinks(container, variant = "footer") {
@@ -118,7 +118,7 @@ function parseFrontmatter(markdown) {
       const itemText = line.replace(/^[*-]\s+/, "");
       const ci = itemText.indexOf(":");
       const label = ci > -1 ? itemText.slice(0, ci).trim() : itemText.trim();
-      const url   = ci > -1 ? itemText.slice(ci + 1).trim() : "";
+      const url = ci > -1 ? itemText.slice(ci + 1).trim() : "";
       if (listKey === "links") result.links.push({ label, url });
       continue;
     }

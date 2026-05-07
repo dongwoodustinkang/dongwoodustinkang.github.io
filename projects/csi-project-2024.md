@@ -4,7 +4,7 @@ author: "Content Convergence Research Center"
 affilation: Korea Electronics Technology Institute(KETI)
 venue: "2024 Korea Electronics Technology Institute(KETI)"
 Links:
-- Paper: https://ieeexplore.ieee.org/document/10827644/metrics
+- Paper: https://ieeexplore.ieee.org/document/10827644
 ---
 
 ## Show
@@ -41,12 +41,21 @@ assets/images/csi-project-2024/csi24-06.png
 
 #### AI 모델 학습 효율을 위한 전처리 파이프라인
 제가 설계한 전처리 파이프라인을 시스템에 통합한 결과 CSI 원시 신호의 신호 대 잡음비가 평균 15db 이상 개선되었습니다.
-이러한 고품질 정제 데이터는 후속 AI 모델의 성능을 극대화하여, 1개의 저가형 수신기만으로도 행동 감지 정확도를 96%까지 끌어올릴 수 있었습니다.
+이러한 고품질 정제 데이터는 후속 AI 모델의 성능을 극대화하여, 1개의 저가형 수신기만으로도 행동 감지 정확도를 77%(정량적 평가 기준)까지 끌어올릴 수 있었습니다.
+
+$$
+\hat{y} = \arg\max_k \sum_{i=1}^{n} w_i \cdot x_i^{(k)}
+$$
 
 #### 2024년 학술적 성과 도출
 저는 단순히 프로젝트의 실무 문제를 해결하는 것에 그치지 않고, 제가 직접 구현한 CSI 전처리 기술과 추가적으로 고안한 **'시퀀스 시간 정렬(Sequence Time Alignment) 기법'의 연구 가치를 학술적으로 입증**하고자 했습니다. 실내 행동 인식을 위해 카메라의 영상 데이터(YOLOv8-pose 기반)와 WiFi CSI 데이터를 병렬로 융합 수집하는 과정에서 두 데이터 간의 수집 속도 차이로 인한 시점 불일치 문제가 발생했습니다. 저는 이를 해결하기 위해 Python의 멀티프로세싱을 활용한 동기화 파이프라인을 구축하고, 선형 보간법(Linear Interpolation)을 적용해 0.1초 단위로 타임스탬프를 정밀하게 정렬하였습니다. 제가 직접 정제하고 동기화한 데이터를 Bi-LSTM 모델에 적용한 결과, 86.87%의 우수한 행동 인식 정확도를 달성하며 알고리즘의 타당성을 증명해 냈습니다.
 
-이러한 데이터 정제 및 융합 수집 파이프라인의 성과를 논리적으로 정리하여, 2024년 10월 IEEE 주관 국제 학술대회(ICTC 2024)에 1저자로 논문("A Study on Fusion Acquisition of Image and CSI Data for Posture Estimation in Indoor Environments")을 직접 작성하고 발표하였습니다
+이러한 데이터 정제 및 융합 수집 파이프라인의 성과를 논리적으로 정리하여, 2024년 10월 IEEE 주관 국제 학술대회(ICTC 2024)에 1저자로 논문(["A Study on Fusion Acquisition of Image and CSI Data for Posture Estimation in Indoor Environments"](https://ieeexplore.ieee.org/document/10827644))을 직접 작성하고 발표하였습니다.
+
+```cite
+D. Kang et al. "A Study on Fusion Acquisition of Image and CSI Data for Posture Estimation in Indoor Environments," 2024 15th International Conference on Information and Communication Technology Convergence (ICTC), Jeju Island, Korea, Republic of, 2024, pp. 1312-1314, doi: 10.1109/ICTC62082.2024.10827644. 
+```
+
 
 #### 회고
 이러한 경험은 제게 발생한 문제를 다각도로 분석하고 수학적, 공학적 지식을 총동원하여 돌파구를 찾아내는 연구원으로서 문제해결 능력을 기르는 계기가 되었습니다.
