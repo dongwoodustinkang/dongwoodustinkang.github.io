@@ -137,6 +137,10 @@ function normalizeFenceLanguage(raw = "") {
     zsh: "bash",
     yml: "yaml",
     md: "markdown",
+    // treat citation/plain-text fences as unlabeled
+    cite: "text",
+    citation: "text",
+    ref: "text",
   };
   return aliasMap[lang] || lang || "text";
 }
