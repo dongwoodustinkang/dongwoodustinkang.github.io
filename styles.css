@@ -1892,15 +1892,7 @@ h2 {
 .dark .project-code-copy:hover { background: rgba(255, 255, 255, 0.18); }
 .project-code-copy.is-copied { opacity: 1; }
 
-/* ── 4-icon system: CSS swaps based on dark mode + is-copied state ── */
-.copy-icon { display: none; width: 100%; height: 100%; object-fit: contain; }
-/* light default */ .copy-icon--la { display: block; }
-/* light success */ .project-code-copy.is-copied .copy-icon--la { display: none; }
-                   .project-code-copy.is-copied .copy-icon--ls { display: block; }
-/* dark default  */ .dark .copy-icon--la { display: none; }
-                    .dark .copy-icon--da { display: block; }
-/* dark success  */ .dark .project-code-copy.is-copied .copy-icon--da { display: none; }
-                    .dark .project-code-copy.is-copied .copy-icon--ds { display: block; }
+.copy-icon { display: block; width: 100%; height: 100%; object-fit: contain; }
 
 /* Tooltip — same pill style as lang badge, appears to the left of the button */
 .project-code-copy::before {

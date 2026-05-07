@@ -191,10 +191,7 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
       `<div class="project-code-inner">` +
       `<pre class="project-code-pre"><code class="language-${codeLang}">${escaped}</code></pre>` +
       `<button class="project-code-copy" type="button" aria-label="Copy code" data-lang="${tooltip}" data-tooltip="${tooltip}">` +
-      `<img class="copy-icon copy-icon--la" src="assets/icons/copy_a.svg" alt="" />` +
-      `<img class="copy-icon copy-icon--ls" src="assets/icons/copy_a_success.svg" alt="" />` +
-      `<img class="copy-icon copy-icon--da" src="assets/icons/copy_b.svg" alt="" />` +
-      `<img class="copy-icon copy-icon--ds" src="assets/icons/copy_b_success.svg" alt="" />` +
+      `<img class="copy-icon" src="assets/icons/copy.svg" alt="" />` +
       `</button>` +
       `</div>` +
       `</div>`
@@ -1064,9 +1061,12 @@ function initCodeBlocks() {
         document.execCommand("copy");
         document.body.removeChild(ta);
       }
+      const icon = btn.querySelector(".copy-icon");
+      if (icon) icon.src = "assets/icons/check.svg";
       btn.dataset.tooltip = "Copied!";
       btn.classList.add("is-copied");
       setTimeout(() => {
+        if (icon) icon.src = "assets/icons/copy.svg";
         btn.dataset.tooltip = btn.dataset.lang || "copy";
         btn.classList.remove("is-copied");
       }, 2000);
