@@ -174,9 +174,17 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
   let codeLines = [];
   let inMath = false;
   let mathLines = [];
+  let inIframe = false;
+  let iframeLines = [];
 
   const closeListIfNeeded = () => {
     if (inList) { html.push("</ul>"); inList = false; }
+  };
+
+  const closeIframeIfNeeded = () => {
+    if (!inIframe) return;
+    html.push(`<div class="project-md-iframe-wrap">${iframeLines.join("")}</div>`);
+    inIframe = false; iframeLines = [];
   };
 
   const closeCodeIfNeeded = () => {
@@ -237,6 +245,23 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
     // ── Inside math block ──
     if (inMath) { mathLines.push(rawLine); return; }
 
+    // ── iframe block (raw HTML pass-through, responsive wrapper) ──
+    if (inIframe) {
+      iframeLines.push(trimmed);
+      if (trimmed.includes("</iframe>")) closeIframeIfNeeded();
+      return;
+    }
+    if (trimmed.startsWith("<iframe")) {
+      closeListIfNeeded();
+      closeMathIfNeeded();
+      if (trimmed.includes("</iframe>")) {
+        html.push(`<div class="project-md-iframe-wrap">${trimmed}</div>`);
+      } else {
+        inIframe = true; iframeLines = [trimmed];
+      }
+      return;
+    }
+
     if (!trimmed) { closeListIfNeeded(); return; }
 
     // ── Standalone image line → <figure> ──
@@ -285,6 +310,7 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
   closeListIfNeeded();
   closeCodeIfNeeded();
   closeMathIfNeeded();
+  closeIframeIfNeeded();
   return html.join("");
 }
 
