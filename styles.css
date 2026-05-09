@@ -1998,6 +1998,37 @@ h2 {
   border-radius: 3px;
 }
 
+/* ── Markdown table ── */
+.project-md-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin: 0.8rem 0;
+}
+.project-md-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.project-md-table th,
+.project-md-table td {
+  padding: 0.5rem 0.85rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.project-md-table th {
+  font-family: var(--mono-font);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-sub);
+  border-bottom: 1.5px solid var(--line);
+}
+.project-md-table td:first-child { color: var(--text-sub); }
+.project-md-table tbody tr:last-child td { border-bottom: none; }
+.project-md-table tbody tr:hover td { background: rgba(128, 128, 128, 0.05); }
+
 /* ── Responsive iframe (16:9) ── */
 .project-md-iframe-wrap {
   position: relative;

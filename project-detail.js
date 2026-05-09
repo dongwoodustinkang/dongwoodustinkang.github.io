@@ -176,6 +176,8 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
   let mathLines = [];
   let inIframe = false;
   let iframeLines = [];
+  let inTable = false;
+  let tableRows = [];
 
   const closeListIfNeeded = () => {
     if (inList) { html.push("</ul>"); inList = false; }
@@ -185,6 +187,30 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
     if (!inIframe) return;
     html.push(`<div class="project-md-iframe-wrap">${iframeLines.join("")}</div>`);
     inIframe = false; iframeLines = [];
+  };
+
+  const closeTableIfNeeded = () => {
+    if (!inTable || !tableRows.length) { inTable = false; tableRows = []; return; }
+    const parseRow = (line) =>
+      line.split("|").slice(1, -1).map((c) => c.trim());
+    const isSep = (row) => row.every((c) => /^:?-+:?$/.test(c));
+
+    const firstRow = parseRow(tableRows[0]);
+    const hasHeader = tableRows.length > 1 && isSep(parseRow(tableRows[1]));
+    const dataStart = hasHeader ? 2 : 0;
+
+    let t = `<div class="project-md-table-wrap"><table class="project-md-table">`;
+    if (hasHeader) {
+      t += `<thead><tr>${firstRow.map((c) => `<th>${parseInlineMarkdown(c, contentPath)}</th>`).join("")}</tr></thead>`;
+    }
+    t += "<tbody>";
+    for (let i = dataStart; i < tableRows.length; i++) {
+      const cells = parseRow(tableRows[i]);
+      t += `<tr>${cells.map((c) => `<td>${parseInlineMarkdown(c, contentPath)}</td>`).join("")}</tr>`;
+    }
+    t += "</tbody></table></div>";
+    html.push(t);
+    inTable = false; tableRows = [];
   };
 
   const closeCodeIfNeeded = () => {
@@ -262,6 +288,14 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
       return;
     }
 
+    // ── Table rows ──
+    if (inTable && !trimmed.startsWith("|")) closeTableIfNeeded();
+    if (trimmed.startsWith("|")) {
+      if (!inTable) { closeListIfNeeded(); closeMathIfNeeded(); inTable = true; tableRows = []; }
+      tableRows.push(trimmed);
+      return;
+    }
+
     if (!trimmed) { closeListIfNeeded(); return; }
 
     // ── Standalone image line → <figure> ──
@@ -311,6 +345,7 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
   closeCodeIfNeeded();
   closeMathIfNeeded();
   closeIframeIfNeeded();
+  closeTableIfNeeded();
   return html.join("");
 }
 
