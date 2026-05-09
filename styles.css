@@ -1465,8 +1465,8 @@ h2 {
 /* ── Footer ────────────────────────────────────────── */
 .site-footer {
   margin-top: 4rem;
-  background: #0A2F1F;
-  color: #F9F9F9;
+  background: #F9F9F9;
+  color: var(--text-main);
   padding: 3rem 1.5rem 3.5rem;
 }
 
@@ -1485,7 +1485,7 @@ h2 {
 
 .footer-name {
   margin: 0;
-  color: #F9F9F9;
+  color: var(--text-main);
   font-family: var(--header-font);
   font-size: 17px;
   font-weight: 700;
@@ -1495,7 +1495,7 @@ h2 {
 
 .footer-email {
   margin-top: 0.5rem;
-  color: rgba(249, 249, 249, 0.55);
+  color: var(--text-sub);
   font-family: var(--mono-font);
   font-size: 10.5px;
   text-decoration: none;
@@ -1504,13 +1504,13 @@ h2 {
 
 .footer-email:hover,
 .footer-email:focus-visible {
-  color: #F9F9F9;
+  color: var(--text-main);
   text-decoration: none;
 }
 
 .footer-location {
   margin: 0.25rem 0 0;
-  color: rgba(249, 249, 249, 0.4);
+  color: var(--text-sub);
   font-family: var(--mono-font);
   font-size: 9.5px;
   letter-spacing: 0.14em;
@@ -1529,7 +1529,7 @@ h2 {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #F9F9F9;
+  background: var(--text-main);
   display: inline-block;
   transition: transform 180ms ease, opacity 180ms ease;
   overflow: hidden;
@@ -1587,7 +1587,7 @@ h2 {
 .footer-copy {
   margin-top: 2.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(249, 249, 249, 0.1);
+  border-top: 1px solid var(--line);
   width: 100%;
   max-width: 1360px;
   display: flex;
@@ -1601,7 +1601,7 @@ h2 {
   font-size: 9px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(249, 249, 249, 0.25);
+  color: var(--text-sub);
 }
 
 /* ── Floating status indicator ─────────────────────── */
