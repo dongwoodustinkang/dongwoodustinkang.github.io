@@ -1,47 +1,59 @@
 ---
-title: "고도화된 데이터 전처리와 CSI 기반 온디바이스 AIoT 프로그램 개발"
+title: "고도화된 데이터 전처리와 CSI 기반 온디바이스 AIoT 시스템 개발"
 author: "Content Convergence Research Center"
 affilation: Korea Electronics Technology Institute(KETI)
 venue: "2025 Korea Electronics Technology Institute(KETI)"
 Links:
 - Paper: https://ieeexplore.ieee.org/document/11263593
+- DEMO: https://youtu.be/35QwhL_oh_Q
+- Github : https://github.com/thkimKETI/csi-sensing
 ---
 
 ## Show
+assets/images/csi-project-2025/csi25-00.png
 assets/images/csi-project-2025/csi25-01.png
-assets/images/csi-project-2025/csi25-01.png
+assets/images/csi-project-2025/csi25-02.png
+assets/images/csi-project-2025/csi25-03.png
+assets/images/csi-project-2025/csi25-04.png
+assets/images/csi-project-2025/csi25-05.png
+
 
 ## Overview
-본 과제는 상용 WiFi 칩셋을 활용하여 카메라나 웨어러블과 같은 장비 없이 사용자의 실내 행동을 인식하는 비접촉식 AI 센싱 시스템 개발을 목표로 진행되었습니다. 저는 2024년 5월부터 해당 과제에 참여하여 하드웨어 수신기가 수신한 채널 상태 정보(CSI)가 노이즈가 많아 AI 모델에 정상적으로 학습되지 않는 문제를 해결하는데 노력을 기울였습니다. 저는 최대한 소프트웨어 파트에서 **데이터 정제 및 파이프라인 설계를 통해 해결**하고자 했습니다. 결과적으로 오인식률을 대폭 낮추고 행동 감지 정확도를 높였습니다. 이 과정에서 얻은 데이터 정제 기술로 2024년 국제 학술 컨퍼런스에서 직접 1저자로 논문을 작성하고 발표하는 성과를 거두었습니다. 
+3차년도에는 다중 수신기 및 엣지 컴퓨팅 환경으로 시스템을 확장했습니다. 시퀀스 시간 정렬 기법을 이용한 동일 시간대 다중 데이터 수집과 안드로이드/리눅스 환경에서 AI 추론이 가능하도록 설계 및 제작하였습니다. 더불어 경량화된 AI 모델(TinyCNN, SVM, Attention)을 엣지 디바이스에 성공적으로 포팅하여 TTA 공인시험에서 96% 이상의 압도적인 행동 감지 정확도를 공식 인증 받는등, 하드웨어의 한계를 소프트웨적 역량으로 완벽히 극복해 냈습니다.
+
+## Show
+<iframe width="560" height="315" src="https://www.youtube.com/embed/35QwhL_oh_Q?si=BLU99dcGeCglYry6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## Problem Definition
 
-#### 스파이킹 노이즈 발생
-원시 복소수 데이터를 진폭(Amplitude)으로 변환할 때 갑작스럽게 튀는 노이즈가 발생했습니다. 또한 통신 규격상 비어있어야할 Null Subcarrier 영역에 비정상적인 값들이 유입되어 데이터 차원이 일치하지 않는 문제가 발생했습니다.
+#### 다중 수신기 확장에 따른 타임스탬프 비동기화 한계
+단일 수신기(ESP32-S3)를 사용하던 환경에서 제한된 송수신 영역에 의해 **사각지대(Dead Zone) 문제**가 발생했습니다. 이를 해결하고 공간적 다양성(Spatial Diversity)를 확보하고자 수신기를 최대 4대로 연동하는 다중 수신기 시스템으로 환경을 확장하게 되었습니다. 그러나 기기별로 패킷 처리 및 통신 지연 시간이 달라 서버에 도달하는 데이터의 시점이 어긋나는 현상이 발생했습니다. 동기화되지 않은 융합 데이터를 학습할 경우 모델의 분류 정확도가 급감하는 것을 확인할 수 있었습니다.
 
-#### 정적 환경(가구, 벽) 간섭 및 장시간 운용에 따른 신호 표류 문제
-실내 환경에서 무선랜 신호를 수집해 본 결과, 사람의 움직임보다 가구, 벽면 등 멈춰 있는 정적 요소가 반사해 내는 신호의 강도로 인해 행동 패턴을 포착하기 어려운 현상이 발생합니다. 또한, 시스템을 장시간 활성화해 둘 경우 실내 온습도 변화나 채널이 자동으로 변경되는 **신호 표류(Signal Drift) 현상**이 관찰되었습니다. 이로 인해 AI 모델이 사람의 행동이 아닌 배경의 변화를 학습해버려 시간이 지날수록 인식률이 급감하고 수집하는 Raw 데이터의 일관성을 잃게 되는 문제가 발생했습니다.
+#### 모바일 엣지 환경의 극심한 연산 및 메모리 한계
+데스크탑 환경이 아닌 스마트폰이나 태블릿 PC, 홈 허브와 같은 모빌리티 환경의 엣지 디바이스는 고성능 서버에 비해 **연산 능력과 메모리가 턱없이 부족**합니다. 초기 연구되었던 트랜스포머(Transformer)와 같이 무겁고 복잡한 시계열  모델을 사용할 경우 엣지 환경에서는 치명적인 추론 지연이 발생할 수 있으며, 다중 센서 입력 시 차원 증가로 인해 과적합(Overfitting) 현상이 심화되는 한계가 있었습니다.
 
 ## Solution Process
 
-#### 예외 처리 및 butterworth 필터링을 통한 노이즈 교정
-통신 상태 불안정으로 발생하는 Null Subcarrier의 인덱스를 선제적으로 삭제하여 신경망의 불필요한 연산을 줄였습니다. 이후, 스파이킹 노이즈를 제거하기 위해 주파수 응답이 평탄한 Butter worth 저역 통과 필터를 도입했습니다. 해당 기법을 사용하여 신호의 시간적 왜곡을 최소화하여 고주파 잡음만 깔끔하게 제거하는 로직을 직접 구현하였습니다. 
+#### TimeLocked 기반 시간 정렬 알고리즘 고안
+각 장치의 타임스탬프를 비교하여 가장 늦게 도착한 시각을 기준으로 대기시키는 TimeLocked Process 개념과 지연으로 비어버린 틈을 채우는 선형 보간법(Linear Interpolation)을 결합한 **시퀀스 시간 정렬 기법**을 고안했습니다. 이를 통해 0.1초 단위로 9개의 패킷이 균일하게 정렬하여 2초 단위의 완벽히 동기화된 융합 CSI 블록을 생성했습니다. 그 결과 다중 수신기 환경에서의 인식 정확도를 대폭 끌어올렸으며, 이 해결 성과를 바탕으로 국제 학술대회에 논문을 제1저자로 발표하여 학술적 성과를 입증했습니다.
 
+#### 리눅스 기반 MQTT 스트리밍 파이프라인 설계 및 안드로이드 풀스택 구현
+만약 클라우드 서버에 전적으로 의존하게 되는 경우 네트워크 통신 지연이나 사생활 침해 우려가 있으므로 로컬 네트워크에서 구동되는 엔드투엔드(End-to-End) 아키텍처를 설계했습니다. 경량 IoT 프로토콜인 **MQTT를 사용하여 토픽을 실시간으로 스트리밍하는 데이터 수집 파이프라인**을 구축했습니다. 또한 데이터 병목 현상을 방지하기 위해 기존의 시스템을 모듈단위로 리팩토링하고 독립된 프로세스로 분리하여 **병렬 아키텍처**를 구현했습니다. 나아가 전처리 로직과 추론 로직을 **안드로이드 환경**에 1:1로 이식해 인터넷 연결없이 모바일 단말에서 실시간 수집 및 데이터 처리가 이루어지는 시스템을 완성했습니다. 
 
-#### 특이값 분해 기반의 정적 환경 요소 분리
-수집한 데이터셋으로 학습과 추론을 진행하면서 수집 환경에 문제가 있다는 것을 알게되었습니다.
-해당 배경 신호 간섭 문제는 수학적 분해 기법으로 해결하게 되었는데 사람이 없는 빈공간의 CSI 데이터를 먼저 수집한 뒤, 행렬 데이터에 **SVD(Singular Value Decomposition)를 수행**하였습니다. 상위 Rank의 특이값(Singualr Values)들이 실내의 고정된 가구나 벽임을 수학적으로 확인한 후, 실사간으로 수신되는 데이터에서 그 특이값 성분을 차감하는 방식입니다. 이를 통해 AI 모델은 불필요한 배경 노이즈에 방해받지 않고 오직 사람의 움직임에 의한 변화에만 집중하여 학습할 수 있게 되었습니다.
+#### 경량화한 TinyCNN 모델 설계, TF Lite 자동화 포팅
+엣지 환경에 적합한 모델로TinyCNN과 SVM 분류 모델을 설계했습니다. 수만개의 파라미터를 다이어트한 후 이 모델들을 PyTorch로 학습하고 **엣지 환경에 맞게 구동시키기 위해 ONNX를 거쳐 엣지 환경에 적합한 모델**으로 변환하였습니다. 복잡도를 덜어낸 경량 모델들은 안드로이드 앱 내부에 성공적으로 포팅하였으며 안드로이드 CPU 환경만으로 실시간 병렬 추론이 가능해졌습니다. 
+
+| | 행동 감지 | 인원수 | 위치 |
+| - | - | - | - |
+| 수신기 2대 | 95.52% | 89.64% | 99.5% |
+| 수신기 4대 | 97.78% | 96.67% | 99.62% |
 
 ## Contribution
 
-#### AI 모델 학습 효율을 위한 전처리 파이프라인
-제가 설계한 전처리 파이프라인을 시스템에 통합한 결과 CSI 원시 신호의 신호 대 잡음비가 평균 15db 이상 개선되었습니다.
-이러한 고품질 정제 데이터는 후속 AI 모델의 성능을 극대화하여, 1개의 저가형 수신기만으로도 행동 감지 정확도를 96%까지 끌어올릴 수 있었습니다.
+#### 하드웨어의 한계를 소프트웨어로 극복한 시간 정렬 알고리즘으로 ICCE-Asia 2025 포스터 논문 발표
+4대의 수신기를 연동하며 겪었던 시간 비동기화 및 패킷 도달 문제를 '소프트웨어 아키텍처 설계'와 '시간 정렬 알고리즘'으로 극복해 낸 과정이 단순한 에러 수정을 넘어 학술적 가치를 지니고 있었습니다. 저는 제가 직접 고안한 이 동기화 알고리즘이 AI 인식률 향상에 얼마나 정량적으로 기여했는지 분석하여 개인적인 학술 성과로 확장했습니다.
+해당 연구는 ["Robust Wifi Channel State Information-based Localization via Sequence Time Alignment"](https://ieeexplore.ieee.org/document/11263593)라는 제목으로 국제 학술대회인 IEEE/IEIE ICCE-Asia 2025에서 포스터로 발표되었습니다.
 
-#### 2024년 학술적 성과 도출
-저는 단순히 프로젝트의 실무 문제를 해결하는 것에 그치지 않고, 제가 직접 구현한 CSI 전처리 기술과 추가적으로 고안한 **'시퀀스 시간 정렬(Sequence Time Alignment) 기법'의 연구 가치를 학술적으로 입증**하고자 했습니다. 실내 행동 인식을 위해 카메라의 영상 데이터(YOLOv8-pose 기반)와 WiFi CSI 데이터를 병렬로 융합 수집하는 과정에서 두 데이터 간의 수집 속도 차이로 인한 시점 불일치 문제가 발생했습니다. 저는 이를 해결하기 위해 Python의 멀티프로세싱을 활용한 동기화 파이프라인을 구축하고, 선형 보간법(Linear Interpolation)을 적용해 0.1초 단위로 타임스탬프를 정밀하게 정렬하였습니다. 제가 직접 정제하고 동기화한 데이터를 Bi-LSTM 모델에 적용한 결과, 86.87%의 우수한 행동 인식 정확도를 달성하며 알고리즘의 타당성을 증명해 냈습니다.
-
-이러한 데이터 정제 및 융합 수집 파이프라인의 성과를 논리적으로 정리하여, 2024년 10월 IEEE 주관 국제 학술대회(ICTC 2024)에 1저자로 논문("A Study on Fusion Acquisition of Image and CSI Data for Posture Estimation in Indoor Environments")을 직접 작성하고 발표하였습니다
-
-#### 회고
-이러한 경험은 제게 발생한 문제를 다각도로 분석하고 수학적, 공학적 지식을 총동원하여 돌파구를 찾아내는 연구원으로서 문제해결 능력을 기르는 계기가 되었습니다.
+```
+D. Kang, et al., "Robust WiFi Channel State Information-Based Localization via Sequence Time Alignment," 2025 IEEE/IEIE International Conference on Consumer Electronics-Asia (ICCE-Asia), Busan, Korea, Republic of, 2025, pp. 1-3, doi: 10.1109/ICCE-Asia67487.2025.11263593. 
+```
