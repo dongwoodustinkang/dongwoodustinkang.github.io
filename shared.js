@@ -70,7 +70,7 @@ const SOCIAL_LINKS = [
   { key: "email", url: "mailto:dongwookang@keti.re.kr", label: "Email" },
   { key: "medium", url: "https://medium.com/@dongwoo-kang", label: "Medium" },
   { key: "scholar", url: "https://scholar.google.com/citations?user=8NhwmX4AAAAJ&hl=ko&oi=sra", label: "Google Scholar" },
-  { key: "linkedin", url: "https://www.linkedin.com/in/-dongwookang", label: "LinkedIn" },
+  // { key: "linkedin", url: "https://www.linkedin.com/in/-dongwookang", label: "LinkedIn" },
 ];
 
 function renderSocialLinks(container, variant = "footer") {
