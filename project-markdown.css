@@ -1,0 +1,240 @@
+/* Paragraphs, links, figures, tables, code, and math inside project content. */
+.project-detail-row-body p, .project-detail-summary p { margin: 0; }
+.project-detail-row-body p + p { margin-top: 0.45rem; }
+.project-detail-summary p + p { margin-top: 0.5rem; }
+.project-detail-row-body ul { margin: 0.55rem 0 0; padding-left: 1.15rem; }
+.project-detail-summary ul { margin: 0.6rem 0 0; padding-left: 1.15rem; }
+.project-md-h2 { margin: 1rem 0 0.4rem; font-size: 18px; }
+.project-md-h3 { margin: 0.75rem 0 0.3rem; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+/* ── Inline markdown formatting ── */
+.project-detail-row-body a,
+.project-detail-summary a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.project-detail-row-body a:hover,
+.project-detail-row-body a:focus-visible,
+.project-detail-summary a:hover,
+.project-detail-summary a:focus-visible {
+  opacity: 0.75;
+}
+
+.project-detail-row-body mark,
+.project-detail-summary mark {
+  background: rgba(255, 195, 0, 0.28);
+  color: var(--text-main);
+  border-radius: 3px;
+  padding: 0 3px;
+}
+
+
+/* ── Embedded images ── */
+.project-md-figure {
+  margin: 1rem 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.project-md-img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid rgba(10, 47, 31, 0.08);
+}
+
+
+.project-md-img-inline {
+  max-width: 100%;
+  max-height: 1.4em;
+  vertical-align: middle;
+  border-radius: 3px;
+}
+
+/* ── Markdown table ── */
+.project-md-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin: 0.8rem 0;
+}
+.project-md-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.project-md-table th,
+.project-md-table td {
+  padding: 0.5rem 0.85rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.project-md-table th {
+  font-family: var(--mono-font);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-sub);
+  border-bottom: 1.5px solid var(--line);
+}
+.project-md-table td:first-child { color: var(--text-sub); }
+.project-md-table tbody tr:last-child td { border-bottom: none; }
+.project-md-table tbody tr:hover td { background: rgba(128, 128, 128, 0.05); }
+
+/* ── Responsive iframe (16:9) ── */
+.project-md-iframe-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 */
+  margin: 0.8rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+}
+.project-md-iframe-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ── Code block wrapper ── */
+.project-code-block {
+  position: relative;
+  margin: 0.8rem 0;
+  padding-top: 1.55rem;
+  /* room for the floating lang pill above inner box */
+}
+
+.project-code-block.no-lang {
+  padding-top: 0;
+}
+
+/* Floating language badge (pill above the inner box, top-right) */
+.project-code-lang {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.18rem 0.6rem;
+  background: rgba(128, 128, 128, 0.14);
+  border-radius: 20px;
+  font-family: var(--mono-font);
+  font-size: 11px;
+  color: var(--text-sub);
+  letter-spacing: 0.06em;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Inner code container */
+.project-code-inner {
+  position: relative;
+  border-radius: 10px;
+  background: #282c34;
+  overflow: hidden;
+}
+
+.project-code-pre {
+  margin: 0;
+  padding: 0.85rem 3rem 0.85rem 1rem;
+  /* right padding leaves room for copy btn */
+  background: transparent;
+  border: 0;
+  font-family: var(--mono-font);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+/* Base text color for code blocks; highlight.js adds token colors when available. */
+.project-code-pre code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+  color: #abb2bf;
+}
+
+/* Copy button — absolute inside inner box, top-right */
+.project-code-copy {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  /* light mode: dark button bg */
+  background: rgba(0, 0, 0, 0.18);
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 150ms ease, background 150ms ease;
+}
+
+
+.project-code-copy:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+
+.project-code-copy.is-copied {
+  opacity: 1;
+}
+
+.copy-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Tooltip — same pill style as lang badge, appears to the left of the button */
+.project-code-copy::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 0.4rem);
+  transform: translateY(-50%);
+  padding: 0.18rem 0.6rem;
+  background: rgba(128, 128, 128, 0.18);
+  border-radius: 20px;
+  font-family: var(--mono-font);
+  font-size: 11px;
+  color: var(--text-sub);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.project-code-copy:hover::before,
+.project-code-copy.is-copied::before {
+  opacity: 1;
+}
+
+/* ── KaTeX display math ── */
+.project-math-block {
+  margin: 0.8rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.katex-display {
+  margin: 0;
+}
+
+.katex {
+  font-size: 1.05em;
+}
+

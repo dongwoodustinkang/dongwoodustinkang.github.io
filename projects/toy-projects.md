@@ -1,7 +1,7 @@
 ---
 title: "Toy projects for my birthday"
 author: "Dongwoo Kang"
-affilation: "Dongwoo Kang"
+affiliation: "Dongwoo Kang"
 venue: "TOY PROJECT"
 Links:
 - 2026: https://birthdaygame-8e431.web.app/

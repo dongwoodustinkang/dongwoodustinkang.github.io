@@ -4,277 +4,144 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dongwoo Kang</title>
+  <title>강동우 | Dongwoo Kang</title>
+  <meta name="description" content="한국전자기술연구원(KETI) 연구원 강동우. 영상 처리와 Physical AI를 기반으로 로봇의 상황 인지 기술을 연구합니다." />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96x96.png" />
   <link rel="manifest" href="assets/favicon/site.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260510-0002" />
+  <link rel="stylesheet" href="styles.css?v=20260913-refactor" />
+  <link rel="stylesheet" href="site-header.css?v=20260913-refactor" />
+  <link rel="stylesheet" href="home.css?v=20260913-refactor" />
 </head>
 
-<body>
-  <div class="mouse-glow" id="mouse-glow" aria-hidden="true"></div>
-
-  <header class="site-header">
-    <div class="header-inner">
-      <button id="brand-home" class="brand-button" type="button">DONGWOO KANG</button>
-
-      <nav class="tabs desktop-tabs" role="tablist" aria-label="Primary">
-        <button class="tab-button active" role="tab" aria-selected="true" data-target="home">
-          Home
-        </button>
-        <a class="tab-button" href="projects.html">Projects</a>
-        <a class="tab-button" href="assets/pdf/dongwoo-kang-cv.pdf" target="_blank" rel="noreferrer">CV</a>
-      </nav>
-
-      <div style="display:flex;align-items:center;gap:0.6rem;">
-        <button id="dark-toggle" class="dark-toggle" type="button" aria-label="Toggle dark mode">☾</button>
-        <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"
-          aria-controls="mobile-overlay">
-          <span class="menu-line"></span>
-          <span class="menu-line"></span>
-          <span class="menu-line"></span>
-        </button>
-      </div>
-    </div>
-    <div class="header-divider" aria-hidden="true"></div>
-  </header>
-
-  <div id="mobile-overlay" class="mobile-overlay" aria-hidden="true">
-    <nav class="mobile-menu" aria-label="Mobile Primary">
-      <button class="tab-button mobile-tab-button active" aria-selected="true" data-target="home">
-        Home
-      </button>
-      <a class="tab-button mobile-tab-button" href="projects.html">Projects</a>
-      <a class="tab-button mobile-tab-button" href="assets/pdf/dongwoo-kang-cv.pdf" target="_blank"
-        rel="noreferrer">CV</a>
-    </nav>
-  </div>
+<body id="top" class="homepage site-shell">
+  <a class="skip-link" href="#home-title" data-en="Skip to content">본문으로 바로가기</a>
+  <div id="site-navigation"></div>
 
   <main>
-    <section id="home" class="panel active" role="tabpanel" aria-labelledby="home-title">
-      <div class="panel-card home-panel">
+    <section id="home" class="home-section" aria-labelledby="home-title">
+      <div class="home-panel">
         <div class="home-intro-grid">
+          <img class="profile-photo" src="assets/images/home-intro.jpeg" alt="강동우 프로필 사진"
+            width="180" height="206" fetchpriority="high" />
           <div class="home-copy">
-            <h1 id="home-title" class="home-name">DONGWOO KANG</h1>
-            <div id="home-content" class="markdown-content home-markdown" aria-live="polite"></div>
+            <h1 id="home-title" class="home-name" tabindex="-1" data-en="Dongwoo Kang">강동우</h1>
+            <div id="home-content" class="home-markdown">
+              <p data-en="Loading introduction…">자기소개를 불러오는 중입니다…</p>
+            </div>
+            <address class="home-contact">
+              <a href="mailto:dongwoo-kang@naver.com">dongwoo-kang [at] naver [dot] com</a>
+              <a href="mailto:dongwookang@keti.re.kr">dongwookang [at] keti [dot] re [dot] kr</a>
+            </address>
+            <div class="home-actions">
+              <a class="home-action" href="projects.html">View Work <span aria-hidden="true">→</span></a>
+              <a class="home-action home-action-outline" data-cv-link href="assets/pdf/dongwoo-kang-cv.pdf" target="_blank" rel="noreferrer">CV<span class="sr-only" data-en="(opens in a new tab)"> (새 탭)</span></a>
+            </div>
           </div>
-          <button id="home-visual" class="home-visual" type="button" aria-label="Profile photo">
-            <span class="home-visual-inner">
-              <span class="home-visual-face home-visual-front" aria-hidden="true"></span>
-            </span>
-          </button>
         </div>
 
-        <section class="recent-updates" aria-label="Recent Updates">
-          <h2 class="updates-title">Recent Updates</h2>
-          <ul class="updates-list">
-            <li class="update-item">
-              <span class="update-text">Presented our CSI research at the ICCE-Asia 2025 Poster Session.</span>
-              <time class="update-date" datetime="2026-02-05">Oct 28, 2025</time>
-            </li>
-            <li class="update-item">
-              <span class="update-text">Honored to deliver an oral presentaion on MCP at the HCI College Conference
-                2024.</span>
-              <time class="update-date" datetime="2026-02-04">Dec 14, 2024</time>
-            </li>
-            <li class="update-item">
-              <span class="update-text">Presented our CSI research at the ICTC 2024 Poster Session.</span>
-              <time class="update-date" datetime="2026-01-30">Oct 18, 2024</time>
-            </li>
-          </ul>
-        </section>
+        <div class="home-details">
+          <section class="career-section" aria-labelledby="career-title">
+            <h2 id="career-title" data-en="Timeline">타임라인</h2>
+            <ol class="career-list">
+              <li class="career-entry">
+                <p class="career-meta" data-en="2024 - Present · Korea Electronics Technology Institute (KETI)">2024 - 현재 한국전자기술연구원(KETI)</p>
+                <h3 data-en="Researcher">연구원</h3>
+                <p class="career-description" data-en="I have worked on channel signal-based activity recognition using lightweight deep learning and signal preprocessing. I presented this research at ICTC and ICCE-Asia, and am now focusing on lightweight, high-speed semiconductor detection.">경량 딥러닝 및 신호 전처리를 활용한 채널 신호 기반 행동 인식 분야의 연구를 진행해왔습니다. ICTC 및 ICCE-Asia에서 연구 결과를 발표했으며, 현재는 반도체 경량 고속 탐지 연구에 집중하고 있습니다.</p>
+              </li>
+              <li class="career-entry">
+                <p class="career-meta" data-en="2016 - 2022 · Hanshin University">2016 - 2022 한신대학교</p>
+                <h3 data-en="B.E. in IT Contents">IT 콘텐츠학과 학사</h3>
+                <p class="career-description" data-en="I earned a Bachelor of Engineering from Hanshin University with a GPA of 4.11/4.5, performing particularly well in AI image processing and mobile UI/UX platform courses. Through extracurricular internships in Python and iOS development, I built practical technical skills. I also designed and taught a coding curriculum for elementary school students.">한신대학교에서 평점 4.11/4.5로 공학 학사 학위를 취득했습니다. 주로 AI 영상처리, 모바일 UI/UX 플랫폼 수업에서 높은 성적을 취득했습니다. 뿐만 아니라, 교외 활동으로 파이썬 및 iOS 개발 분야에서 인턴십을 통해 전문적인 기술 역량을 확보했으며 초등학생을 위한 코딩 교육 커리큘럼을 기획하고 운영했습니다.</p>
+              </li>
+            </ol>
+          </section>
 
-        <section class="home-projects" aria-label="Projects">
-          <h2 class="home-projects-title">Projects</h2>
-          <article class="home-project-item">
-            <div class="home-project-thumb" aria-hidden="true"></div>
-            <div class="home-project-details">
-              <h3 class="home-project-name">{Project Name}</h3>
-              <p class="home-project-author">{Author}</p>
-              <p class="home-project-venue">{conference name / conference}</p>
-              <button class="home-project-abstract" type="button" aria-expanded="false"
-                aria-controls="home-project-hidden-1">
-                abstract ↓
-              </button>
+          <section class="credentials-section" aria-labelledby="credentials-title">
+            <h2 id="credentials-title" data-en="Awards &amp; Credentials">수상 및 자격증</h2>
+            <div class="credential-tabs" role="tablist" aria-label="수상 및 자격증 분류">
+              <button id="tab-awards" class="credential-tab" type="button" role="tab" aria-selected="true" aria-controls="panel-awards" data-en="Awards">수상</button>
+              <button id="tab-scholarships" class="credential-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-scholarships" tabindex="-1" data-en="Scholarships">장학금</button>
+              <button id="tab-certificates" class="credential-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-certificates" tabindex="-1" data-en="Certificates">자격증</button>
+              <button id="tab-languages" class="credential-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-languages" tabindex="-1" data-en="Languages">어학</button>
             </div>
-          </article>
-          <p id="home-project-hidden-1" class="home-project-hidden" hidden>{Hidden Abstract...}</p>
-          <a class="view-all-projects" href="projects.html">
-            View all projects →
-          </a>
-        </section>
-
-        <section class="projects-timeline" aria-label="Timeline">
-          <h2 class="timeline-section-title">Timeline</h2>
-          <ol class="timeline-list">
-
-            <li class="timeline-item">
-              <p class="timeline-meta">
-                <span class="timeline-period">2016 - 2022</span>
-                <span class="timeline-org">Hanshin University</span>
-              </p>
-              <h3 class="timeline-title">B.E. in IT Contents</h3>
-              <p class="timeline-desc">
-                Completed my Bachelor of Engineering at Hanshin University’s College of Information with a GPA of
-                <strong>4.11/4.5</strong>
-                Validated professional technical proficiency through <strong>two private-sector internships</strong> in
-                Python and
-                iOS
-                development.
-                Strategized and led a <strong>coding education curriculum</strong> for elementary students.
-              </p>
-              <div class="timeline-tags" aria-label="Keywords">
-                <span class="timeline-tag">Deep Learning</span>
-                <span class="timeline-tag">Python</span>
-                <span class="timeline-tag">Mobile Application</span>
-                <span class="timeline-tag">UX Design</span>
-                <span class="timeline-tag">Big Data</span>
+            <div class="credential-panels">
+              <div id="panel-awards" class="credential-panel" role="tabpanel" aria-labelledby="tab-awards" tabindex="0">
+                <ul class="credential-list">
+                  <li class="credential-row">
+                    <div><p class="credential-name" data-en="Excellence Award, HCI College Conference 2024">2024년 HCI 대학 컨퍼런스 우수상 수상</p><p class="credential-org" data-en="Companoid Institute">콤파노이드 연구소</p></div>
+                    <time datetime="2024-12-14">2024/12/14</time>
+                  </li>
+                  <li class="credential-row">
+                    <div><p class="credential-name" data-en="Excellence Award, AI &amp; Big Data Hackathon">AI 및 빅데이터 해커톤 우수상 수상</p><p class="credential-org" data-en="Hanshin University">한신대학교</p></div>
+                    <time datetime="2021-12">2021/12</time>
+                  </li>
+                </ul>
               </div>
-            </li>
-
-
-            <li class="timeline-item timeline-item-current">
-              <p class="timeline-meta">
-                <span class="timeline-period">2024 - PRESENT</span>
-                <span class="timeline-org">Korea Electronics Technology Institute (KETI)</span>
-              </p>
-              <h3 class="timeline-title">Researcher</h3>
-              <p class="timeline-desc">
-                Leading research on <strong>CSI-based behavioral recognition</strong> using lightweight DL and signal
-                preprocessing.
-                Presented findings at ICTC and ICCE-Asia, with a current focus on 3D Digital Human synthesis.
-                Advancing <strong>HCI</strong>-driven productivity through MCP Tool strategies presented at HCI
-                conferences.
-              </p>
-              <div class="timeline-tags" aria-label="Keywords">
-                <span class="timeline-tag">CSI Sensing</span>
-                <span class="timeline-tag">Deep Learning</span>
-                <span class="timeline-tag">Digital Human</span>
-                <span class="timeline-tag">HCI</span>
-                <span class="timeline-tag">Behavioral Recognition</span>
+              <div id="panel-scholarships" class="credential-panel" role="tabpanel" aria-labelledby="tab-scholarships" tabindex="0" hidden>
+                <ul class="credential-list">
+                  <li class="credential-row">
+                    <div><p class="credential-name" data-en="National Science &amp; Engineering Scholarship · 4 semesters">국가우수장학금(이공계) · 4학기</p><p class="credential-org" data-en="Ministry of Science and ICT">과학기술정보통신부</p></div>
+                    <span class="credential-date">2020 - 2022</span>
+                  </li>
+                  <li class="credential-row">
+                    <div><p class="credential-name" data-en="Academic Excellence Full Scholarship · 3 semesters">성적우수 전액 장학금 · 3학기</p><p class="credential-org" data-en="Hanshin University">한신대학교</p></div>
+                    <span class="credential-date">2016 - 2020</span>
+                  </li>
+                </ul>
               </div>
-            </li>
-          </ol>
-        </section>
-
-        <section class="awards-section" aria-label="Awards and Prizes">
-          <h2 class="awards-title">Awards &amp; Prizes</h2>
-          <ul class="awards-list">
-            <li class="award-item">
-              <div class="award-left">
-                <span class="award-icon award-icon-contest" aria-hidden="true"></span>
-                <div class="award-copy">
-                  <p class="award-name">Excellence Award of HCI College Conference 2024</p>
-                  <p class="award-org">Companoid Institute</p>
-                </div>
+              <div id="panel-certificates" class="credential-panel" role="tabpanel" aria-labelledby="tab-certificates" tabindex="0" hidden>
+                <ul class="credential-list">
+                  <li class="credential-row"><p class="credential-name" data-en="IoT Certification">IoT 자격검정</p><time datetime="2025">2025</time></li>
+                  <li class="credential-row"><p class="credential-name">AWS CSA</p><time datetime="2025">2025</time></li>
+                  <li class="credential-row"><p class="credential-name">SQLD</p><time datetime="2024">2024</time></li>
+                  <li class="credential-row"><p class="credential-name" data-en="Engineer Information Processing">정보처리기사</p><time datetime="2024">2024</time></li>
+                </ul>
               </div>
-              <time class="award-date" datetime="2024-12-14">Dec 14, 2024</time>
-            </li>
-
-            <li class="award-item">
-              <div class="award-left">
-                <span class="award-icon award-icon-contest" aria-hidden="true"></span>
-                <div class="award-copy">
-                  <p class="award-name">Excellence Award of AI & Big Data Hackathon</p>
-                  <p class="award-org">Hanshin University</p>
-                </div>
+              <div id="panel-languages" class="credential-panel" role="tabpanel" aria-labelledby="tab-languages" tabindex="0" hidden>
+                <ul class="credential-list">
+                  <li class="credential-row"><p class="credential-name">TEPS 320</p><time datetime="2026">2026</time></li>
+                  <li class="credential-row"><p class="credential-name">IELTS 6.0</p><time datetime="2024">2024</time></li>
+                </ul>
               </div>
-              <time class="award-date" datetime="2021-12-01">Dec, 2021</time>
-            </li>
-
-            <li class="award-item">
-              <div class="award-left">
-                <span class="award-icon award-icon-scholarship" aria-hidden="true"></span>
-                <div class="award-copy">
-                  <p class="award-name">National Science & Engineering Scholarship (4 Semesters)</p>
-                  <p class="award-org">Ministry of Science and ICT (MSIT)</p>
-                </div>
-              </div>
-              <time class="award-date" datetime="2020-03-01">2020 - 2022</time>
-            </li>
-
-            <li class="award-item">
-              <div class="award-left">
-                <span class="award-icon award-icon-scholarship" aria-hidden="true"></span>
-                <div class="award-copy">
-                  <p class="award-name">Academic Excellence Full Scholarship (3 Semesters)</p>
-                  <p class="award-org">Hanshin University</p>
-                </div>
-              </div>
-              <time class="award-date" datetime="2020-03-01">2016 - 2020</time>
-            </li>
-          </ul>
-        </section>
-
-        <section class="odds-section" aria-label="Odds and Ends">
-          <h2 class="odds-title">Odds &amp; Ends</h2>
-          <div class="odds-list">
-            <p class="odds-line">🇬🇧 <span class="tooltip-anchor">English<span class="tooltip-bubble">IELTS 6.0
-                  (2024)<br>TEPS 320 (2026)</span></span> matters to me - it's how real communication happens.</p>
-            <p class="odds-line">
-              ⛹️ I like picking up new sports, and unwinding with music 🎶 or films 🍿.
-            </p>
-            <p class="odds-line">🎖️ Got a few <span class="tooltip-anchor">certs<span class="tooltip-bubble">IoT 자격검정
-                  (2025)<br>AWS CSA (2025)<br>SQLD (2024)<br>정보처리기사 (2024)</span></span> to keep my practical bits in
-              check.</p>
-          </div>
-        </section>
-      </div>
-    </section>
-
-    <section id="projects" class="panel" role="tabpanel" aria-labelledby="projects-title">
-      <div class="panel-card">
-        <div class="section-head">
-          <h2 id="projects-title">Projects</h2>
-          <div class="filters" role="group" aria-label="Project filters">
-            <button class="filter-button active" aria-pressed="true" data-filter="all">All</button>
-            <button class="filter-button" aria-pressed="false" data-filter="industrial">
-              Industrial
-            </button>
-            <button class="filter-button" aria-pressed="false" data-filter="academic">
-              Academic
-            </button>
-          </div>
-        </div>
-        <div id="project-grid" class="project-grid"></div>
-      </div>
-    </section>
-
-    <section id="contact" class="panel" role="tabpanel" aria-labelledby="contact-title">
-      <div class="panel-card">
-        <h2 id="contact-title">Projects</h2>
-        <div class="card-stage">
-          <article class="business-card" id="business-card" tabindex="0">
-            <div class="card-face card-front">
-              <p class="card-role">Researcher / Engineer</p>
-              <h3>홍길동</h3>
-              <p class="card-email">honggildong@university.edu</p>
-              <p class="card-org">Dept. of Computer Science</p>
             </div>
-          </article>
+          </section>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer" aria-label="Site footer">
-    <div class="site-footer-inner">
-      <p class="footer-name">DONGWOO KANG</p>
-      <a class="footer-email" href="mailto:dongwookang@keti.re.kr">dongwookang [at] keti [dot] re [dot] kr</a>
-      <p class="footer-location">Seoul, South Korea</p>
-
-      <div class="footer-socials" aria-label="Social links"></div>
+  <footer id="contact" class="site-footer contact-section" aria-labelledby="contact-title">
+    <div class="contact-inner">
+      <h2 id="contact-title" data-en="Contact">연락처</h2>
+      <p data-en="Thank you for taking the time to read about my work.">여기까지 읽어주셔서 진심으로 감사드립니다.</p>
+      <nav class="contact-links" aria-label="연락처 및 소셜 링크">
+        <a href="https://github.com/dongwoodustinkang" target="_blank" rel="noreferrer" aria-label="GitHub (새 탭)" title="GitHub">
+          <img src="assets/icons/github.svg" alt="" width="30" height="30" />
+        </a>
+        <a href="mailto:dongwookang@keti.re.kr" aria-label="이메일 보내기" title="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m3 6 9 7 9-7"/></svg>
+        </a>
+        <a href="https://medium.com/@dongwoo-kang" target="_blank" rel="noreferrer" aria-label="Medium (새 탭)" title="Medium">
+          <img src="assets/icons/medium.svg" alt="" width="30" height="30" />
+        </a>
+        <a href="https://scholar.google.com/citations?user=8NhwmX4AAAAJ&amp;hl=ko&amp;oi=sra" target="_blank" rel="noreferrer" aria-label="Google Scholar (새 탭)" title="Google Scholar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 8 10-5 10 5-10 5-10-5Z"/><path d="M6 10v6c3 3 9 3 12 0v-6M22 8v8"/></svg>
+        </a>
+      </nav>
     </div>
   </footer>
 
-  <script src="shared.js?v=2"></script>
-  <script src="script.js?v=20260506-0001"></script>
+  <script src="site-config.js?v=20260913-refactor"></script>
+  <script src="language.js?v=20260913-refactor"></script>
+  <script src="shared.js?v=20260913-refactor"></script>
+  <script src="markdown.js?v=20260913-refactor"></script>
+  <script src="script.js?v=20260913-refactor"></script>
 </body>
 
 </html>

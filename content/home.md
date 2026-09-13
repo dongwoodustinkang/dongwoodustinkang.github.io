@@ -1,5 +1,3 @@
-As a researcher at [KETI Korea Electronics Technology Institute](https://www.keti.re.kr), I have been working on a diverse range of projects, 
-including Wi-Fi signal processing, 3D facial mapping, and semiconductor anomaly detection. 
-This experience has sparked a strong interest in multimodal AI. 
-I am now eager to extend my expertise to vision and audio data, 
-focusing on how fusing these modalities can lead to a more profound understanding of human activities and their surroundings.
+저는 현재 한국전자기술연구원(KETI)에서 연구원으로 재직중입니다. KETI에 합류하기 전에는 플랫폼 기업에서 소프트웨어 개발자로 인턴 근무를 했으며 CIT HCI College에서 사용자 경험에 관한 학습 후 프로젝트 발표를 했습니다.
+
+저의 관심사는 주로 영상 처리(Image Processing)과 Physical AI를 기반으로 한 로봇의 상황 인지 기술에 초점을 두고 있지만 컴퓨터 비전과 지능형 로보틱스와도 밀접하게 연관되어 있기 때문에 폭넓은 관심을 두고 깊이 있게 학습하고 있습니다.

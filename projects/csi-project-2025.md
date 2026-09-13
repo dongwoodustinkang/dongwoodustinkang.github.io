@@ -1,7 +1,7 @@
 ---
 title: "고도화된 데이터 전처리와 CSI 기반 온디바이스 AIoT 시스템 개발"
 author: "Content Convergence Research Center"
-affilation: Korea Electronics Technology Institute(KETI)
+affiliation: Korea Electronics Technology Institute(KETI)
 venue: "2025 Korea Electronics Technology Institute(KETI)"
 Links:
 - Paper: https://ieeexplore.ieee.org/document/11263593
@@ -21,7 +21,7 @@ assets/images/csi-project-2025/csi25-05.png
 ## Overview
 3차년도에는 다중 수신기 및 엣지 컴퓨팅 환경으로 시스템을 확장했습니다. 시퀀스 시간 정렬 기법을 이용한 동일 시간대 다중 데이터 수집과 안드로이드/리눅스 환경에서 AI 추론이 가능하도록 설계 및 제작하였습니다. 더불어 경량화된 AI 모델(TinyCNN, SVM, Attention)을 엣지 디바이스에 성공적으로 포팅하여 TTA 공인시험에서 96% 이상의 압도적인 행동 감지 정확도를 공식 인증 받는등, 하드웨어의 한계를 소프트웨적 역량으로 완벽히 극복해 냈습니다.
 
-## Show
+## Media
 <iframe width="560" height="315" src="https://www.youtube.com/embed/35QwhL_oh_Q?si=BLU99dcGeCglYry6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## Problem Definition

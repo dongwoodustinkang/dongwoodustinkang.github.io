@@ -1,7 +1,7 @@
 ---
 title: "AI Agent 기반 대화형 협업 도구 솔루션"
 author: "Minji Kim, Dongwoo Kang, Ha-Eun Kwon"
-affilation: CIT HCI College
+affiliation: CIT HCI College
 venue: "HCI College Conference 2024"
 Links:
 - Paper: https://www.companoid.institute/achievement-project/goget
@@ -61,9 +61,3 @@ AI를 단순 검색 기능이 아닌 업무 보조 에이전트(Cognitive Assist
 
 ## Reflection
 이번 프로젝트를 통해 기술 중심이 아닌 HCI 기반 설계의 중요성을 체감할 수 있었습니다. AI를 자동화 도구가 아닌 업무 흐름을 유지시키는 보조 에이전트(Cognitive Assistant)로 바라보는 관점 전환이 이번 설계의 핵심이었습니다.
-
-## Publications
-### 생산성 향상을 위한 인공지능 기반 대화형 협업 도구 솔루션 제안
-- Authors: Dongwoo Kang, 김민지, 권하은
-- Venue: HCI College Conference 2024
-- Abstract: AI Agent 기반 Semantic Search와 Conversational Interaction을 활용해 협업 도구에서의 자료 검색 문제를 해결하고 업무 몰입을 높이는 솔루션.
