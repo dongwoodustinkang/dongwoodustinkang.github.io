@@ -1,0 +1,8 @@
+/* Keep text visible while the variable font is being fetched. */
+@font-face {
+  font-family: "SUITE Variable";
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url("https://cdn.jsdelivr.net/gh/sun-typeface/SUITE@2/fonts/variable/woff2/SUITE-Variable.woff2") format("woff2-variations");
+}

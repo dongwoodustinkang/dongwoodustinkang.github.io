@@ -9,13 +9,12 @@
   <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96x96.png" />
   <link rel="manifest" href="assets/favicon/site.webmanifest" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260913-refactor" />
-  <link rel="stylesheet" href="site-header.css?v=20260913-refactor" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUITE@2/fonts/variable/woff2/SUITE-Variable.woff2" crossorigin />
+  <link rel="stylesheet" href="suite-font.css?v=20260916-performance" />
+  <link rel="preload" as="image" href="assets/images/home-intro-540.jpeg" fetchpriority="high" />
+  <link rel="stylesheet" href="styles.css?v=20260916-performance" />
+  <link rel="stylesheet" href="site-header.css?v=20260916-performance" />
   <link rel="stylesheet" href="home.css?v=20260913-refactor" />
 </head>
 
@@ -27,12 +26,13 @@
     <section id="home" class="home-section" aria-labelledby="home-title">
       <div class="home-panel">
         <div class="home-intro-grid">
-          <img class="profile-photo" src="assets/images/home-intro.jpeg" alt="강동우 프로필 사진"
+          <img class="profile-photo" src="assets/images/home-intro-540.jpeg" alt="강동우 프로필 사진"
             width="180" height="206" fetchpriority="high" />
           <div class="home-copy">
             <h1 id="home-title" class="home-name" tabindex="-1" data-en="Dongwoo Kang">강동우</h1>
             <div id="home-content" class="home-markdown">
-              <p data-en="Loading introduction…">자기소개를 불러오는 중입니다…</p>
+              <p data-en="I am currently a researcher at the Korea Electronics Technology Institute (KETI). Before joining KETI, I interned as a software developer at a platform company and studied user experience at CIT HCI College, where I also presented a project.">저는 현재 한국전자기술연구원(KETI)에서 연구원으로 재직중입니다. KETI에 합류하기 전에는 플랫폼 기업에서 소프트웨어 개발자로 인턴 근무를 했으며 CIT HCI College에서 사용자 경험에 관한 학습 후 프로젝트 발표를 했습니다.</p>
+              <p data-en="My interests primarily focus on situational awareness for robots based on image processing and Physical AI. As these areas are closely connected to computer vision and intelligent robotics, I continue to explore a broad range of topics and study them in depth.">저의 관심사는 주로 영상 처리(Image Processing)과 Physical AI를 기반으로 한 로봇의 상황 인지 기술에 초점을 두고 있지만 컴퓨터 비전과 지능형 로보틱스와도 밀접하게 연관되어 있기 때문에 폭넓은 관심을 두고 깊이 있게 학습하고 있습니다.</p>
             </div>
             <address class="home-contact">
               <a href="mailto:dongwoo-kang@naver.com">dongwoo-kang [at] naver [dot] com</a>
@@ -138,7 +138,7 @@
   </footer>
 
   <script src="site-config.js?v=20260913-refactor"></script>
-  <script src="language.js?v=20260913-refactor"></script>
+  <script src="language.js?v=20260916-lang-fix"></script>
   <script src="shared.js?v=20260913-refactor"></script>
   <script src="markdown.js?v=20260913-refactor"></script>
   <script src="script.js?v=20260913-refactor"></script>

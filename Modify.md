@@ -6,7 +6,7 @@
 
 | 수정할 항목 | 파일 / 위치 |
 | --- | --- |
-| 자기소개 한국어 / 영어 | `content/home.md` / `content/home.en.md` |
+| 자기소개 한국어 / 영어 | `index.html`의 `id="home-content"` |
 | 이름, 프로필 사진, 이메일, 타임라인, 수상·장학금·자격증·어학, 하단 연락처 | `index.html` |
 | 공통 메뉴 항목, CV 파일 경로, 프로젝트 분류 | `site-config.js` |
 | 프로젝트 추가·삭제·목록 순서·분류·연도 | `projects/projects.json` |
@@ -44,18 +44,15 @@ python3 -m http.server 5173 --bind 127.0.0.1
 
 ### 자기소개
 
-- 한국어: `content/home.md`
-- 영어: `content/home.en.md`
+- `index.html`의 `id="home-content"` 안에서 각 `<p>`를 수정합니다.
+- 태그 안의 문구는 한국어, 같은 태그의 `data-en` 값은 영어입니다.
 
-문단 사이에 빈 줄을 넣습니다. 같은 언어의 내용은 이 파일 한 곳에서만 관리합니다. HTML에 자기소개를 중복 작성할 필요가 없습니다.
-
-```md
-첫 번째 소개 문단입니다.
-
-두 번째 소개 문단입니다. **강조**하거나 [링크](https://example.com)를 넣을 수 있습니다.
+```html
+<p data-en="First introduction paragraph.">첫 번째 소개 문단입니다.</p>
+<p data-en="Second introduction paragraph.">두 번째 소개 문단입니다.</p>
 ```
 
-한 문단은 한 줄로 작성하는 것을 권장합니다. 현재의 간단한 Markdown 변환기는 일반 텍스트의 각 줄을 별도 문단으로 표시합니다.
+문단을 추가할 때는 위의 `<p>...</p>` 한 줄을 복사해 한국어와 영어를 함께 입력합니다.
 
 ### 이름과 사진
 
@@ -65,7 +62,7 @@ python3 -m http.server 5173 --bind 127.0.0.1
 - `class="profile-photo"`: `src`에 프로필 사진 경로
 - `<title>`와 `<meta name="description">`: 탭 제목과 검색 설명
 
-현재 프로필 사진 경로는 `assets/images/home-intro.jpeg`입니다. 파일을 다른 이름이나 확장자로 교체하면 `index.html`의 `src`도 함께 바꿔 주세요.
+현재 프로필 사진 경로는 `assets/images/home-intro-540.jpeg`입니다. 파일을 다른 이름이나 확장자로 교체하면 `index.html`의 `src`도 함께 바꿔 주세요.
 
 사진 크기·둥근 모서리는 `home.css`의 `.profile-photo`에서 바꿉니다. 이름을 변경하면 `language.js`의 홈 탭 제목 및 사진 설명, `project-detail.js`의 상세 탭 제목에 붙는 이름도 확인하세요.
 

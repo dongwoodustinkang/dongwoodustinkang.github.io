@@ -1,19 +1,4 @@
-// Home introduction and credential tabs.
-const homeContent = document.getElementById("home-content");
-
-async function loadHomeMarkdown() {
-  try {
-    const res = await fetch(localizedContentPath("content/home.md"), { cache: "no-cache" });
-    if (!res.ok) throw new Error();
-    homeContent.innerHTML = markdownLinesToHtml((await res.text()).split(/\r?\n/), "content/home.md");
-  } catch (_) {
-    homeContent.textContent = siteText("자기소개를 불러오지 못했습니다. 로컬 미리보기 주소에서 다시 확인해 주세요.", "Unable to load the introduction. Please open the local preview address.");
-  }
-}
-
-loadHomeMarkdown();
-
-// Accessible tabs: arrow keys wrap; Home and End jump to the edges.
+// Home credential tabs: arrow keys wrap; Home and End jump to the edges.
 const credentialTabs = [...document.querySelectorAll('.credential-tab')];
 
 function selectCredentialTab(selectedTab) {

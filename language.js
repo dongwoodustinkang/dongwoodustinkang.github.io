@@ -24,9 +24,16 @@ function initLanguageButtons() {
       if (next === siteLanguage) return;
       const url = new URL(location.href);
       url.searchParams.delete('lang');
-      try { localStorage.setItem('language', next); }
-      catch (_) { url.searchParams.set('lang', next); }
-      location.replace(url.href);
+      try {
+        localStorage.setItem('language', next);
+        // `location.replace()` does not navigate when the URL (including its
+        // fragment) is unchanged, such as on index.html#top.
+        if (url.href === location.href) location.reload();
+        else location.replace(url.href);
+      } catch (_) {
+        url.searchParams.set('lang', next);
+        location.replace(url.href);
+      }
     });
   });
 }
