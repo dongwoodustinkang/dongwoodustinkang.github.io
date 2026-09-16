@@ -53,6 +53,7 @@
 .detail-page .hero-track { display: flex; width: 100%; height: 100%; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
 .detail-page .hero-slide { flex: 0 0 100%; min-width: 100%; height: 100%; }
 .detail-page .hero-slide img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.detail-page .hero-fullscreen-close { display: none; }
 .detail-page .gallery-controls { display: flex; justify-content: center; padding: 6px 0; }
 .detail-page .gallery-controls[hidden] { display: none; }
 .detail-page .gallery-dot {
@@ -152,6 +153,42 @@
   .detail-page .project-detail-actions { margin-top: 28px; gap: 10px; }
   .detail-page .project-detail-action { font-size: 16px; }
   .detail-page .project-gallery { margin: 52px -12px 0; }
+  .detail-page .project-detail-hero { cursor: zoom-in; }
+  .detail-page .project-detail-hero.is-fullscreen {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    margin: 0;
+    aspect-ratio: auto;
+    border-radius: 0;
+    background: #000;
+    cursor: zoom-out;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+  }
+  .detail-page .hero-fullscreen-close {
+    position: absolute;
+    z-index: 1;
+    top: max(16px, env(safe-area-inset-top));
+    right: max(16px, env(safe-area-inset-right));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0 0 4px;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 62%);
+    color: #fff;
+    font: 400 36px/1 Arial, sans-serif;
+    cursor: pointer;
+  }
+  .detail-page .hero-fullscreen-close:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .detail-page.hero-fullscreen-open { overflow: hidden; }
   .detail-page .project-detail-content { margin-top: 30px; }
   .detail-page .project-detail-row-label,
   .detail-page .project-detail-summary h2 { font-size: 20px; }

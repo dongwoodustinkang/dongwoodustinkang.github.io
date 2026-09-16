@@ -1,4 +1,4 @@
-// Image gallery: dot navigation, arrow keys, and swipe.
+// Image gallery: dot navigation, arrow keys, swipe, and mobile full-screen viewing.
 function buildHeroSlider(heroEl, sources = [], title = "") {
   const controls = document.getElementById("project-gallery-controls");
   heroEl.replaceChildren();
@@ -27,6 +27,39 @@ function buildHeroSlider(heroEl, sources = [], title = "") {
     return slide;
   });
   heroEl.appendChild(track);
+
+  const closeButton = document.createElement("button");
+  closeButton.type = "button";
+  closeButton.className = "hero-fullscreen-close";
+  closeButton.hidden = true;
+  closeButton.setAttribute("aria-label", siteText("전체 화면 닫기", "Close full screen"));
+  closeButton.innerHTML = '<span aria-hidden="true">×</span>';
+  heroEl.appendChild(closeButton);
+
+  const mobileQuery = window.matchMedia("(max-width: 540px)");
+  let isFullscreen = false;
+  function setFullscreen(open) {
+    if (open && !mobileQuery.matches) return;
+    isFullscreen = open;
+    heroEl.classList.toggle("is-fullscreen", open);
+    document.body.classList.toggle("hero-fullscreen-open", open);
+    closeButton.hidden = !open;
+    heroEl.setAttribute("role", open ? "dialog" : "region");
+    if (open) heroEl.setAttribute("aria-modal", "true");
+    else heroEl.removeAttribute("aria-modal");
+    if (open) closeButton.focus();
+    else heroEl.focus();
+  }
+  closeButton.addEventListener("click", event => {
+    event.stopPropagation();
+    setFullscreen(false);
+  });
+  mobileQuery.addEventListener("change", event => {
+    if (!event.matches && isFullscreen) setFullscreen(false);
+  });
+  window.addEventListener("keydown", event => {
+    if (event.key === "Escape" && isFullscreen) setFullscreen(false);
+  });
   let current = 0;
   const dots = sources.map((_, i) => {
     const dot = document.createElement("button");
@@ -46,11 +79,17 @@ function buildHeroSlider(heroEl, sources = [], title = "") {
   }
   goTo(0);
   heroEl.onkeydown = event => {
-    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-    event.preventDefault();
-    goTo(current + (event.key === 'ArrowLeft' ? -1 : 1));
+    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      event.preventDefault();
+      goTo(current + (event.key === "ArrowLeft" ? -1 : 1));
+    }
+    if ((event.key === "Enter" || event.key === " ") && mobileQuery.matches) {
+      event.preventDefault();
+      setFullscreen(!isFullscreen);
+    }
   };
   let pointerStart = null;
+  let ignoreClick = false;
   heroEl.onpointerdown = event => {
     if (event.isPrimary) pointerStart = { x: event.clientX, y: event.clientY };
   };
@@ -58,9 +97,19 @@ function buildHeroSlider(heroEl, sources = [], title = "") {
     if (!pointerStart) return;
     const dx = event.clientX - pointerStart.x;
     const dy = event.clientY - pointerStart.y;
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) goTo(current + (dx < 0 ? 1 : -1));
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+      goTo(current + (dx < 0 ? 1 : -1));
+      ignoreClick = true;
+    }
     pointerStart = null;
   };
   heroEl.onpointercancel = () => { pointerStart = null; };
+  heroEl.onclick = event => {
+    if (!mobileQuery.matches || event.target.closest(".hero-fullscreen-close")) return;
+    if (ignoreClick) {
+      ignoreClick = false;
+      return;
+    }
+    setFullscreen(!isFullscreen);
+  };
 }
-
