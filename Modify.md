@@ -74,7 +74,7 @@ python3 -m http.server 5173 --bind 127.0.0.1
 <a href="mailto:hello@example.com">hello [at] example [dot] com</a>
 ```
 
-하단의 `class="contact-links"`에는 GitHub·이메일·Medium·Google Scholar 링크가 있습니다. `href`가 실제 주소, `title`이 링크 이름입니다. 추가할 때 기존 `<a>...</a>` 하나를 복사해 주소·제목·아이콘을 변경하고, 제거할 때는 해당 `<a>...</a>` 전체를 삭제합니다.
+하단의 `class="contact-links"`에는 GitHub·이메일·Medium·Google Scholar 링크가 있습니다. `href`가 실제 주소, `title`이 링크 이름입니다. Threads 링크는 현재 `index.html`에서 주석 처리되어 있으므로, `YOUR_THREADS_HANDLE`을 계정 핸들로 바꾼 뒤 주석을 해제하면 표시됩니다. 추가할 때 기존 `<a>...</a>` 하나를 복사해 주소·제목·아이콘을 변경하고, 제거할 때는 해당 `<a>...</a>` 전체를 삭제합니다.
 
 ## 4. 타임라인과 수상·자격증
 
