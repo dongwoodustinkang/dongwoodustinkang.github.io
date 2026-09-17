@@ -22,6 +22,9 @@ function buildHeroSlider(heroEl, sources = [], title = "") {
     image.src = src;
     image.alt = `${title} — ${siteText('이미지', 'Image')} ${i + 1}`;
     image.draggable = false;
+    image.addEventListener("load", () => {
+      if (i === current) applyImageOrientation();
+    });
     slide.appendChild(image);
     track.appendChild(slide);
     return slide;
@@ -36,8 +39,35 @@ function buildHeroSlider(heroEl, sources = [], title = "") {
   closeButton.innerHTML = '<span aria-hidden="true">×</span>';
   heroEl.appendChild(closeButton);
 
-  const mobileQuery = window.matchMedia("(max-width: 540px)");
+  const mobileQuery = window.matchMedia("(max-width: 540px), (hover: none) and (pointer: coarse)");
   let isFullscreen = false;
+  function currentOrientation() {
+    const image = slides[current]?.querySelector("img");
+    return image && image.naturalWidth > image.naturalHeight ? "landscape" : "portrait";
+  }
+  function applyImageOrientation() {
+    const orientation = currentOrientation();
+    heroEl.classList.toggle("is-landscape", orientation === "landscape");
+    heroEl.classList.toggle("is-portrait", orientation === "portrait");
+    heroEl.dataset.imageOrientation = orientation;
+    return orientation;
+  }
+  async function enterNativeFullscreen() {
+    try {
+      if (!document.fullscreenElement && heroEl.requestFullscreen) {
+        await heroEl.requestFullscreen({ navigationUI: "hide" });
+      }
+    } catch (_) {
+      try { await heroEl.requestFullscreen?.(); }
+      catch (_) {}
+    }
+    try { await screen.orientation?.lock?.(applyImageOrientation()); }
+    catch (_) {}
+  }
+  function exitNativeFullscreen() {
+    if (document.fullscreenElement === heroEl) document.exitFullscreen?.().catch(() => {});
+    screen.orientation?.unlock?.();
+  }
   function setFullscreen(open) {
     if (open && !mobileQuery.matches) return;
     isFullscreen = open;
@@ -47,8 +77,14 @@ function buildHeroSlider(heroEl, sources = [], title = "") {
     heroEl.setAttribute("role", open ? "dialog" : "region");
     if (open) heroEl.setAttribute("aria-modal", "true");
     else heroEl.removeAttribute("aria-modal");
-    if (open) closeButton.focus();
-    else heroEl.focus();
+    if (open) {
+      applyImageOrientation();
+      closeButton.focus();
+      enterNativeFullscreen();
+    } else {
+      exitNativeFullscreen();
+      heroEl.focus();
+    }
   }
   closeButton.addEventListener("click", event => {
     event.stopPropagation();
@@ -59,6 +95,9 @@ function buildHeroSlider(heroEl, sources = [], title = "") {
   });
   window.addEventListener("keydown", event => {
     if (event.key === "Escape" && isFullscreen) setFullscreen(false);
+  });
+  document.addEventListener("fullscreenchange", () => {
+    if (!document.fullscreenElement && isFullscreen) setFullscreen(false);
   });
   let current = 0;
   const dots = sources.map((_, i) => {
@@ -76,6 +115,7 @@ function buildHeroSlider(heroEl, sources = [], title = "") {
     track.style.transform = `translateX(-${current * 100}%)`;
     dots.forEach((dot, i) => dot.setAttribute("aria-current", String(i === current)));
     slides.forEach((slide, i) => slide.setAttribute("aria-hidden", String(i !== current)));
+    if (isFullscreen) applyImageOrientation();
   }
   goTo(0);
   heroEl.onkeydown = event => {
