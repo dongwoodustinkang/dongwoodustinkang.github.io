@@ -5,7 +5,7 @@
 .project-detail-row-body ul { margin: 0.55rem 0 0; padding-left: 1.15rem; }
 .project-detail-summary ul { margin: 0.6rem 0 0; padding-left: 1.15rem; }
 .project-md-h2 { margin: 1rem 0 0.4rem; font-size: 18px; }
-.project-md-h3 { margin: 0.75rem 0 0.3rem; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+.project-md-h3 { margin: 0.75rem 0 0.3rem; font-family: var(--header-font); font-size: 15px; font-weight: 300; letter-spacing: -0.01em; }
 /* ── Inline markdown formatting ── */
 .project-detail-row-body a,
 .project-detail-summary a {
@@ -174,7 +174,7 @@
   /* light mode: dark button bg */
   background: rgba(0, 0, 0, 0.18);
   border: none;
-  border-radius: 7px;
+  border-radius: 3px;
   cursor: pointer;
   opacity: 0.6;
   transition: opacity 150ms ease, background 150ms ease;
@@ -237,4 +237,3 @@
 .katex {
   font-size: 1.05em;
 }
-

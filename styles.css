@@ -4,24 +4,25 @@
   --panel: #fff;
   --text-main: #111;
   --text-sub: #666;
-  --accent: #0088ff;
-  --accent-hover: #0077df;
-  --accent-soft: rgb(0 136 255 / 8%);
+  --accent: #232323;
+  --accent-hover: #fef991;
+  --accent-soft: rgb(254 249 145 / 32%);
   --line: #ececec;
-  --header-font: "SUITE Variable", sans-serif;
   --mono-font: "JetBrains Mono", monospace;
 }
 
 * { box-sizing: border-box; }
-html { min-height: 100%; background: #f5f5f5; scroll-behavior: smooth; }
+html { min-height: 100%; background: #f4f4f4; scroll-behavior: smooth; }
 body {
   position: relative;
   min-height: 100%;
   margin: 8px;
   background: var(--bg);
   color: var(--text-main);
-  font-family: var(--header-font);
+  font-family: var(--body-font);
+  font-weight: 200;
 }
+h1, h2, h3, h4, h5, h6, b, strong { font-family: var(--header-font); font-weight: 300; }
 main { position: relative; z-index: 1; margin: 0 auto; }
 [hidden] { display: none !important; }
 .sr-only {

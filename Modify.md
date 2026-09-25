@@ -303,12 +303,12 @@ $$
 전체 색상은 `styles.css`의 변수로 조정합니다.
 
 ```css
---accent: #0088ff;
---accent-hover: #0077df;
---accent-soft: rgb(0 136 255 / 8%);
+--accent: #232323;
+--accent-hover: #fef991;
+--accent-soft: rgb(254 249 145 / 32%);
 ```
 
-`--accent`는 기본 파랑, `--accent-hover`는 View Work 호버 색, `--accent-soft`는 연한 배경입니다. CV 호버에는 기본 파랑이 적용됩니다.
+`--accent`는 기본 진회색, `--accent-hover`는 버튼 호버 색, `--accent-soft`는 연한 노란 배경입니다. 버튼은 3px 모서리와 진회색 테두리를 사용합니다. 글꼴은 별도 파일을 배포하지 않고 기기에 설치된 Helvetica Neue UltraLight/Light를 우선 사용하며, 없는 환경에서는 유사한 시스템 글꼴로 표시됩니다.
 
 ## 10. 수정 후 검사
 
