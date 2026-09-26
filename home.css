@@ -129,7 +129,8 @@
   cursor: pointer;
   transition: background 160ms ease, color 160ms ease;
 }
-.homepage .credential-tab:hover { background: var(--accent-hover); color: #232323; }
+.homepage .credential-tab:not([aria-selected="true"]):hover { background: #dbdbdb; color: #232323; }
+.homepage .credential-tab:not([aria-selected="true"]):active { background: #c3c3c3; color: #232323; }
 .homepage .credential-tab[aria-selected="true"] { background: var(--accent); color: #fff; }
 .homepage .credential-tab[aria-selected="true"]::before {
   content: "";

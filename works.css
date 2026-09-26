@@ -39,6 +39,8 @@
   font-weight: 200;
   cursor: pointer;
 }
+.works-page .projects-filter-select:hover { background: #dbdbdb; }
+.works-page .projects-filter-select:active { background: #c3c3c3; }
 .works-page .projects-filter-wrap::after {
   content: "";
   position: absolute;

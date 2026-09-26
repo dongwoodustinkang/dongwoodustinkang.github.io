@@ -308,7 +308,7 @@ $$
 --accent-soft: rgb(254 249 145 / 32%);
 ```
 
-`--accent`는 기본 진회색, `--accent-hover`는 버튼 호버 색, `--accent-soft`는 연한 노란 배경입니다. 버튼은 3px 모서리와 진회색 테두리를 사용합니다. 글꼴은 별도 파일을 배포하지 않고 기기에 설치된 Helvetica Neue UltraLight/Light를 우선 사용하며, 없는 환경에서는 유사한 시스템 글꼴로 표시됩니다.
+`--accent`는 기본 진회색, `--accent-hover`는 강조 버튼 호버 색, `--accent-soft`는 연한 노란 배경입니다. 기본 배경이 `#f4f4f4`인 버튼은 호버 시 `#dbdbdb`, 누르는 동안 `#c3c3c3`으로 표시됩니다. 버튼은 3px 모서리와 진회색 테두리를 사용합니다. 글꼴은 별도 파일을 배포하지 않고 기기에 설치된 Helvetica Neue UltraLight/Light를 우선 사용하며, 없는 환경에서는 유사한 시스템 글꼴로 표시됩니다.
 
 ## 10. 수정 후 검사
 
