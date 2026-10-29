@@ -12,7 +12,8 @@
 }
 
 * { box-sizing: border-box; }
-html { min-height: 100%; background: #f4f4f4; scroll-behavior: smooth; }
+html { min-height: 100%; background: var(--bg); scroll-behavior: smooth; }
+::selection { background: var(--accent-hover); color: var(--accent); }
 body {
   position: relative;
   min-height: 100%;

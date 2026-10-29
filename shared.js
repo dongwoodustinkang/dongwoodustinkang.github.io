@@ -9,10 +9,7 @@ function initSiteNavigation() {
     <header class="site-header">
       <div class="header-inner">
         <a id="header-home" class="header-home" href="${homeHref}" aria-label="${siteText('홈으로 이동', 'Go to home')}" title="${siteText('홈으로 이동', 'Go to home')}">
-          <svg viewBox="0 0 32 36" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 14 16 3l13 11v17a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V14Z" />
-            <path d="M12 32V18h8v14" />
-          </svg>
+          <img src="assets/icons/logo.gif" alt="" />
         </a>
         <div class="header-actions">
           <div class="language-switch" role="group" aria-label="Language">
@@ -20,7 +17,7 @@ function initSiteNavigation() {
             <button type="button" data-language="en" aria-label="English">EN</button>
           </div>
           <button id="menu-toggle" class="menu-toggle" type="button" aria-label="${siteText('메뉴 열기', 'Open menu')}" aria-expanded="false" aria-controls="mobile-overlay">
-            <span class="menu-line"></span><span class="menu-line"></span><span class="menu-line"></span>
+            <img src="assets/icons/burgur_menu.svg" alt="" />
           </button>
         </div>
       </div>
@@ -46,6 +43,7 @@ function initSiteNavigation() {
   initLanguageButtons();
 
   const toggle = mount.querySelector("#menu-toggle");
+  const toggleIcon = toggle.querySelector("img");
   const overlay = mount.querySelector("#mobile-overlay");
   const background = document.querySelectorAll("main, .site-footer, .skip-link");
   function setMenuOpen(open) {
@@ -53,7 +51,7 @@ function initSiteNavigation() {
     overlay.inert = !open;
     overlay.classList.toggle("open", open);
     overlay.setAttribute("aria-hidden", String(!open));
-    toggle.classList.toggle("is-open", open);
+    toggleIcon.src = open ? "assets/icons/close_menu.svg" : "assets/icons/burgur_menu.svg";
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? siteText("메뉴 닫기", "Close menu") : siteText("메뉴 열기", "Open menu"));
     document.body.classList.toggle("menu-open", open);

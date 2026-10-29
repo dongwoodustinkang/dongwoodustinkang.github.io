@@ -1,5 +1,6 @@
-/* Use locally licensed system fonts; no web font is downloaded or redistributed. */
+/* Use locally licensed system fonts; no web font is downloaded or redistributed.
+   -apple-system resolves to SF Pro (Text/Display by size) on Apple devices. */
 :root {
-  --body-font: "Helvetica Neue UltraLight", "HelveticaNeue-UltraLight", "Helvetica Neue", "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
-  --header-font: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
+  --body-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Apple SD Gothic Neo", "Noto Sans KR", "Helvetica Neue", Arial, sans-serif;
+  --header-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Apple SD Gothic Neo", "Noto Sans KR", "Helvetica Neue", Arial, sans-serif;
 }
