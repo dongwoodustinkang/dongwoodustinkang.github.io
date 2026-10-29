@@ -36,9 +36,10 @@ function renderProjects(categoryFilter = "all", yearFilter = "all") {
     return;
   }
 
-  filtered.forEach((project) => {
+  filtered.forEach((project, index) => {
     const item = document.createElement("a");
     item.className = "projects-tile projects-tile-link";
+    item.style.setProperty("--tile-index", index);
     item.dataset.category = project.category;
     item.dataset.slug = project.slug;
     item.href = `project-detail.html?slug=${encodeURIComponent(project.slug)}`;
@@ -49,7 +50,7 @@ function renderProjects(categoryFilter = "all", yearFilter = "all") {
     if (project.thumbnail) {
       const image = document.createElement("span");
       image.className = "projects-tile-image";
-      image.style.backgroundImage = `url("${project.thumbnail}")`;
+      setTileImage(image, project.thumbnail);
       thumb.appendChild(image);
     }
 
@@ -70,6 +71,24 @@ function renderProjects(categoryFilter = "all", yearFilter = "all") {
     item.appendChild(copy);
     projectsList.appendChild(item);
   });
+}
+
+// Falls back to the original image when no small thumbnail has been made yet.
+// The image fades in only after it has fully loaded.
+function setTileImage(element, src) {
+  const show = url => {
+    element.style.backgroundImage = `url("${url}")`;
+    element.classList.add("is-loaded");
+  };
+  const small = smallThumbnailPath(src);
+  const probe = new Image();
+  probe.onload = () => show(small);
+  probe.onerror = () => {
+    const original = new Image();
+    original.onload = original.onerror = () => show(src);
+    original.src = src;
+  };
+  probe.src = small;
 }
 
 async function loadProjects() {

@@ -1,3 +1,19 @@
+// Warm the browser cache with Works card images once Home is idle.
+window.addEventListener('load', () => {
+  const idle = window.requestIdleCallback || (callback => setTimeout(callback, 1500));
+  idle(async () => {
+    try {
+      const registry = await loadProjectRegistry();
+      const projects = await Promise.all(registry.map(loadProjectContent));
+      projects.forEach(project => {
+        if (project.thumbnail) new Image().src = smallThumbnailPath(project.thumbnail);
+      });
+    } catch (error) {
+      // Prefetch is optional; Works loads everything itself.
+    }
+  });
+});
+
 // Home credential tabs: arrow keys wrap; Home and End jump to the edges.
 const credentialTabs = [...document.querySelectorAll('.credential-tab')];
 

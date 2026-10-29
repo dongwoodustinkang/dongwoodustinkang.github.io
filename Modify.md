@@ -144,7 +144,7 @@ cv: "assets/pdf/dongwoo-kang-cv.pdf",
 | `year` | Year 필터와 카드에 표시할 연도. 문자열로 작성 |
 | `content` | 한국어 Markdown 파일의 저장소 기준 경로 |
 
-카드의 제목과 소속은 Markdown 상단에서 가져옵니다. 대표 이미지는 `## Show`의 첫 번째 이미지입니다. **JSON에 제목이나 대표 이미지를 중복해서 넣지 않습니다.**
+카드의 제목과 소속은 Markdown 상단에서 가져옵니다. 대표 이미지는 `## Show`의 첫 번째 이미지입니다. **JSON에 제목이나 대표 이미지를 중복해서 넣지 않습니다.** 카드에는 대표 이미지 옆 `thumbs` 폴더의 작은 WebP(예: `assets/images/my-project/thumbs/cover.webp`)를 먼저 쓰고, 없으면 원본을 그대로 씁니다.
 
 Markdown 맨 위의 `---` 사이가 기본 정보입니다. 일반 YAML 전체를 지원하는 것은 아니며 아래 형식을 사용하세요.
 
@@ -173,6 +173,7 @@ Links:
 2. 같은 파일을 영어로 작성해 `projects/my-project.en.md`로 저장합니다.
 3. 이미지는 `assets/images/my-project/` 폴더에 넣습니다.
 4. Markdown의 제목·소속·링크·이미지 경로·본문을 수정합니다.
+   - 카드를 빨리 띄우려면 대표 이미지(`## Show`의 첫 번째 이미지)로 작은 WebP를 만듭니다. 예: `cwebp -q 80 -resize 1000 0 assets/images/my-project/cover.png -o assets/images/my-project/thumbs/cover.webp` (`thumbs` 폴더를 먼저 만들고, 대표 이미지를 바꾸면 다시 만듭니다.)
 5. `projects/projects.json` 배열에 아래 항목을 추가합니다.
 
 ```json

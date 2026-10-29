@@ -9,7 +9,7 @@ function initSiteNavigation() {
     <header class="site-header">
       <div class="header-inner">
         <a id="header-home" class="header-home" href="${homeHref}" aria-label="${siteText('홈으로 이동', 'Go to home')}" title="${siteText('홈으로 이동', 'Go to home')}">
-          <img src="assets/icons/logo.gif" alt="" />
+          <img src="assets/icons/logo.webp" alt="" />
         </a>
         <div class="header-actions">
           <div class="language-switch" role="group" aria-label="Language">

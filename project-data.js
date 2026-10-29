@@ -58,6 +58,11 @@ async function loadProjectContent(entry) {
   return { ...entry, ...metadata, sections, images, thumbnail: images[0] || "", contentPath: path };
 }
 
+// Works cards use a small WebP beside the original: images/x/a.png -> images/x/thumbs/a.webp.
+function smallThumbnailPath(src) {
+  return /^(?:[a-z]+:)?\/\//i.test(src) ? src : src.replace(/([^/]+)\.[a-z0-9]+$/i, "thumbs/$1.webp");
+}
+
 function projectOrganization(project) {
   return /Korea Electronics? Technology Institute/i.test(project.affiliation)
     ? siteText("한국전자기술연구원(KETI)", "Korea Electronics Technology Institute (KETI)")

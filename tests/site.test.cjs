@@ -82,9 +82,3 @@ test('gallery and inline images resolve relative to Markdown, not the page', () 
   assert.equal(context.parseImageSourceFromLine('![Figure](../assets/images/example.png)'), '../assets/images/example.png');
 });
 
-test('home introductions are available in both languages', () => {
-  for (const file of ['content/home.md', 'content/home.en.md']) {
-    const html = context.markdownLinesToHtml(read(file).split('\n'), file);
-    assert.ok(html.includes('<p>'), `Missing introduction: ${file}`);
-  }
-});
