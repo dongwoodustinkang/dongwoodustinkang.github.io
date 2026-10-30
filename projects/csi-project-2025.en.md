@@ -3,6 +3,7 @@ title: "Advanced Data Preprocessing and a CSI-Based On-Device AIoT System"
 author: "Content Convergence Research Center"
 affiliation: Korea Electronics Technology Institute(KETI)
 venue: "2025 Korea Electronics Technology Institute(KETI)"
+thumbnail: assets/images/csi-project-2025/thumbs/csi25-00.webp
 Links:
 - Paper: https://ieeexplore.ieee.org/document/11263593
 - DEMO: https://youtu.be/35QwhL_oh_Q

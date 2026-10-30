@@ -39,6 +39,7 @@ test('registry has unique URLs, valid categories, explicit years, and both trans
       const metadata = context.parseFrontmatter(markdown);
       assert.ok(metadata.title, `Missing title: ${file}`);
       assert.ok(metadata.affiliation, `Missing affiliation: ${file}`);
+      localAssetExists(metadata.thumbnail, file);
       const sections = context.parseMarkdownSections(context.stripFrontmatter(markdown));
       const show = sections.filter(section => section.key === 'show').flatMap(section => section.lines);
       for (const image of context.extractAllImageSources(show, file)) localAssetExists(image, file);
@@ -74,6 +75,19 @@ test('rendering preserves code, tables, math, links, and videos', () => {
   const source = '#### Heading\n**Bold** and [Paper](https://example.com)\n\n| A | B |\n| - | - |\n| 1 | 2 |\n\n```swift\nlet value = "<tag>"\n```\n\n$$\nx^2\n$$\n<iframe src="https://www.youtube.com/embed/example"></iframe>';
   const html = context.markdownLinesToHtml(source.split('\n'));
   for (const expected of ['<h4', '<strong>Bold</strong>', 'href="https://example.com"', '<table', '<th>A</th>', '&lt;tag&gt;', 'language-swift', 'project-code-copy', 'project-math-block', 'project-md-iframe-wrap']) assert.ok(html.includes(expected), expected);
+});
+
+test('body images between paragraphs become figures with optional captions', () => {
+  const html = context.markdownLinesToHtml(['Before', '', '![Result <chart>](assets/images/a.png)', '', 'assets/images/b.png', '', 'After']);
+  assert.ok(html.includes('alt="Result &lt;chart&gt;"'));
+  assert.ok(html.includes('<figcaption class="project-md-caption">Result &lt;chart&gt;</figcaption>'));
+  assert.equal((html.match(/<figure/g) || []).length, 2);
+  assert.equal((html.match(/<figcaption/g) || []).length, 1);
+});
+
+test('subtitle is the first Head 1 outside code blocks', () => {
+  assert.equal(context.parseSubtitle('```md\n# Code\n```\n## Show\n# First\n# Second'), 'First');
+  assert.equal(context.parseSubtitle('## Overview\n#### Not a subtitle'), '');
 });
 
 test('gallery and inline images resolve relative to Markdown, not the page', () => {

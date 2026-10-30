@@ -1,9 +1,37 @@
 // Render a single project. Media, Markdown, and navigation live in separate files.
 const titleEl = document.getElementById("project-detail-title");
+const subtitleEl = document.getElementById("project-detail-subtitle");
 const actionsEl = document.getElementById("project-detail-actions");
 const heroEl = document.getElementById("project-detail-hero");
 const summaryEl = document.getElementById("project-detail-summary");
 const contentEl = document.getElementById("project-detail-content");
+const sectionEl = document.querySelector(".project-detail-section");
+
+// Wait for the first gallery image (at most `limit` ms) so the page fades in whole, not piece by piece.
+function whenImageReady(image, limit = 1200) {
+  if (!image) return Promise.resolve();
+  const loaded = image.complete ? Promise.resolve() : new Promise(resolve => {
+    image.addEventListener("load", resolve, { once: true });
+    image.addEventListener("error", resolve, { once: true });
+  });
+  const decoded = loaded.then(() => image.decode?.()).catch(() => {});
+  return Promise.race([decoded, new Promise(resolve => setTimeout(resolve, limit))]);
+}
+
+function revealPage() {
+  sectionEl.classList.add("is-ready");
+}
+
+function fadeInBodyImages() {
+  contentEl.parentElement.querySelectorAll(".project-md-img").forEach(image => {
+    const show = () => image.classList.add("is-loaded");
+    if (image.complete) show();
+    else {
+      image.addEventListener("load", show, { once: true });
+      image.addEventListener("error", show, { once: true });
+    }
+  });
+}
 
 function renderProjectActions(links) {
   const seen = new Set();
@@ -56,13 +84,18 @@ async function loadProject() {
     if (!entry) throw new Error(`Unknown project: ${slug}`);
     const project = await loadProjectContent(entry);
     titleEl.textContent = project.title;
+    subtitleEl.textContent = project.subtitle;
+    subtitleEl.hidden = !project.subtitle;
     document.title = `${project.title} | Dongwoo Kang`;
     renderProjectActions(project.links);
     renderProjectSections(project);
     buildHeroSlider(heroEl, project.images, project.title);
+    fadeInBodyImages();
     initCodeBlocks();
     initMath();
     initProjectToc();
+    await whenImageReady(heroEl.querySelector("img"));
+    revealPage();
   } catch (error) {
     console.error(error);
     titleEl.textContent = siteText("프로젝트를 찾을 수 없습니다", "Project not found");
@@ -70,6 +103,7 @@ async function loadProject() {
     heroEl.parentElement.hidden = true;
     summaryEl.hidden = false;
     summaryEl.textContent = siteText("프로젝트를 불러오지 못했습니다. 프로젝트 목록에서 다시 선택해 주세요.", "Unable to load this project. Please select it again from the project list.");
+    revealPage();
   }
 }
 

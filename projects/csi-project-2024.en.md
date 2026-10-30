@@ -3,6 +3,7 @@ title: "CSI Denoising and Preprocessing Optimization to Overcome Hardware Noise"
 author: "Content Convergence Research Center"
 affiliation: Korea Electronics Technology Institute(KETI)
 venue: "2024 Korea Electronics Technology Institute(KETI)"
+thumbnail: assets/images/csi-project-2024/thumbs/csi24-01.webp
 Links:
 - Paper: https://ieeexplore.ieee.org/document/10827644
 ---

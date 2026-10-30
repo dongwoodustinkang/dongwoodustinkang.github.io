@@ -3,6 +3,7 @@ title: "An AI Agent-Based Conversational Collaboration Solution"
 author: "Minji Kim, Dongwoo Kang, Ha-Eun Kwon"
 affiliation: CIT HCI College
 venue: "HCI College Conference 2024"
+thumbnail: assets/images/collab-ai-agent-hci-2024/thumbs/24_02_00.webp
 Links:
 - Paper: https://www.companoid.institute/achievement-project/goget
 - News: https://platum.kr/archives/247782

@@ -19,7 +19,10 @@ function buildHeroSlider(heroEl, sources = [], title = "") {
     slide.setAttribute("role", "group");
     slide.setAttribute("aria-label", `${i + 1} / ${sources.length}`);
     const image = document.createElement("img");
-    image.src = src;
+    if (i === 0) {
+      image.fetchPriority = "high";
+      image.src = src;
+    } else image.dataset.src = src;
     image.alt = `${title} — ${siteText('이미지', 'Image')} ${i + 1}`;
     image.draggable = false;
     image.addEventListener("load", () => {
@@ -30,6 +33,19 @@ function buildHeroSlider(heroEl, sources = [], title = "") {
     return slide;
   });
   heroEl.appendChild(track);
+
+  // The other slides start downloading only after the first one, so they don't slow it down.
+  const loadRest = () => slides.forEach(slide => {
+    const image = slide.querySelector("img[data-src]");
+    if (image) { image.src = image.dataset.src; delete image.dataset.src; }
+  });
+  const firstImage = slides[0].querySelector("img");
+  if (firstImage.complete) loadRest();
+  else {
+    firstImage.addEventListener("load", loadRest, { once: true });
+    firstImage.addEventListener("error", loadRest, { once: true });
+    setTimeout(loadRest, 2500);
+  }
 
   const closeButton = document.createElement("button");
   closeButton.type = "button";

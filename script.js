@@ -6,7 +6,7 @@ window.addEventListener('load', () => {
       const registry = await loadProjectRegistry();
       const projects = await Promise.all(registry.map(loadProjectContent));
       projects.forEach(project => {
-        if (project.thumbnail) new Image().src = smallThumbnailPath(project.thumbnail);
+        if (project.thumbnail) new Image().src = project.thumbnail;
       });
     } catch (error) {
       // Prefetch is optional; Works loads everything itself.

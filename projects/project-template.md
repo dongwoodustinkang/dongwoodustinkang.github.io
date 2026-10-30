@@ -3,6 +3,7 @@ title: "새 프로젝트 제목"
 author: "Dongwoo Kang"
 affiliation: "개인 프로젝트"
 venue: "2026"
+thumbnail: assets/images/my-project/thumbs/cover.webp
 Links:
 - Github: https://github.com/example/project
 ---

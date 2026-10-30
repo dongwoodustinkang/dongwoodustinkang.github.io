@@ -3,6 +3,7 @@ title: "하드웨어 노이즈 극복을 위한 채널신호(CSI) 정제 및 전
 author: "Content Convergence Research Center"
 affiliation: Korea Electronics Technology Institute(KETI)
 venue: "2024 Korea Electronics Technology Institute(KETI)"
+thumbnail: assets/images/csi-project-2024/thumbs/csi24-01.webp
 Links:
 - Paper: https://ieeexplore.ieee.org/document/10827644
 ---

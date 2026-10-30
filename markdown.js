@@ -179,12 +179,14 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
 
     if (!trimmed) { closeListIfNeeded(); return; }
 
-    // ── Standalone image line → <figure> ──
+    // ── Standalone image line → <figure>; ![caption](src) also shows the caption ──
     const imgSrc = parseImageSourceFromLine(trimmed);
     if (imgSrc) {
       closeListIfNeeded();
       const resolved = resolveContentPath(imgSrc, contentPath);
-      html.push(`<figure class="project-md-figure"><img class="project-md-img" src="${resolved}" alt="" loading="lazy" /></figure>`);
+      const caption = (trimmed.match(/^!\[([^\]]*)]\([^)]+\)$/)?.[1] || "").trim();
+      const alt = escapeHtml(caption);
+      html.push(`<figure class="project-md-figure"><img class="project-md-img" src="${resolved}" alt="${alt}" loading="lazy" decoding="async" />${caption ? `<figcaption class="project-md-caption">${parseInlineMarkdown(caption, contentPath)}</figcaption>` : ""}</figure>`);
       return;
     }
 

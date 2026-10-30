@@ -43,6 +43,10 @@ function renderProjects(categoryFilter = "all", yearFilter = "all") {
     item.dataset.category = project.category;
     item.dataset.slug = project.slug;
     item.href = `project-detail.html?slug=${encodeURIComponent(project.slug)}`;
+    // Start the detail page's first gallery image early so it can fade in sooner.
+    const warm = () => { if (project.images[0]) new Image().src = project.images[0]; };
+    item.addEventListener("pointerenter", warm, { once: true });
+    item.addEventListener("focus", warm, { once: true });
 
     const thumb = document.createElement("div");
     thumb.className = "projects-tile-thumb";
@@ -73,22 +77,14 @@ function renderProjects(categoryFilter = "all", yearFilter = "all") {
   });
 }
 
-// Falls back to the original image when no small thumbnail has been made yet.
 // The image fades in only after it has fully loaded.
 function setTileImage(element, src) {
-  const show = url => {
-    element.style.backgroundImage = `url("${url}")`;
+  const image = new Image();
+  image.onload = image.onerror = () => {
+    element.style.backgroundImage = `url("${src}")`;
     element.classList.add("is-loaded");
   };
-  const small = smallThumbnailPath(src);
-  const probe = new Image();
-  probe.onload = () => show(small);
-  probe.onerror = () => {
-    const original = new Image();
-    original.onload = original.onerror = () => show(src);
-    original.src = src;
-  };
-  probe.src = small;
+  image.src = src;
 }
 
 async function loadProjects() {

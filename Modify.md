@@ -144,7 +144,7 @@ cv: "assets/pdf/dongwoo-kang-cv.pdf",
 | `year` | Year 필터와 카드에 표시할 연도. 문자열로 작성 |
 | `content` | 한국어 Markdown 파일의 저장소 기준 경로 |
 
-카드의 제목과 소속은 Markdown 상단에서 가져옵니다. 대표 이미지는 `## Show`의 첫 번째 이미지입니다. **JSON에 제목이나 대표 이미지를 중복해서 넣지 않습니다.** 카드에는 대표 이미지 옆 `thumbs` 폴더의 작은 WebP(예: `assets/images/my-project/thumbs/cover.webp`)를 먼저 쓰고, 없으면 원본을 그대로 씁니다.
+카드의 제목·소속·썸네일은 Markdown 상단에서 가져옵니다. **JSON에 제목이나 썸네일을 중복해서 넣지 않습니다.** 썸네일은 `thumbnail:`에 적은 이미지 하나만 카드에 쓰이고, `## Show` 이미지는 상세 페이지 갤러리에만 쓰입니다. `thumbnail:`을 생략하면 `## Show`의 첫 번째 이미지를 원본 그대로 씁니다.
 
 Markdown 맨 위의 `---` 사이가 기본 정보입니다. 일반 YAML 전체를 지원하는 것은 아니며 아래 형식을 사용하세요.
 
@@ -154,6 +154,7 @@ title: "프로젝트 제목"
 author: "Dongwoo Kang"
 affiliation: "한국전자기술연구원(KETI)"
 venue: "2026"
+thumbnail: assets/images/my-project/thumbs/cover.webp
 Links:
 - Github: https://github.com/example/project
 - Paper: https://example.com/paper
@@ -161,7 +162,9 @@ Links:
 ```
 
 - `title`: 카드와 상세 페이지의 제목
+- 상세 페이지 제목 밑의 부제목: 본문에서 처음 나오는 `# 제목`(Head 1) 한 줄. 없으면 부제목을 표시하지 않음
 - `affiliation`: 카드에 표시할 소속
+- `thumbnail`: Works 카드와 Home 미리 불러오기에 쓰는 썸네일. 갤러리(`## Show`)에는 나오지 않음
 - `author`, `venue`: 작성자·행사 기록용 정보. 현재 상세 화면에서는 별도로 표시하지 않음
 - `Links`: 상세 페이지 상단 링크 버튼. 없으면 `Links:`와 하위 항목을 함께 생략 가능
 - 버튼 추가·삭제: `- 이름: URL` 줄을 추가·삭제. 빈 URL은 버튼을 만들지 않음
@@ -173,7 +176,7 @@ Links:
 2. 같은 파일을 영어로 작성해 `projects/my-project.en.md`로 저장합니다.
 3. 이미지는 `assets/images/my-project/` 폴더에 넣습니다.
 4. Markdown의 제목·소속·링크·이미지 경로·본문을 수정합니다.
-   - 카드를 빨리 띄우려면 대표 이미지(`## Show`의 첫 번째 이미지)로 작은 WebP를 만듭니다. 예: `cwebp -q 80 -resize 1000 0 assets/images/my-project/cover.png -o assets/images/my-project/thumbs/cover.webp` (`thumbs` 폴더를 먼저 만들고, 대표 이미지를 바꾸면 다시 만듭니다.)
+   - 썸네일은 `assets/images/my-project/thumbs/`에 따로 넣고 `thumbnail:`에 경로를 적습니다. 카드를 빨리 띄우려면 작은 WebP로 만듭니다. 예: `cwebp -q 80 -resize 1000 0 원본.png -o assets/images/my-project/thumbs/cover.webp` (움직이는 GIF는 `gif2webp -q 80 원본.gif -o assets/images/my-project/thumbs/cover.webp`)
 5. `projects/projects.json` 배열에 아래 항목을 추가합니다.
 
 ```json
@@ -217,7 +220,7 @@ assets/images/my-project/cover.png
 assets/images/my-project/result.png
 ```
 
-첫 이미지가 카드 대표 이미지입니다. 이미지 순서대로 갤러리가 구성되고, 점 버튼 수도 자동으로 맞춰집니다. 이미지가 한 장이면 점 버튼을 숨기고, 이미지가 없으면 갤러리를 숨깁니다. 이미지를 교체·추가·제거할 때 한국어와 영어 파일 양쪽의 목록을 맞춰 주세요.
+여기 적은 이미지는 상세 페이지 갤러리에만 쓰이며, 카드 썸네일은 상단의 `thumbnail:`로 따로 지정합니다. 이미지 순서대로 갤러리가 구성되고, 점 버튼 수도 자동으로 맞춰집니다. 이미지가 한 장이면 점 버튼을 숨기고, 이미지가 없으면 갤러리를 숨깁니다. 이미지를 교체·추가·제거할 때 한국어와 영어 파일 양쪽의 목록을 맞춰 주세요.
 
 경로는 대소문자를 구분합니다. 저장소 루트 기준 `assets/images/...` 형식을 권장합니다. `../assets/images/...` 같은 상대 경로는 **Markdown 파일이 있는 폴더 기준**으로 해석합니다.
 
@@ -270,6 +273,25 @@ assets/images/my-project/result.png
 | - | - |
 | 정확도 | 95% |
 ```
+
+### 글 사이 이미지
+
+본문 어느 구간에서든 이미지를 한 줄에 단독으로 쓰면 글 사이에 이미지가 들어갑니다. 위아래에 빈 줄을 두세요.
+
+```md
+첫 번째 문단입니다.
+
+![실험 결과 그래프](assets/images/my-project/result.png)
+
+두 번째 문단입니다.
+
+assets/images/my-project/diagram.png
+```
+
+- `![설명](경로)`: 이미지 아래에 `설명`이 캡션으로 표시되고, 화면 낭독기용 대체 텍스트로도 쓰입니다.
+- 경로만 쓰면 캡션 없이 이미지만 표시됩니다.
+- 문장 중간에 `![설명](경로)`를 넣으면 글자 크기의 작은 아이콘으로 표시됩니다.
+- 이미지는 화면에 가까워질 때 불러오고, 다 불러오면 페이드 인됩니다. 큰 PNG는 WebP로 줄이면 더 빨리 뜹니다.
 
 코드는 백틱 3개로 감싸고 첫 줄에 언어 이름을 붙입니다.
 

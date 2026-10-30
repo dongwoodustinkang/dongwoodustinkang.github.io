@@ -10,7 +10,7 @@ async function loadProjectRegistry() {
 }
 
 function parseFrontmatter(markdown) {
-  const metadata = { title: "", author: "", affiliation: "", venue: "", links: [] };
+  const metadata = { title: "", author: "", affiliation: "", venue: "", thumbnail: "", links: [] };
   const match = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!match) return metadata;
   let inLinks = false;
@@ -47,20 +47,29 @@ function parseMarkdownSections(markdown) {
   return sections;
 }
 
+// The first `# ` heading (outside code blocks) is the subtitle under the detail page title.
+function parseSubtitle(markdown) {
+  let inCode = false;
+  for (const line of markdown.split(/\r?\n/)) {
+    if (line.trim().startsWith("```")) inCode = !inCode;
+    const heading = !inCode && line.match(/^#\s+(.+)$/);
+    if (heading) return heading[1].trim();
+  }
+  return "";
+}
+
 async function loadProjectContent(entry) {
   const path = localizedContentPath(entry.content);
   const markdown = await fetchText(path);
   const metadata = parseFrontmatter(markdown);
   if (!metadata.title) throw new Error(`Missing title: ${path}`);
-  const sections = parseMarkdownSections(stripFrontmatter(markdown));
+  const body = stripFrontmatter(markdown);
+  const sections = parseMarkdownSections(body);
   const galleryLines = sections.filter(section => section.key === "show").flatMap(section => section.lines);
   const images = extractAllImageSources(galleryLines, path);
-  return { ...entry, ...metadata, sections, images, thumbnail: images[0] || "", contentPath: path };
-}
-
-// Works cards use a small WebP beside the original: images/x/a.png -> images/x/thumbs/a.webp.
-function smallThumbnailPath(src) {
-  return /^(?:[a-z]+:)?\/\//i.test(src) ? src : src.replace(/([^/]+)\.[a-z0-9]+$/i, "thumbs/$1.webp");
+  // Works card image comes from `thumbnail:`; the `## Show` images belong to the detail page only.
+  const thumbnail = metadata.thumbnail ? resolveContentPath(metadata.thumbnail, path) : images[0] || "";
+  return { ...entry, ...metadata, subtitle: parseSubtitle(body), sections, images, thumbnail, contentPath: path };
 }
 
 function projectOrganization(project) {
