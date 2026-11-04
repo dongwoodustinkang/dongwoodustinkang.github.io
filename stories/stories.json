@@ -1,37 +1,59 @@
 [
   {
     "slug": "attention-is-all-you-need",
-    "category": "ai",
+    "category": [
+      "ai",
+      "review"
+    ],
     "year": "2017",
     "content": "stories/attention-is-all-you-need.md"
   },
   {
     "slug": "vit",
-    "category": "ai",
+    "category": [
+      "ai",
+      "vision",
+      "review"
+    ],
     "year": "2021",
     "content": "stories/ViT.md"
   },
   {
     "slug": "sensifi",
-    "category": "iot",
+    "category": [
+      "iot",
+      "review"
+    ],
     "year": "2023",
     "content": "stories/SensiFi.md"
   },
   {
     "slug": "void",
-    "category": "ai",
+    "category": [
+      "ai",
+      "vision",
+      "review"
+    ],
     "year": "2024",
     "content": "stories/VOID.md"
   },
   {
     "slug": "patchcore",
-    "category": "abnormal-detection",
+    "category": [
+      "abnormal-detection",
+      "ai",
+      "review"
+    ],
     "year": "2022",
     "content": "stories/PatchCore.md"
   },
   {
     "slug": "dinomaly",
-    "category": "abnormal-detection",
+    "category": [
+      "abnormal-detection",
+      "ai",
+      "review"
+    ],
     "year": "2025",
     "content": "stories/Dinomaly.md"
   }

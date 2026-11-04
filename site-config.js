@@ -17,5 +17,6 @@ const SITE_CONFIG = {
     { value: "physical", ko: "Physical", en: "Physical" },
     { value: "iot", ko: "IoT", en: "IoT" },
     { value: "abnormal-detection", ko: "Abnormal Detection", en: "Abnormal Detection" },
+    { value: "review", ko: "논문리뷰", en: "review" },
   ],
 };
