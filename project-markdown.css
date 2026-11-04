@@ -2,17 +2,39 @@
 .project-detail-row-body p, .project-detail-summary p { margin: 0; }
 .project-detail-row-body p + p { margin-top: 0.45rem; }
 .project-detail-summary p + p { margin-top: 0.5rem; }
-.project-detail-row-body ul { margin: 0.55rem 0 0; padding-left: 1.15rem; }
-.project-detail-summary ul { margin: 0.6rem 0 0; padding-left: 1.15rem; }
+/* Lists and callouts keep one blank line (the body's 1.6 line-height) above and below. */
+.project-detail-row-body :is(ul, ol, .project-md-callout),
+.project-detail-summary :is(ul, ol, .project-md-callout) { margin: 1.6em 0; }
+.project-detail-row-body :is(ul, ol, .project-md-callout):first-child,
+.project-detail-summary :is(ul, ol, .project-md-callout):first-child { margin-top: 0; }
+.project-detail-row-body :is(ul, ol, .project-md-callout):last-child,
+.project-detail-summary :is(ul, ol, .project-md-callout):last-child { margin-bottom: 0; }
+.project-detail-row-body ul, .project-detail-summary ul { padding-left: 1.15rem; }
+.project-detail-row-body ol, .project-detail-summary ol { padding-left: 1.5rem; }
+.project-md-spacer { height: 1.6em; }
+/* Callout (> text): same yellow and dark text on both themes, so links, highlights, and the
+   selection color are reset here to stay readable against the yellow. */
+.project-md-callout {
+  --link: #0050a0;
+  --text-main: #232323;
+  padding: 0.85rem 1rem;
+  border-radius: 6px;
+  background: var(--accent-hover);
+  color: #232323;
+}
+:is(.project-detail-row-body, .project-detail-summary) .project-md-callout ::selection { background: #232323; color: var(--accent-hover); }
 .project-md-h2 { margin: 1rem 0 0.4rem; font-size: 18px; }
 .project-md-h3 { margin: 0.75rem 0 0.3rem; font-family: var(--header-font); font-size: 15px; font-weight: 300; letter-spacing: -0.01em; }
 /* ── Inline markdown formatting ── */
 .project-detail-row-body a,
 .project-detail-summary a {
-  color: var(--accent);
+  color: var(--link);
   text-decoration: none;
   transition: color 180ms ease;
 }
+
+.project-detail-row-body a::after,
+.project-detail-summary a::after { content: "↗"; }
 
 .project-detail-row-body a:hover,
 .project-detail-row-body a:focus-visible,
@@ -42,6 +64,7 @@
   width: 100%;
   max-width: 100%;
   height: auto;
+  margin: 0 auto;
   border-radius: 6px;
   border: 1px solid rgba(10, 47, 31, 0.08);
 }

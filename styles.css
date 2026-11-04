@@ -7,6 +7,7 @@
   --accent: #232323;
   --accent-hover: #fef991;
   --accent-soft: rgb(254 249 145 / 32%);
+  --link: #0066cc;
   --line: #ececec;
   --mono-font: "JetBrains Mono", monospace;
 }
@@ -23,7 +24,8 @@ body {
   font-family: var(--body-font);
   font-weight: 200;
 }
-h1, h2, h3, h4, h5, h6, b, strong { font-family: var(--header-font); font-weight: 300; }
+h1, h2, h3, h4, h5, h6 { font-family: var(--header-font); font-weight: 300; }
+b, strong { font-family: var(--header-font); font-weight: 700; }
 main { position: relative; z-index: 1; margin: 0 auto; }
 [hidden] { display: none !important; }
 .sr-only {

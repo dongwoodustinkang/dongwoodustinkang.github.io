@@ -41,7 +41,9 @@ document.querySelector('.credential-tabs')?.setAttribute('aria-label', siteText(
 document.querySelector('.profile-photo')?.setAttribute('alt', siteText('강동우 프로필 사진', 'Portrait of Dongwoo Kang'));
 document.querySelector('.contact-links')?.setAttribute('aria-label', siteText('연락처 및 소셜 링크', 'Contact and social links'));
 document.querySelectorAll('.contact-links a').forEach(link => {
-  const label = link.title === 'Email' ? siteText('이메일 보내기', 'Send email') : `${link.title} ${siteText('(새 탭)', '(opens in a new tab)')}`;
+  const label = link.title === 'Email' ? siteText('이메일 보내기', 'Send email')
+    : link.title === 'Stories' ? siteText('스토리', 'Stories')
+    : `${link.title} ${siteText('(새 탭)', '(opens in a new tab)')}`;
   link.setAttribute('aria-label', label);
 });
 
@@ -50,7 +52,8 @@ function localizedSectionTitle(title) {
     'Problem Definition': '문제 정의', 'Solution Process': '해결 과정',
     'Contribution': '기여', 'Solution Design': '솔루션 설계',
     'Reflection': '회고', 'Abstract': '초록', 'Publications': '발표 논문',
-    'Overview': '개요', 'Paper': '논문', 'Demo': '데모', 'News': '뉴스', 'Code': '코드'
+    'Overview': '개요', 'Paper': '논문', 'Demo': '데모', 'News': '뉴스', 'Code': '코드',
+    'Summary': '요약', 'Method': '방법', 'Thoughts': '생각'
   };
   return siteLanguage === 'ko' ? (labels[title] || title) : title;
 }

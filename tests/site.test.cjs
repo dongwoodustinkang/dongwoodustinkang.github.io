@@ -16,6 +16,7 @@ for (const file of ['site-config.js', 'markdown.js', 'project-data.js']) {
 }
 const config = vm.runInContext('SITE_CONFIG', context);
 const registry = JSON.parse(read('projects/projects.json'));
+const storyRegistry = JSON.parse(read('stories/stories.json'));
 
 function localAssetExists(url, contentPath = '') {
   if (!url || /^(?:mailto:|data:|#)/.test(url)) return;
@@ -53,8 +54,31 @@ test('registry has unique URLs, valid categories, explicit years, and both trans
   }
 });
 
+test('story registry has unique URLs, valid categories, and Korean content', () => {
+  const slugs = new Set();
+  for (const story of storyRegistry) {
+    assert.match(story.slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+    assert.ok(!slugs.has(story.slug), `Duplicate story slug: ${story.slug}`);
+    slugs.add(story.slug);
+    const categories = context.storyCategoryValues(story);
+    assert.ok(categories.length, `Missing category: ${story.slug}`);
+    for (const value of categories) assert.ok(config.storyCategories.some(category => category.value === value), `Unknown category: ${story.slug}/${value}`);
+    assert.match(story.content, /^stories\/.+\.md$/);
+    const metadata = context.parseFrontmatter(read(story.content));
+    assert.ok(metadata.title, `Missing title: ${story.content}`);
+    localAssetExists(metadata.thumbnail, story.content);
+    metadata.links.forEach(link => localAssetExists(link.url, story.content));
+  }
+});
+
+test('a story category may be one value or a list', () => {
+  assert.deepEqual([...context.storyCategoryValues({ category: 'ai' })], ['ai']);
+  assert.deepEqual([...context.storyCategoryValues({ category: ['ai', 'iot'] })], ['ai', 'iot']);
+  assert.deepEqual([...context.storyCategoryValues({})], []);
+});
+
 test('page dependencies and CV exist; HTML IDs are unique', () => {
-  for (const file of ['index.html', 'projects.html', 'project-detail.html']) {
+  for (const file of ['index.html', 'projects.html', 'project-detail.html', 'stories.html', 'story-detail.html']) {
     const html = read(file);
     const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
     assert.equal(ids.length, new Set(ids).size, `Duplicate ID in ${file}`);
@@ -83,6 +107,35 @@ test('body images between paragraphs become figures with optional captions', () 
   assert.ok(html.includes('<figcaption class="project-md-caption">Result &lt;chart&gt;</figcaption>'));
   assert.equal((html.match(/<figure/g) || []).length, 2);
   assert.equal((html.match(/<figcaption/g) || []).length, 1);
+});
+
+test('body images accept an optional width', () => {
+  const html = context.markdownLinesToHtml(['![Chart](assets/images/a.png){width=60%}', '', 'assets/images/b.png {width=400px}']);
+  assert.ok(html.includes('style="width:60%" src="assets/images/a.png"'));
+  assert.ok(html.includes('<figcaption class="project-md-caption">Chart</figcaption>'));
+  assert.ok(html.includes('style="width:400px" src="assets/images/b.png"'));
+});
+
+test('numbered lines become ordered lists; a year-led sentence stays a paragraph', () => {
+  const html = context.markdownLinesToHtml(['Intro', '1. One', '2. **Two**', '- Dot', 'After', '', '3. Three', '', '2017. A year']);
+  assert.ok(html.includes('<p>Intro</p><ol><li>One</li><li><strong>Two</strong></li></ol><ul><li>Dot</li></ul><p>After</p>'));
+  assert.ok(html.includes('<ol start="3"><li>Three</li></ol>'));
+  assert.ok(html.includes('<p>2017. A year</p>'));
+});
+
+test('consecutive > lines become one callout with inline formatting', () => {
+  const html = context.markdownLinesToHtml(['- Item', '> **First** <b>', '>', '>Second', 'After', '', '> Third', '>']);
+  assert.ok(html.includes('<ul><li>Item</li></ul><blockquote class="project-md-callout"><p><strong>First</strong> &lt;b&gt;</p><p>Second</p></blockquote><p>After</p>'));
+  assert.ok(html.endsWith('<blockquote class="project-md-callout"><p>Third</p></blockquote>'));
+  assert.equal(context.markdownLinesToHtml(['>']), '');
+  assert.ok(context.markdownLinesToHtml(['```', '> code', '```']).includes('&gt; code'));
+});
+
+test('a line with only <br> adds a spacer; blank lines and <br> in code do not', () => {
+  const spacer = '<div class="project-md-spacer" aria-hidden="true"></div>';
+  assert.equal(context.markdownLinesToHtml(['A', '<br>', '<br/>', 'B']), `<p>A</p>${spacer}${spacer}<p>B</p>`);
+  assert.equal(context.markdownLinesToHtml(['A', '', '', 'B']), '<p>A</p><p>B</p>');
+  assert.ok(!context.markdownLinesToHtml(['```', '<br>', '```']).includes('project-md-spacer'));
 });
 
 test('subtitle is the first Head 1 outside code blocks', () => {

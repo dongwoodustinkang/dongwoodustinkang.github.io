@@ -49,7 +49,9 @@ function parseInlineMarkdown(raw, contentPath = "") {
 
 function markdownLinesToHtml(lines = [], contentPath = "") {
   const html = [];
-  let inList = false;
+  let listTag = "";
+  let inCallout = false;
+  let calloutLines = [];
   let inCode = false;
   let codeLang = "text";
   let codeLines = [];
@@ -61,7 +63,15 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
   let tableRows = [];
 
   const closeListIfNeeded = () => {
-    if (inList) { html.push("</ul>"); inList = false; }
+    if (listTag) { html.push(`</${listTag}>`); listTag = ""; }
+  };
+
+  const closeCalloutIfNeeded = () => {
+    if (!inCallout) return;
+    if (calloutLines.length) {
+      html.push(`<blockquote class="project-md-callout">${calloutLines.map((text) => `<p>${parseInlineMarkdown(text, contentPath)}</p>`).join("")}</blockquote>`);
+    }
+    inCallout = false; calloutLines = [];
   };
 
   const closeIframeIfNeeded = () => {
@@ -132,6 +142,8 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
       return;
     }
 
+    if (inCallout && !trimmed.startsWith(">")) closeCalloutIfNeeded();
+
     // ── Open code fence ──
     if (trimmed.startsWith("```")) {
       closeListIfNeeded();
@@ -177,16 +189,35 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
       return;
     }
 
+    // ── Callout: consecutive "> text" lines form one highlighted box, each line a paragraph ──
+    if (trimmed.startsWith(">")) {
+      closeListIfNeeded();
+      inCallout = true;
+      const calloutText = trimmed.replace(/^>\s*/, "");
+      if (calloutText) calloutLines.push(calloutText);
+      return;
+    }
+
+    // ── A line with only <br> adds one blank line of space; ordinary blank lines add none ──
+    if (/^<br\s*\/?>$/i.test(trimmed)) {
+      closeListIfNeeded();
+      html.push('<div class="project-md-spacer" aria-hidden="true"></div>');
+      return;
+    }
+
     if (!trimmed) { closeListIfNeeded(); return; }
 
-    // ── Standalone image line → <figure>; ![caption](src) also shows the caption ──
-    const imgSrc = parseImageSourceFromLine(trimmed);
+    // ── Standalone image line → <figure>; ![caption](src) also shows the caption; {width=60%} or {width=400px} sets its size ──
+    const imgWidth = trimmed.match(/\s*\{width=(\d+(?:%|px))\}$/);
+    const imgLine = imgWidth ? trimmed.slice(0, imgWidth.index) : trimmed;
+    const imgSrc = parseImageSourceFromLine(imgLine);
     if (imgSrc) {
       closeListIfNeeded();
       const resolved = resolveContentPath(imgSrc, contentPath);
-      const caption = (trimmed.match(/^!\[([^\]]*)]\([^)]+\)$/)?.[1] || "").trim();
+      const caption = (imgLine.match(/^!\[([^\]]*)]\([^)]+\)$/)?.[1] || "").trim();
       const alt = escapeHtml(caption);
-      html.push(`<figure class="project-md-figure"><img class="project-md-img" src="${resolved}" alt="${alt}" loading="lazy" decoding="async" />${caption ? `<figcaption class="project-md-caption">${parseInlineMarkdown(caption, contentPath)}</figcaption>` : ""}</figure>`);
+      const widthStyle = imgWidth ? ` style="width:${imgWidth[1]}"` : "";
+      html.push(`<figure class="project-md-figure"><img class="project-md-img"${widthStyle} src="${resolved}" alt="${alt}" loading="lazy" decoding="async" />${caption ? `<figcaption class="project-md-caption">${parseInlineMarkdown(caption, contentPath)}</figcaption>` : ""}</figure>`);
       return;
     }
 
@@ -212,11 +243,24 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
     }
 
     if (trimmed.startsWith("- ")) {
-      if (!inList) {
+      if (listTag !== "ul") {
+        closeListIfNeeded();
         html.push("<ul>");
-        inList = true;
+        listTag = "ul";
       }
       html.push(`<li>${parseInlineMarkdown(trimmed.replace(/^-+\s*/, ""), contentPath)}</li>`);
+      return;
+    }
+
+    // ── Numbered list; at most 3 digits so a sentence starting with a year ("2017. ...") stays a paragraph ──
+    const olMatched = trimmed.match(/^(\d{1,3})\.\s+(.+)$/);
+    if (olMatched) {
+      if (listTag !== "ol") {
+        closeListIfNeeded();
+        html.push(olMatched[1] === "1" ? "<ol>" : `<ol start="${Number(olMatched[1])}">`);
+        listTag = "ol";
+      }
+      html.push(`<li>${parseInlineMarkdown(olMatched[2], contentPath)}</li>`);
       return;
     }
 
@@ -225,6 +269,7 @@ function markdownLinesToHtml(lines = [], contentPath = "") {
   });
 
   closeListIfNeeded();
+  closeCalloutIfNeeded();
   closeCodeIfNeeded();
   closeMathIfNeeded();
   closeIframeIfNeeded();

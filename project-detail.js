@@ -6,6 +6,12 @@ const heroEl = document.getElementById("project-detail-hero");
 const summaryEl = document.getElementById("project-detail-summary");
 const contentEl = document.getElementById("project-detail-content");
 const sectionEl = document.querySelector(".project-detail-section");
+const tagsEl = document.getElementById("project-detail-tags");
+const pagerEl = document.getElementById("project-detail-pager");
+// story-detail.html reuses this page with its own registry (`data-registry` on <body>)
+// and `data-translated="false"` when it has no English files.
+const registryPath = document.body.dataset.registry;
+const translated = document.body.dataset.translated !== "false";
 
 // Wait for the first gallery image (at most `limit` ms) so the page fades in whole, not piece by piece.
 function whenImageReady(image, limit = 1200) {
@@ -34,6 +40,7 @@ function fadeInBodyImages() {
 }
 
 function renderProjectActions(links) {
+  if (!actionsEl) return; // Story pages have no link buttons.
   const seen = new Set();
   actionsEl.replaceChildren();
   links.forEach(({ label, url }) => {
@@ -48,6 +55,41 @@ function renderProjectActions(links) {
     link.textContent = localizedSectionTitle(normalized);
     actionsEl.appendChild(link);
   });
+}
+
+// Story pages show each category as a tag that opens the bookshelf filtered to it.
+function renderStoryTags(project) {
+  if (!tagsEl) return;
+  const categories = storyCategoryValues(project)
+    .map(value => SITE_CONFIG.storyCategories.find(item => item.value === value))
+    .filter(Boolean);
+  tagsEl.hidden = !categories.length;
+  tagsEl.setAttribute("aria-label", siteText("태그", "Tags"));
+  tagsEl.replaceChildren(...categories.map(category => {
+    const tag = document.createElement("a");
+    tag.className = "project-detail-tag";
+    tag.href = `stories.html?category=${encodeURIComponent(category.value)}`;
+    tag.textContent = siteText(category.ko, category.en);
+    return tag;
+  }));
+}
+
+// Story pages end with "← Back" to the bookshelf and "Next post →" in stories.json order.
+function renderStoryPager(registry, slug) {
+  if (!pagerEl) return;
+  pagerEl.setAttribute("aria-label", siteText("스토리 이동", "Story navigation"));
+  const back = document.createElement("a");
+  back.className = "project-detail-pager-back";
+  back.href = "stories.html";
+  back.textContent = siteText("← 돌아가기", "← Back");
+  pagerEl.replaceChildren(back);
+  const next = registry[registry.findIndex(entry => entry.slug === slug) + 1];
+  if (!next) return;
+  const nextLink = document.createElement("a");
+  nextLink.className = "project-detail-pager-next";
+  nextLink.href = `story-detail.html?slug=${encodeURIComponent(next.slug)}`;
+  nextLink.textContent = siteText("다음 포스트 →", "Next post →");
+  pagerEl.appendChild(nextLink);
 }
 
 function renderProjectSections(project) {
@@ -79,14 +121,16 @@ function renderProjectSections(project) {
 async function loadProject() {
   try {
     const slug = new URLSearchParams(location.search).get("slug");
-    const registry = await loadProjectRegistry();
+    const registry = await loadProjectRegistry(registryPath);
     const entry = registry.find(project => project.slug === slug);
     if (!entry) throw new Error(`Unknown project: ${slug}`);
-    const project = await loadProjectContent(entry);
+    const project = await loadProjectContent({ ...entry, translated });
     titleEl.textContent = project.title;
     subtitleEl.textContent = project.subtitle;
     subtitleEl.hidden = !project.subtitle;
     document.title = `${project.title} | Dongwoo Kang`;
+    renderStoryTags(project);
+    renderStoryPager(registry, slug);
     renderProjectActions(project.links);
     renderProjectSections(project);
     buildHeroSlider(heroEl, project.images, project.title);

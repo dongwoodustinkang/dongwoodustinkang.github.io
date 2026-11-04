@@ -3,7 +3,7 @@ function initSiteNavigation() {
   const mount = document.getElementById("site-navigation");
   if (!mount) return;
   const isHome = document.body.classList.contains("homepage");
-  const activePage = isHome ? "home" : "works";
+  const activePage = isHome ? "home" : document.body.dataset.page || "works";
   const homeHref = isHome ? "#top" : "index.html#top";
   mount.innerHTML = `
     <header class="site-header">

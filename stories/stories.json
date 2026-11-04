@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "attention-is-all-you-need",
+    "category": "ai",
+    "year": "2017",
+    "content": "stories/attention-is-all-you-need.md"
+  },
+  {
+    "slug": "vit",
+    "category": "ai",
+    "year": "2021",
+    "content": "stories/ViT.md"
+  },
+  {
+    "slug": "sensifi",
+    "category": "iot",
+    "year": "2023",
+    "content": "stories/SensiFi.md"
+  },
+  {
+    "slug": "void",
+    "category": "ai",
+    "year": "2024",
+    "content": "stories/VOID.md"
+  },
+  {
+    "slug": "patchcore",
+    "category": "abnormal-detection",
+    "year": "2022",
+    "content": "stories/PatchCore.md"
+  },
+  {
+    "slug": "dinomaly",
+    "category": "abnormal-detection",
+    "year": "2025",
+    "content": "stories/Dinomaly.md"
+  }
+]

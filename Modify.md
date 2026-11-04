@@ -15,6 +15,8 @@
 | 홈 화면 간격, 사진 크기, 버튼, 타임라인 | `home.css` |
 | 공통 헤더, 햄버거 메뉴, KR·EN 버튼 | `site-header.css` |
 | 프로젝트 카드, 필터, 1열·2열 배치 | `works.css` |
+| 스토리(논문 리뷰) 추가·삭제·순서·분류 | `stories/stories.json`, `stories/*.md`, `site-config.js`의 `storyCategories` |
+| 스토리 메뉴의 어두운 배경, 책장·책 크기·말풍선, 상세 화면 색 | `stories.css` |
 | 상세 페이지 간격, 갤러리, 오른쪽 눈금 목차 | `project-page.css` |
 | 본문 표, 코드 블록, 수식, 영상 스타일 | `project-markdown.css` |
 
@@ -74,7 +76,7 @@ python3 -m http.server 5173 --bind 127.0.0.1
 <a href="mailto:hello@example.com">hello [at] example [dot] com</a>
 ```
 
-하단의 `class="contact-links"`에는 GitHub·이메일·Medium·Google Scholar 링크가 있습니다. `href`가 실제 주소, `title`이 링크 이름입니다. Threads 링크는 현재 `index.html`에서 주석 처리되어 있으므로, `YOUR_THREADS_HANDLE`을 계정 핸들로 바꾼 뒤 주석을 해제하면 표시됩니다. 추가할 때 기존 `<a>...</a>` 하나를 복사해 주소·제목·아이콘을 변경하고, 제거할 때는 해당 `<a>...</a>` 전체를 삭제합니다.
+하단의 `class="contact-links"`에는 GitHub·이메일·스토리(책 아이콘, `stories.html`로 이동) 링크가 있습니다. `href`가 실제 주소, `title`이 링크 이름입니다. Threads 링크는 현재 `index.html`에서 주석 처리되어 있으므로, `YOUR_THREADS_HANDLE`을 계정 핸들로 바꾼 뒤 주석을 해제하면 표시됩니다. 추가할 때 기존 `<a>...</a>` 하나를 복사해 주소·제목·아이콘을 변경하고, 제거할 때는 해당 `<a>...</a>` 전체를 삭제합니다.
 
 ## 4. 타임라인과 수상·자격증
 
@@ -267,12 +269,24 @@ assets/images/my-project/result.png
 - 첫 번째 항목
 - 두 번째 항목
 
+1. 번호 항목
+2. 번호 항목
+
+> 형광 노란색 콜아웃
+> 이어지는 줄은 같은 상자 안의 새 문단이 됩니다
+
 ![설명](assets/images/my-project/result.png)
 
 | 항목 | 결과 |
 | - | - |
 | 정확도 | 95% |
 ```
+
+`**굵게**`는 볼드체(font-weight 700)로 표시됩니다. 본문 링크는 파란색(`styles.css`의 `--link`)으로 표시되고 뒤에 `↗`가 자동으로 붙으므로 직접 입력하지 않습니다.
+
+목록(`-`, `1.`)과 콜아웃(`>`)은 앞뒤에 빈 줄 한 칸 간격이 자동으로 들어갑니다. 빈 줄을 여러 개 넣어도 간격은 같습니다. 콜아웃 색은 `styles.css`의 `--accent-hover`이고, 빈 줄이 나오면 상자가 끝납니다. 번호는 1~3자리만 목록이 되므로 `2017. 문장`은 일반 문단으로 남습니다.
+
+빈 줄은 문단을 나눌 뿐 간격을 늘리지 않습니다. 한 줄을 더 띄우려면 그 자리에 `<br>`만 있는 줄을 씁니다. 두 줄을 띄우려면 `<br>` 줄을 두 개 씁니다.
 
 ### 글 사이 이미지
 
@@ -290,6 +304,7 @@ assets/images/my-project/diagram.png
 
 - `![설명](경로)`: 이미지 아래에 `설명`이 캡션으로 표시되고, 화면 낭독기용 대체 텍스트로도 쓰입니다.
 - 경로만 쓰면 캡션 없이 이미지만 표시됩니다.
+- 줄 끝에 `{width=60%}`나 `{width=400px}`를 붙이면 그 크기로 가운데 정렬됩니다. 예: `![설명](경로){width=60%}`. 없으면 본문 폭에 꽉 차게 표시됩니다.
 - 문장 중간에 `![설명](경로)`를 넣으면 글자 크기의 작은 아이콘으로 표시됩니다.
 - 이미지는 화면에 가까워질 때 불러오고, 다 불러오면 페이드 인됩니다. 큰 PNG는 WebP로 줄이면 더 빨리 뜹니다.
 
@@ -312,6 +327,34 @@ $$
 영상은 `## Media` 아래에 기존 프로젝트처럼 YouTube의 **공유 → 퍼가기**에서 얻은 `<iframe ...></iframe>` 코드를 넣습니다. 이 사이트는 영상용 iframe을 그대로 표시하므로 직접 확인한 퍼가기 코드를 사용하세요. 수식과 코드 색상은 외부 KaTeX·highlight.js를 사용합니다. 이 파일을 불러오지 못해도 본문과 원본 코드는 유지됩니다.
 
 중첩 목록·각주 등 Markdown의 모든 기능을 지원하지는 않습니다. 복잡한 문법은 먼저 미리보기에서 확인하세요.
+
+## 8-1. 스토리(Stories) 책장
+
+스토리 메뉴는 논문 리뷰를 모아 두는 곳이며, 목록(`stories.html`)과 상세(`story-detail.html?slug=...`) 모두 **어두운 배경**입니다. 색은 `stories.css` 맨 위의 `body[data-page="stories"]` 변수에서 바꿉니다.
+
+상세 페이지 제목 아래에는 분류(`category`)가 태그로 표시되며, 태그를 누르면 그 분류만 고른 책장(`stories.html?category=ai`)으로 이동합니다. 스토리 상세에는 링크 버튼이 없으므로 논문 주소가 필요하면 본문에 `[논문 보기](https://...)`처럼 적습니다. 상세 맨 아래 왼쪽 `← 돌아가기`는 책장으로, 오른쪽 `다음 포스트 →`는 `stories.json`에서 다음 항목으로 이동하며 마지막 항목에서는 표시되지 않습니다.
+
+목록은 리뷰를 책 표지처럼 선반 한 줄에 10권씩 보여 줍니다. 책에 마우스를 올리면 책이 앞으로 나오고 말풍선에 제목이 표시되며, 누르면 상세 페이지로 이동합니다. 상단 `AI 3`, `Physical 1` 버튼은 분류별 개수이자 필터이며, 한 번 더 누르면 전체를 보여 줍니다. 태그는 **스토리 개수가 많은 순**(같으면 `storyCategories` 순서)으로 정렬되고, 태그 바는 항상 한 줄이며, 6개를 넘으면 6개 너비만 보이고 나머지는 좌우로 스크롤해서 봅니다. 마우스 휠은 태그 위에서 6개씩 넘기고, 트랙패드·터치는 좌우로 밀면 됩니다. 휴대폰처럼 6개가 한 화면에 들어가지 않으면 태그 하나씩 멈춥니다. 한 번에 보이는 개수는 `stories-page.js`의 `TAGS_PER_PAGE`에서 바꿉니다.
+
+### 스토리 추가하기
+
+1. `stories/story-template.md`를 복사해 `stories/my-paper.md`를 만듭니다. 스토리는 **영어 파일(`.en.md`) 없이** 한국어 파일 하나만 작성하며, EN 화면에서도 같은 파일이 표시됩니다.
+2. `title`은 논문 제목(말풍선·상세 제목), `affiliation`은 학회·저널(예: `NeurIPS 2024`)입니다.
+3. 표지 이미지는 `assets/images/stories/my-paper/cover.webp`처럼 넣고 `thumbnail:`에 경로를 적습니다. 비율은 6:7(예: 360×420)이 잘 맞습니다. `thumbnail:`을 생략하면 회색 표지에 제목이 적힌 책으로 표시됩니다.
+4. `stories/stories.json`에 항목을 추가합니다. 배열 순서가 책장에 꽂히는 순서입니다.
+
+```json
+{
+  "slug": "my-paper",
+  "category": "ai",
+  "year": "2024",
+  "content": "stories/my-paper.md"
+}
+```
+
+`category`는 `site-config.js`의 `storyCategories`에 있는 `value`(`ai`, `physical`, `iot`, `abnormal-detection`)를 사용합니다. 여러 개면 `"category": ["ai", "iot"]`처럼 배열로 쓰며, 그 스토리는 각 분류의 책장에 모두 나오고 상세 페이지에는 태그가 쓴 순서대로 표시됩니다. 분류를 추가하려면 `storyCategories`에 `{ value: "robotics", ko: "로보틱스", en: "Robotics" }`처럼 추가합니다. 본문 작성 규칙은 프로젝트와 같으며(8장), `## Summary`, `## Method`, `## Thoughts`는 한국어 화면에서 요약·방법·생각으로 표시됩니다.
+
+현재 `stories/`의 Attention·ResNet·DDPM·π0 네 항목은 화면 확인용 샘플입니다. 실제 리뷰로 바꾸거나 `stories.json`에서 지워 주세요.
 
 ## 9. 언어와 화면 크기
 

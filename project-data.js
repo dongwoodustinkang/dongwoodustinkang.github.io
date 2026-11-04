@@ -5,8 +5,13 @@ async function fetchText(path) {
   return response.text();
 }
 
-async function loadProjectRegistry() {
-  return JSON.parse(await fetchText("projects/projects.json"));
+async function loadProjectRegistry(path = "projects/projects.json") {
+  return JSON.parse(await fetchText(path));
+}
+
+// A story's `category` is one value ("ai") or a list (["ai", "iot"]); this always returns a list.
+function storyCategoryValues(story) {
+  return [].concat(story.category || []);
 }
 
 function parseFrontmatter(markdown) {
@@ -58,8 +63,9 @@ function parseSubtitle(markdown) {
   return "";
 }
 
+// `translated: false` reads the Korean file in both languages (Stories has no .en.md).
 async function loadProjectContent(entry) {
-  const path = localizedContentPath(entry.content);
+  const path = entry.translated === false ? entry.content : localizedContentPath(entry.content);
   const markdown = await fetchText(path);
   const metadata = parseFrontmatter(markdown);
   if (!metadata.title) throw new Error(`Missing title: ${path}`);
